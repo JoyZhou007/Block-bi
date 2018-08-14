@@ -1,0 +1,271 @@
+@charset "UTF-8";
+
+.dialog-bg-center {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.8);
+}
+
+.dialog-box-center {
+  position: fixed;
+  z-index: 21;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.zoomIn {
+  -webkit-animation: dialogZoomIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -moz-animation: dialogZoomIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -o-animation: dialogZoomIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -ms-animation: dialogZoomIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  animation: dialogZoomIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.zoomOut {
+  -webkit-animation: dialogZoomOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -moz-animation: dialogZoomOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -o-animation: dialogZoomOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -ms-animation: dialogZoomOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  animation: dialogZoomOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.fadeIn {
+  -webkit-animation: dialogFadeIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -moz-animation: dialogFadeIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -o-animation: dialogFadeIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -ms-animation: dialogFadeIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  animation: dialogFadeIn .5s both cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+.fadeOut {
+  -webkit-animation: dialogFadeOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -moz-animation: dialogFadeOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -o-animation: dialogFadeOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  -ms-animation: dialogFadeOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+  animation: dialogFadeOut .5s both cubic-bezier(0.7, 0, 0.3, 1);
+}
+
+@-webkit-keyframes dialogFadeIn {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-o-keyframes dialogFadeIn {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-moz-keyframes dialogFadeIn {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-ms-keyframes dialogFadeIn {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@keyframes dialogFadeIn {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-webkit-keyframes dialogFadeOut {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-moz-keyframes dialogFadeOut {
+  0% {
+    opacity: 0;
+    z-index: -1;
+  }
+  100% {
+    opacity: 1;
+    z-index: 32;
+  }
+}
+
+@-o-keyframes dialogFadeOut {
+  0% {
+    opacity: 1;
+    z-index: 32;
+  }
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@-ms-keyframes dialogFadeOut {
+  0% {
+    opacity: 1;
+    z-index: 32;
+  }
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@keyframes dialogFadeOut {
+  0% {
+    opacity: 1;
+    z-index: 32;
+  }
+  100% {
+    opacity: 0;
+    z-index: -1;
+  }
+}
+
+@-webkit-keyframes dialogZoomIn {
+  0% {
+    transform: translate(-50%, -50%) scale3d(0.7, 0.7, 0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes dialogZoomIn {
+  0% {
+    transform: translate(-50%, -50%) scale3d(0.7, 0.7, 0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@-o-keyframes dialogZoomIn {
+  0% {
+    transform: translate(-50%, -50%) scale3d(0.7, 0.7, 0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes dialogZoomIn {
+  0% {
+    transform: translate(-50%, -50%) scale3d(0.7, 0.7, 0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@keyframes dialogZoomIn {
+  0% {
+    transform: translate(-50%, -50%) scale3d(0.7, 0.7, 0.7);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes dialogZoomOut {
+  0% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@-moz-keyframes dialogZoomOut {
+  0% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@-o-keyframes dialogZoomOut {
+  0% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@-ms-keyframes dialogZoomOut {
+  0% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(0, 0, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes dialogZoomOut {
+  0% {
+    transform: translate(-50%, -50%) scale3d(1, 1, 1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale3d(0, 0, 0);
+    opacity: 0;
+  }
+}

@@ -1,0 +1,60 @@
+<div class="meeting-width">
+    <!--header start-->
+    <header class="g-header space-header">
+        <div class="pull-left m-header-title">
+            <div class="clearfix">
+                <span class="icon1-space-control1"></span>
+                <span class="pull-left f18-f">{{'SPACE CONTROL' | translate}}</span>
+            </div>
+        </div>
+        <div class="g-search-wrap-width">
+            <div class="pull-left g-search-wrap">
+                <span class="font-search-blue1"></span>
+                <span class="font-remove" *ngIf="searchText" (click)="onCloseSearch($event)"></span>
+                <input class="f26-f g-font-normal f-color-dark" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchText">
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+        </div>
+    </header>
+    <!--header end-->
+    <section class="clearfix">
+        <div class="pull-left space-left">
+
+            <!--<img src="{{config.staticResourceDomain + 'assets/images/space-img.jpg'}}" />-->
+            <space-pipe [pipeFiveData]="fiveDataArr" [pipeTotalData]="totalArr"></space-pipe>
+        </div>
+        <div class="pull-right space-right">
+            <ul class="space-title clearfix o-fun-title">
+                <li>{{'Staff' | translate}}</li>
+                <li>{{'Folder' | translate}}</li>
+                <li>{{'Chat' | translate}}</li>
+                <li>{{'Mission' | translate}}</li>
+                <li>{{'Total' | translate}}</li>
+            </ul>
+            <perfect-scrollbar class="ps-container space-scroll">
+                <ul class="clearfix space-list g-transition2 o-fun-style" *ngFor="let staff of staffList">
+                <li>
+                    <!--<img src="{{ staff.profile ? config.resourceFolderDomain + staff.profile: ''}}" *ngIf="staff.profile">-->
+                    <!--<span *ngIf="!staff.profile"-->
+                          <!--style="width: 16px;height: 16px;display: inline-block;margin-top: 9px;margin-right: 5px;-->
+                          <!--text-align: center;line-height: 16px;border-radius: 2px;border: 1px solid rgba(151,151,151,.5)"-->
+                          <!--class="pull-left search-style2-list-bg d-letter-k">-->
+                        <!--{{staff.p_name.charAt(0)}}-->
+                    <!--</span>-->
+                    <!--<span class="f19-f">{{staff.work_name?staff.work_name:staff.p_name}}</span>-->
+                    <profile-img class="pull-left g-margin-top4 g-display" [userInfo]="staff" [settings]="{show_work_name: true}"></profile-img>
+                </li>
+                <li><i class="">0</i></li>
+                <li><i class="">0</i></li>
+                <li><i class="">0</i></li>
+                <li>
+                    <i class="">{{((staff.occupied_space/1024).toFixed(2)>0 && (staff.occupied_space/1024).toFixed(4)<0.0001 )? '0.01': (staff.occupied_space/1024).toFixed(2)}}M</i>
+                </li>
+            </ul>
+            </perfect-scrollbar>
+        </div>
+    </section>
+</div>

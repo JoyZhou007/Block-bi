@@ -1,0 +1,53 @@
+<div class="s-menu pull-left" #helpViewContainer *ngIf="isReady">
+    <div class="relative z-index-num4 g-margin-top40">
+        <current-user-info [setCouldInit]="true"></current-user-info>
+        <span class="chat-view-history icon1-import"
+              *ngIf="staffList.length == 1 && departmentList.length === 0"
+              tooltip [tooltip]="{content: 'import structure', position:'top'}"
+              style="top:44px;" (click)="importStructure($event, importFile)"></span>
+        <input type="file" class="hide" #importFile (change)="uploadStructure($event, importFile)"/>
+    </div>
+    <div class="s-contact-box">
+        <perfect-scrollbar class="ps-container s-contact">
+            <!-- 部门标题 -->
+            <div class="s-contact-list f11-f" *ngFor="let did of deptKeyArr;">
+                <p class="s-contact-list-title cursor clearfix"
+                   [class.s-contact-list-title-current]="departmentId && departmentId == did"
+                   (click)="(staffListBlock.isShow = staffListBlock.isShow == undefined ? staffByDeptList[did].length <= 0 : !staffListBlock.isShow);">
+                    <span class="pull-left" *ngIf="did == -1">{{'PENDING' | translate}}</span>
+                    <span class="pull-left" *ngIf="did == 0">{{'MAIN' | translate}}</span>
+                    <span class="pull-left" *ngIf="did > 0 || (did && did.substring(0, 1) == 'd')">{{departmentList[did].name | translate}}</span>
+                    <span class="s-contact-list-number pull-left">({{staffByDeptList[did].length}})</span>
+                    <span class="pull-left s-contact-list-title-arrow" [class.s-contact-list-title-active]="staffListBlock.isShow
+                          || (staffListBlock.isShow == undefined && staffByDeptList[did].length > 0)">
+                        <em class="font-selectbutton-line"></em>
+                    </span>
+                    <span *ngIf="did > -1 || (did && did.substring(0, 1) == 'd')"
+                          (click)="clickEditDepartment($event, did)" tooltip
+                          [tooltip]="{content: 'edit', position:'top'}"
+                          class="bi-icon-edit g-transition2 pull-right g-padding-right2"></span>
+                </p>
+                <!-- 成员列表 -->
+                <div [class.hide]="!(staffListBlock.isShow || (staffListBlock.isShow == undefined && staffByDeptList[did].length > 0))"
+                     #staffListBlock>
+                    <div class="s-contact-person  clearfix"
+                         *ngFor="let item of staffByDeptList[did]"
+                         (click)="clickPosition($event, item, did)" [class.active]="editPosition?.suid == item.suid">
+                        <div class="s-contact-person-info pull-left clearfix">
+                            <img class="s-contact-person-info-portrait pull-left"
+                                 src="{{config.resourceDomain + item.profile}}">
+                            <div class="s-contact-person-info-name pull-left">
+                                <p class="name f12-f">{{item.work_name}}</p>
+                            </div>
+                        </div>
+                        <div class="s-contact-person-chat font-chat" (click)="chatOrInMail($event, item, did)"></div>
+                    </div>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+    <div (click)="editPositionLevel($event)"
+         class="s-new-post-hover f6-f" data-step="step_str_4" id="step_str_4">
+        <span class="base">{{'EDIT POSITION LEVEL' | translate}}</span>
+    </div>
+</div>

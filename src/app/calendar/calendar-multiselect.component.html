@@ -1,0 +1,209 @@
+<div class="date multiDate" #dateForm>
+    <div class="chat-search-time clearfix">
+        <!--设置开始时间点击-->
+        <div class="chat-search-time-start pull-left" [class.click-start]="clickStart" (click)="onClickStart($event)">
+            <span class="f13-f">{{'Start' | translate}}</span>
+            <div class="chat-search-time-start-bottom clearfix" *ngIf="hasStart">
+                <div class="chat-search-time-number pull-left">{{startDate.day}}</div>
+                <div class="chat-search-time-date pull-left">
+                    <div class="f32-f">{{startDate.month}} {{startDate.year}}</div>
+                    <div class="f27-f">{{startDate.hms}} {{startDate.week}}</div>
+                </div>
+            </div>
+            <div *ngIf="!linkInfoName" class="chat-search-time-start-bottom chat-search-time-start-bom f49-f"
+                 [class.hide]="hasStart">{{startDes | translate}}
+            </div>
+
+            <div *ngIf="linkInfoName" class="v8-f add-pointer link-name" title="{{linkInfoName}}">{{linkInfoName}}</div>
+            <div class="m-a-side-date-icon">
+                <span class="icon-mission-link" (click)="linkTheMission($event)"
+                      *ngIf="dateTemplate &&dateTemplate.start.isAbleLink"></span>
+                <span class="font-rightnow" (click)="resetTime($event)"
+                      *ngIf="dateTemplate &&dateTemplate.start.isShowNowBtn"></span>
+                <span class="font-page-esc-small"
+                      *ngIf="dateTemplate && dateTemplate.start.isShowCloseBtn"
+                      (click)="recoveryPending($event,0)"></span>
+            </div>
+        </div>
+        <span class="icon1-Shape-2"></span>
+        <!--设置结束时间点击-->
+        <div class="chat-search-time-end chat-search-time-start pull-right"
+             [class.click-start]="clickEnd" (click)="onClickEnd($event)">
+            <span class="f13-f">{{'End' | translate}}</span>
+            <div class=" chat-search-time-start-bottom clearfix" [class.hide]="!hasEnd || isPeriod">
+                <div class="chat-search-time-number pull-left">{{endDate.day}}</div>
+                <div class="chat-search-time-date pull-left">
+                    <div class="f32-f">{{endDate.month}} {{endDate.year}}</div>
+                    <div class="f27-f">{{endDate.hms}} {{endDate.week}}</div>
+                </div>
+            </div>
+            <div class="chat-search-time-start-bottom chat-search-time-start-bom f49-f"
+                 [class.hide]="hasEnd || isPeriod">{{endDes | translate}}
+            </div>
+
+            <!--period-->
+            <div class="period" *ngIf="isPeriod">
+                <div class="se-input m-r-c-tab-common">
+                    <div class="se-input-select" (click)="onChangePeriod($event)">
+                        <span class="f14-f">{{periodUnit}}</span>
+                    </div>
+                    <input class="current-color ng-valid ng-dirty ng-touched" type="text"
+                           (click)="onClickInput($event)" [(ngModel)]="periodBinding" (keydown)="onKeyDown($event)">
+                    <div class="d-select d-select-min-width" *ngIf="isShowUnit">
+                        <ul>
+                            <li *ngFor=" let item of periodList" (click)="onClickUnit($event,item)">
+                                <i class="base">{{item}}</i>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="m-a-side-date-icon">
+                <span class="icon-mission-link" (click)="linkTheMission($event)"
+                      *ngIf="dateTemplate && dateTemplate.end.isAbleLink"></span>
+                <span class="font-rightnow" (click)="resetTime($event)"
+                      *ngIf="dateTemplate && dateTemplate.end.isShowNowBtn"></span>
+                <span class="font-page-esc-small"
+                      *ngIf="dateTemplate && dateTemplate.end.isShowCloseBtn"
+                      (click)="recoveryPending($event,1)">
+                                </span>
+            </div>
+        </div>
+    </div>
+    <!--link列表-->
+    <perfect-scrollbar class="mission-list" *ngIf="isStartLink">
+        <ul class="clearfix m-left-storage-list">
+            <li *ngFor="let link  of linkMissionList ,let i = index" (click)="selectLinkMission(link,$event)"
+                class="clearfix">
+                <div class="mission-left-task-list">
+                    <h2 class="f21-f" title="{{link.name}}">{{link.name}}</h2>
+                    <p class="clearfix"><span class="icon-board-{{link.typeTxt| lowercase}}"></span><span class="f5-f">
+                        {{link.typeTxt}} {{link.hm}}{{link.ap}}{{link.day}} {{link.month}}</span></p>
+                </div>
+            </li>
+        </ul>
+    </perfect-scrollbar>
+    <div class="clearfix date-top">
+        <a class="date-top-but date-top-prev font-page-next-small add-pointer"
+           (click)="setShowDate(1, $event)"
+           (mousedown)="onHourMouseDown('left',0,$event)"></a>
+        <div class="pull-left date-top-warp">
+            <div class="data-top-month" #dataMonth>
+                <em (click)="showSelectMonth($event)">{{dateWord.month[showDateIn.month]}}</em>
+                <!--month-->
+                <div class="d-select date-month single-date-month month-position">
+                    <ul class="hide d-select date-month" #selectMonth>
+                        <li *ngFor="let month of dateWord.month; let i = index" (click)="setShowMonth(i)"
+                            [class.calendar-year-active]='month == dateWord.month[showDateIn.month]'
+                        >
+                            <span class="base">{{month}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="data-top-year" #dataYear>
+                <em (click)="showSelectYear($event)">{{showDateIn.year}}</em>
+                <!--year-->
+                <div class="d-select date-year single-date-year year-position">
+                    <ul class="hide" #selectYear>
+                        <li *ngFor="let year of showSelectYearArr" (click)="setShowYear(year)"
+                            [class.calendar-year-active]='year == showDateIn.year'>
+                            <span class="base">{{year}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <a class="date-top-but date-top-next font-page-next-small add-pointer"
+           (click)="setShowDate(2, $event)"
+           (mousedown)="onHourMouseDown('right',0,$event)"></a>
+    </div>
+    <ul class="clearfix f5-f date-week">
+        <li>su</li>
+        <li>mo</li>
+        <li>tu</li>
+        <li>we</li>
+        <li>th</li>
+        <li>fr</li>
+        <li>sa</li>
+    </ul>
+    <ul class="clearfix f39-f date-list">
+        <li *ngFor="let date of showDate,let i=index"
+            [class.hide]="date.isHide"
+            [class.date-list-gray]="(date.before || date.after)"
+            [class.hasdone]="date.done"
+            [class.todo]="date.todo"
+            [class.date-list-left]="date.selectedStart || i%7 == 0 || (date.leftRadius && !date.done && !date.todo && !date.isBeforeToday)"
+            [class.date-list-right]="date.selectedEnd || i%7 == 6 || date.lastBeforeToday || (date.rightRadius  && !date.done && !date.todo && !date.isBeforeToday)"
+            [class.current]="date.isToday"
+            [class.enddate]="date.selectedEnd"
+            [class.selected]="date.selected"
+            [class.add-margin]="date.hasMargin && !noMinute"
+            [class.add-margin-hour]="date.hasMargin && noMinute"
+            [class.no-background]="date.noBackground"
+            [class.beforeToday]="date.isBeforeToday"
+            (click)="onClickEvent(date, i, $event)"
+        >
+            <span [class.done-background]="date.spanDoneBg"
+                  [class.todo-background]="date.spanTodoBg"
+                  [class.gray-background]="date.spanGrayBg"
+                  [class.gone-background]="date.spanGoneBg"> {{date.selectedCurrent ? '' : date.monthDay}}</span>
+            <em></em>
+            <p class="date-left"
+               [class.done-background]="date.leftDoneBg && i%7 != 0"
+               [class.todo-background]="date.leftTodoBg && !((date.selectedStart || i%7 == 0 && i!= 0) && (date.selectedEnd
+               || i%7 == 6 && i!=sumDay || date.lastBeforeToday) && date.selectedEnd && date.selected) && i%7 != 0"
+               [class.gray-background]="date.leftGrayBg && i%7 != 0"
+               [class.gone-background]="date.leftGoneBg && i%7 != 0"
+            ></p>
+            <p class="date-right"
+               [class.done-background]="date.rightDoneBg && i%7 != 6"
+               [class.todo-background]="(date.rightTodoBg || date.isMiddle) && i%7 != 6 "
+               [class.gray-background]="date.rightGrayBg && i%7 != 6"
+               [class.gone-background]="date.rightGoneBg && i%7 != 6"
+            ></p>
+        </li>
+    </ul>
+    <div class="but but-select-done" (click)="selectDone($event)">
+        <span class="base g-clearStyle">{{'DONE' | translate}}</span>
+    </div>
+    <div class="date-h-m" [style.left.px]="showHourLeft" [style.top.px]="showHourTop" [class.hide]="!isShowHour">
+        <div class="date-hour clearfix">
+            <div class="date-h-m-title f13-f">Hour</div>
+            <div class="date-h-m-content clearfix">
+                <a class="date-top-but date-top-prev font-page-next-small add-pointer"
+                   (click)="onClickHourLeft($event)"
+                   (mousedown)="onHourMouseDown('left',1,$event)"
+                ></a>
+                <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour">
+                    <ul class="date-list clearfix date-list-new" #rollHour style="left: 0;">
+                        <li *ngFor="let hour of hourList,let i = index" (click)="onHourClick($event,i)"
+                            [class.selected]="hour.selected"
+                        >
+                            <span>{{hour.hour}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <a class="date-top-but date-top-next font-page-next-small add-pointer"
+                   (click)="onClickHourRight($event)"
+                   (mousedown)="onHourMouseDown('right',1,$event)"></a>
+            </div>
+        </div>
+        <div class="date-minute date-hour clearfix" *ngIf="!noMinute">
+            <div class="date-minute-line"></div>
+            <div class="date-h-m-title f13-f">Minute</div>
+            <div class="date-h-m-content clearfix">
+                <div class="date-h-m-content-nums pull-left">
+                    <ul class="date-list clearfix date-list-new">
+                        <li *ngFor=" let minute of minuteList,let i=index"
+                            [class.selected]="minute.selected"
+                            (click)="onClickMinute($event,i)">
+                            <span>{{minute.minute}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

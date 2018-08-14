@@ -1,0 +1,54 @@
+<ul class="a-p-resume g-transition2" *ngIf = "getExperienceData.operation !== -1">
+    <li class="clearfix select-time">
+        <div class="g-title">
+            <span class="f9-f">{{'PERIOD' | translate}}</span>
+            <span class="font-delete" (click) = "deleteExperience(getCurrent);"></span>
+        </div>
+        <div class="clearfix g-time profile-time-select g-input-box-shadow g-transition2 relative" [class.g-show-input-error]="errorObj.ctimeEmpty && !hasStartEnd">
+            <input class="pull-left ng-pristine ng-valid ng-touched add-pointer" readonly=""
+                   [class.g-color-not-select]="(showTime.start ? showTime.start : getExperienceData.start_date) == select_start"
+                   type="text" (click)="dateClick($event, 'start')" [(ngModel)] = "showTime.start ? showTime.start : getExperienceData.start_date">
+            <span class="pull-left icon1-Shape-2"></span>
+            <input class="pull-left ng-pristine ng-valid ng-touched add-pointer" readonly=""
+                   [class.g-color-not-select]="(showTime.end ? showTime.end : getExperienceData.end_date) == select_end"
+                   type="text" (click)="dateClick($event, 'end')" [(ngModel)] = "showTime.end ? showTime.end : getExperienceData.end_date">
+        </div>
+        <p [class.hide]="!errorObj.ctimeEmpty || hasStartEnd" class="resume-error">{{emptyError}}</p>
+    </li>
+    <li class="clearfix">
+        <div class="g-title">
+            <span class="f9-f">{{'COMPANY' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" inputBlur="">
+            <input class="se-date-input g-input-box-shadow" type="text" name="company" [(ngModel)] = "getExperienceData.company"
+                   [class.g-show-input-error]="errorObj.companyEmpty" #inputContent>
+            <p #inputError [class.hide]="!errorObj.companyEmpty" class="resume-error">{{emptyError | translate}}</p>
+        </div>
+    </li>
+    <li class="clearfix">
+        <div class="pull-left a-list-half">
+            <div class="g-title">
+                <span class="f9-f">{{'INITIAL POSITION' | translate}}</span>
+            </div>
+            <div class="se-input"><input class="g-input-box-shadow" type="text" name="initial_position" [(ngModel)] = "getExperienceData.initial_position"></div>
+        </div>
+        <div class="pull-right a-list-half">
+            <div class="g-title">
+                <span class="f9-f">{{'LAST POSITION' | translate}}</span>
+            </div>
+            <div class="se-input"><input class="g-input-box-shadow" type="text" name="finial_position" [(ngModel)] = "getExperienceData.finial_position"></div>
+        </div>
+    </li>
+    <li class="clearfix" style="overflow: inherit">
+        <div class="g-title">
+            <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="getExperienceData.description"></textarea>
+            <p class="f33-f">{{'Maximum 200' | translate}}</p>
+        </div>
+    </li>
+</ul>
+
+

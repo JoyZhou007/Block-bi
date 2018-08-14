@@ -1,0 +1,43 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="" *ngIf="!isGlobal">
+        <div *ngIf="selectedForm=='1'">
+
+            <dropdown-search
+                [dropdownOptions]="shareList"
+                [dropdownSettings]="shareSettings"
+                [selectedOptions]="selectedOptions"
+                (optionModelArrChange)="setSelectedOption($event)"
+            ></dropdown-search>
+        </div>
+
+
+
+        <div *ngIf="selectedForm=='2'">
+
+            <dropdown-search
+                [dropdownOptions]="shareListBusiness"
+                [dropdownSettings]="shareSettingsBusiness"
+                [selectedOptions]="selectedOptions"
+                (optionModelArrChange)="setSelectedOption($event)"
+            ></dropdown-search>
+        </div>
+    </div>
+
+    <div *ngIf="isGlobal">
+        <div>
+            <dropdown-search
+                [dropdownOptions]="shareList"
+                [dropdownSettings]="shareSettings"
+                [selectedOptions]="selectedOptions"
+                (optionModelArrChange)="setSelectedOption($event)"
+            ></dropdown-search>
+        </div>
+
+    </div>
+
+</div>
+

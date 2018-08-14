@@ -1,0 +1,455 @@
+<div class="relative z-index-num4">
+    <!--header start-->
+    <header class="g-width g-header h-header">
+        <div class="pull-left">
+            <span class="icon-logo"></span>
+            <div class="pull-left">
+                <div class="relative" toggleSelectGroup
+                     data-step="1" id="step_1">
+                  <span class="clearfix h-people-name" #toggleSelectBut>
+                      <span class="pull-left normalLight">{{currentName}}</span>
+                      <em class="font-selectbutton-line"></em>
+                  </span>
+                    <div class="g-border2  h-header-people-info"
+                         #toggleSelect #userInfo>
+                        <div class="clearfix">
+                            <img class="pull-left"
+                                 src="{{userProfilePath}}"/>
+                            <span class="f3-f currentName">{{currentName}}</span>
+                            <span class="f2-f">{{currentEmail}}</span>
+                            <div class="pull-left but but-profile" [routerLink]="['/personal', 'general']"
+                            >
+                                <em class="base">{{"PERSONAL PROFILE" | translate}}</em>
+                            </div>
+                            <!--<div class="pull-left but but-upgrade">-->
+                                <!--<em class="base">{{"UPGRADE" | translate}}</em>-->
+                            <!--</div>-->
+                        </div>
+                        <div class="h-header-create-company" *ngIf="companyLength <= 0">
+                            <a class="f5-f base" [routerLink]="['/company/register']">{{'CREATE A BUSINESS' |
+                                translate}}</a>
+                        </div>
+                        <ul class="h-header-company" *ngIf="companyLength > 0">
+
+                            <li>
+                                <a class="f5-f base" [routerLink]="['/company/register']">{{'CREATE A BUSINESS' |
+                                    translate}}</a>
+                            </li>
+                            <li>
+                                <a class="f5-f cursor base" (click)="viewBusinessList($event)">{{'BUSINESS LIST' |
+                                    translate}}</a>
+                            </li>
+                        </ul>
+                        <div>
+                            <ul class="h-header-module">
+                                <li data-step="2" id="step_2" [class.module-no-access]="companyLength == 0">
+                                    <a href="javascript:;"
+                                       (click)="showCompanyBox()">
+                                        <span class="icon-homepage-company-profile">
+                                          <em class="path1"></em>
+                                          <em class="path2"></em>
+                                        </span>
+                                        <span class="f5-f">{{'BUSINESS PROFILE' | translate}}</span>
+                                    </a>
+                                </li>
+                                <li data-step="3" id="step_3"
+                                    [class.module-no-access]="!accessArr.structure && !isHelpModule">
+                                    <a href="javascript:;" (click)="jumpToStructure()">
+                                        <span class="icon-homepage-structure">
+                                          <em class="path1"></em>
+                                          <em class="path2"></em>
+                                          <em class="path3"></em>
+                                          <em class="path4"></em>
+                                          <em class="path5"></em>
+                                          <em class="path6"></em>
+                                          <em class="path7"></em>
+                                          <em class="path8"></em>
+                                          <em class="path9"></em>
+                                          <em class="path10"></em>
+                                        </span>
+                                        <span class="f5-f">{{'STRUCTURE' | translate}}</span>
+                                    </a>
+                                </li>
+                                <li data-step="4" id="step_4"
+                                    [class.module-no-access]="!accessArr.workflow && !isHelpModule">
+                                    <a href="javascript:;" (click)="jumpToWorkflow()">
+                                        <span class="icon-homepage-workflow">
+                                            <em class="path1"></em>
+                                            <em class="path2"></em>
+                                            <em class="path3"></em>
+                                            <em class="path4"></em>
+                                            <em class="path5"></em>
+                                            <em class="path6"></em>
+                                            <em class="path7"></em>
+                                        </span>
+                                        <span class="f5-f">{{'WORKFLOW' | translate}}</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="g-header-sign-out" (click)="userLogout()">
+                            <span class="icon-homepage-power">
+                                <em class="path1"></em>
+                            </span>
+                            <em class="f5-f">{{'SIGN OUT' | translate}}</em>
+                        </div>
+                    </div>
+                </div>
+                <div class="h-header-company-name-vertical pull-left">
+                    <span class="v2-f base">{{currentPosition}}</span>
+                </div>
+                <div *ngIf="allCompanyList.length" class="f6-f pull-left h-header-company-name" toggleSelectGroup>
+                    <div class="h-header-company-name-vertical" #toggleSelectBut (click)="getCompanyList()">
+                        <span class="base">{{defaultCompany?.name}}</span>
+                    </div>
+                    <div class="h-company-list" #toggleSelect>
+                        <ul #toggleSelectContent>
+                            <li *ngFor="let company of allCompanyList;let i = index"
+                                [class.current]="company.cid == defaultCompany?.cid"
+                                (click)="updateDefaultCompany($event, i)">
+                                <em class="base">{{company.name}}</em>
+                                <span class="font-selectbutton-select"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right" toggleSelectGroup>
+            <div class="pull-left h-header-lan" #toggleSelectBut>
+                <span class="v1-f">{{translate.lan == 'en' ? 'EN' : '中文'}}</span>
+                <span class="font-selectbutton-soildclose"></span>
+            </div>
+            <div class="d-select d-select-cn" #toggleSelect>
+                <ul #toggleSelectContent>
+                    <li [class.current]="translate.lan === 'en'" (click)="switchLanguage($event, 'en')">
+                        <em class="base">ENGLISH</em>
+                        <span class="font-selectbutton-select"></span>
+                    </li>
+                    <li [class.current]="translate.lan === 'zh-cn'" (click)="switchLanguage($event, 'zh-cn')">
+                        <em class="base">中文</em>
+                        <span class="font-selectbutton-select"></span>
+                    </li>
+                </ul>
+            </div>
+            <span class="pull-left h-header-setting">
+                <a class="font-setting" href="javascript:;" (click)="clickShowGeneralAccount($event)"></a>
+            </span>
+        </div>
+    </header>
+    <!--header end-->
+
+    <!--nav start-->
+    <div #userNav1>
+        <user-nav #userNav *ngIf="accessInit"
+                  [accessArr]="accessArr"
+                  [isSuperAdmin]="isSuperAdmin"
+                  style="width: 100%;height: 45px;display: block;"
+                  (userEvent)="doUserIndexEvent($event)"
+                  (OutputGlobalSearchResult)="doShowSearchResult($event)"
+                  (OutputCloseSearhComponent)="doCloseSearchTab()"
+                  (OutputShowApplication)="doShowApplication($event)">
+        </user-nav>
+    </div>
+    <!--nav end-->
+</div>
+
+<!--user account -reset password start-->
+
+<div class="set-wrap m-user-account-reset-pwd" *ngIf="showResetPwd">
+    <form action="" #accountForm="ngForm" name="account" style="height: 100vh" *ngIf="!hasSetPwd">
+        <div class="di1-warp">
+            <div class="g-title">
+                <span class="f9-f">{{'RESET YOUR PASSWORD' | translate}}</span>
+            </div>
+            <div class="current-password LatoThin">
+                {{'CURRENT PASSWORD' | translate}}
+            </div>
+            <input class="f49-f set-input current-password-input g-font-normal"
+                   placeholder="{{'current password' | translate}}"
+                   required
+                   minlength="8"
+                   #oldPassword="ngModel"
+                   name="oldPassword"
+                   (blur)="oldPasswordBlur()"
+                   [(ngModel)]="user.oldPassword"
+                   type="password">
+            <div class="alert-error absolute"
+                 [hidden]="!oldPassword_error.isShow">
+                {{oldPassword_error.text | translate}}
+            </div>
+            <div class="new-password LatoThin">
+                {{'NEW PASSWORD' | translate}}
+            </div>
+            <input class="f49-f set-input new-password-input g-font-normal"
+                   placeholder="{{'new password' | translate}}" type="password"
+                   required
+                   minlength="8"
+                   name="password"
+                   #password="ngModel"
+                   reverse="true"
+                   (blur)="passwordBlur()"
+                   validateEqual="confirmPassword"
+                   [(ngModel)]="user.password"
+            >
+            <div class="alert-error absolute"
+                 [hidden]="!password_error.isShow">
+                {{password_error.text | translate}}
+            </div>
+            <input class="f49-f set-input new-password-input new-password-input2 g-font-normal"
+                   placeholder="{{'new password' | translate}}"
+                   required
+                   minlength="8"
+                   name="confirmPassword"
+                   validateEqual="password"
+                   (blur)="confirmPasswordBlur()"
+                   #confirmPassword="ngModel"
+                   [(ngModel)]="user.confirmPassword"
+                   type="password">
+            <div class="alert-error absolute"
+                 [hidden]="!confirmPassword_error.isShow">
+                {{confirmPassword_error.text | translate}}
+            </div>
+            <p class="g-show-error">{{errorText | translate}}</p>
+            <div class="di-but">
+                <div class="but but-cancel" (click)="clickCloseResetPwd($event,accountForm)"><span
+                        class="base">{{'CANCEL' | translate}}</span></div>
+                <div class="but but-done" saveDataGroup #saveDataElement (outSaveData)="clickSubmit($event,accountForm,saveDataElement)"
+                    ><span class="base">{{'UPLOAD' | translate}}</span>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="set-success clearfix" *ngIf="hasSetPwd">
+        <span class="icon1-completing-update">
+            <em class="path1"></em>
+            <em class="path2"></em>
+            <em class="path3"></em>
+            <em class="path4"></em>
+            <em class="path5"></em>
+       </span>
+        <div class="f35-f">
+            {{'completing update' | translate}}
+            <span class="success-loading">
+                <i>.</i><i>.</i><i>.</i><i>.</i>
+            </span>
+        </div>
+    </div>
+    <a href="javascript:;" class="pull-left font-page-esc di-esc" (click)="clickCloseAccount($event, 'password')"></a>
+</div>
+
+<!--user account -reset password end-->
+
+<!--S reset account-->
+<div class="set-wrap m-user-account-reset-pwd" *ngIf="showResetAccount">
+    <a href="javascript:;" class="pull-left font-page-esc di-esc"
+       *ngIf="!hasSetAccount"
+       (click)="clickCloseAccount($event, 'account')"></a>
+    <div class="di1-warp" *ngIf="!hasSetAccount">
+        <div class="g-title">
+            <span class="f9-f">{{'RESET YOUR ACCOUNT' | translate}}</span>
+        </div>
+        <div class="personal clearfix">
+            <div [class.g-opacity5]="showEmail">
+                <div class="personal-title">{{'PERSONAL' | translate}}</div>
+                <div class="personal-content personal-phone LatoThin cursor"
+                     (click)="clickToggleEmail($event,'phone')"
+                     [class.personal-border]="!showEmail">{{'PHONE' | translate}}
+                </div>
+            </div>
+            <div>
+                {{'OR' | translate}}
+            </div>
+            <div [class.g-opacity5]="!showEmail" class="g-text-align-right">
+                <div class="personal-title">{{'PERSONAL' | translate}}</div>
+                <div class="personal-content personal-email LatoThin cursor"
+                     (click)="clickToggleEmail($event,'email')"
+                     [class.personal-border]="showEmail">{{'EMAIL' | translate}}
+                </div>
+            </div>
+        </div>
+
+        <div class="" *ngIf="!showEmail">
+            <input class="f49-f set-input personal-input normalLight" required="" type="number"
+                   [class.personal-phone-border]="!showEmail"
+                   [class.personal-email-border]="showEmail"
+                   [(ngModel)]="accountUser.phone"
+                   (blur)="accountPhoneBlur()"
+                   (keyup)="phoneKeyUp()"
+            >
+            <div class="alert-error absolute"
+                 [hidden]="!account_error.isShow">
+                {{account_error.text | translate}}
+            </div>
+            <div class="absolute {{phoneCodeAlert.success?'alert-success':'alert-error'}}"
+                 *ngIf="phoneCodeAlert.show">{{phoneCodeAlert.text}}
+            </div>
+            <div class="auth-code" *ngIf="hasSendPhone && showAutoCodeIpt && checkAccountPhoneValid()">
+                <form action="" #authCodeForm>
+                    <input *ngFor="let num of tplAuthCodeList; let i = index"
+                           #codeInput
+                           class="f49-f normalLight" type="text" value="" maxlength="1"
+                           [class.current]="currentTab===i"
+                           (keyup)="autoTab($event, i, codeInput)"
+                           (focus)="currentTab=i">
+                </form>
+
+            </div>
+            <p class="g-show-error-color">{{authCode_error.text}}</p>
+            <div class="di-but set-di-but">
+                <div class="but but-cancel f4-f set-auth"
+                     (click)="clickSendAuthCode($event)"
+                     *ngIf="accountUser.phone"
+                ><span class="base">{{(authCodeTimer===0?'AUTH CODE': authCodeTimer+'s') | translate}}</span>
+                </div>
+                <div class="but but-send f4-f"
+                     saveDataGroup #saveElement (outSaveData)="clickUpdatePhone($event,saveElement)"
+                     *ngIf="authCodeLength===6 && hasSendPhone"
+                ><span class="base">{{'UPLOAD' | translate}}</span>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="showEmail">
+            <input class="f49-f set-input personal-input normalLight" required="" type="email"
+                   [class.personal-phone-border]="!showEmail"
+                   [class.personal-email-border]="showEmail"
+                   [(ngModel)]="accountUser.email"
+                   (blur)="accountEmailBlur()"
+                   (keyup)="emailKeyUp()"
+            >
+            <div class="alert-error absolute"
+                 [hidden]="!account_email_error.isShow">
+                {{account_email_error.text | translate}}
+            </div>
+            <div class="absolute {{emailCodeAlert.success?'alert-success':'alert-error'}}"
+                 *ngIf="emailCodeAlert.show">{{emailCodeAlert.text | translate}}
+            </div>
+            <div class="auth-code" *ngIf="hasSendEmail && showAutoCodeIpt && checkAccountEmailValid()">
+                <form action="" #authCodeForm>
+                    <input *ngFor="let num of tplAuthCodeList; let i = index"
+                           #codeInput
+                           class="f49-f normalLight" type="text" value="" maxlength="1"
+                           [class.current]="currentTab===i"
+                           (keyup)="autoTab($event, i, codeInput)"
+                           (focus)="currentTab=i">
+                </form>
+
+            </div>
+            <div class="absolute {{emailAlert.success?'alert-success':'alert-error'}}"
+
+                 *ngIf="emailAlert.show">{{emailAlert.text | translate}}
+            </div>
+            <div class="f35-f check-email">{{'Check your email box and find BI link email' | translate}}
+            </div>
+            <div class="di-but set-di-but set-margin-top39">
+                <div class="but but-cancel f4-f set-link" *ngIf="accountUser.email"
+                     (click)="clickResendEmail($event)"
+                ><span class="base">{{(accountEmailTimer===0?'SEND LINK': accountEmailTimer+'s') | translate}}</span></div>
+                <div class="but but-send f4-f" (click)="clickUploadEmail($event)"
+                     *ngIf="authCodeLength===6 && hasSendEmail"
+                ><span class="base">{{'UPLOAD' | translate}}</span></div>
+            </div>
+        </div>
+    </div>
+    <div class="set-success clearfix" *ngIf="hasSetAccount">
+        <span class="icon1-completing-update">
+            <em class="path1"></em>
+            <em class="path2"></em>
+            <em class="path3"></em>
+            <em class="path4"></em>
+            <em class="path5"></em>
+       </span>
+        <div class="f35-f">
+            {{'completing update' | translate}}
+            <span class="success-loading">
+                <i>.</i><i>.</i><i>.</i><i>.</i>
+            </span>
+        </div>
+    </div>
+</div>
+<!--E reset account-->
+
+
+<!--content start-->
+<div #tips1>
+    <tips #tips *ngIf="couldLoadTips" [class.hide]="isShowApplication"></tips>
+</div>
+
+<!--content end-->
+<!--application start-->
+<application *ngIf="isShowApplication" [isCeo]="isSuperAdmin"></application>
+<!--application end-->
+
+<!--contacts list start-->
+<contacts-list #contactList (contactListReload)="loadTips()"></contacts-list>
+<!--contacts list end-->
+
+<!--notification start-->
+<user-notification #userNotification (userEvent)="doUserIndexEvent($event)"></user-notification>
+<!--notification end-->
+
+<!--business list start-->
+<div class="h-business-warp"
+     [class.h-business-warp-zIndex]="businessZIndex"
+     [class.fadeIn]="businessFadeIn"
+     [class.fadeOut]="!businessFadeIn"
+     *ngIf="isShowBusiness"
+     #businessWarp
+     (click)="hideBusinessList($event, businessWarp)">
+    <div class="h-business-list" (click)="stopPropa($event)">
+        <div class="clearfix h-business-list-title">
+            <span class="pull-left f9-f">{{'BUSINESS LIST' | translate}}</span>
+        </div>
+        <div class="f19-f text-center g-margin-top10 g-no-data-color" style="padding-bottom: 10px;"
+             *ngIf="unVerifiedCompanyList && unVerifiedCompanyList.length == 0">
+            {{'No Data' | translate}}
+        </div>
+        <div class="business-list-wrap">
+            <ul *ngIf="unVerifiedCompanyList && unVerifiedCompanyList.length!==0">
+                <li class="clearfix" *ngFor="let company of unVerifiedCompanyList">
+                    <div class="pull-left h-business-list-left">
+                        <span class="f19-f">{{company.name}}</span>
+                        <span class="f5-f">{{(company.status == 3? 'Upgrading' : company.status == 2 ? pending:'in active') | translate}}</span>
+                    </div>
+                    <div class="pull-right h-business-list-right" *ngIf="company.is_studio == 0">
+                        <span class="pull-left f48-f h-business-company h-business-no-company">{{'company' | translate}}</span>
+                        <span class="bi-icon-edit hide last-child-icon"></span>
+                    </div>
+                    <div class="pull-right h-business-list-right" *ngIf="company.is_studio == 1">
+                    <span class="pull-left f48-f h-business-studio"
+                          [class.h-business-no-company]="company.status == 3">
+                        {{'studio' | translate}}
+                    </span>
+                        <span class="icon1-business-upgrade last-child-icon"
+                              *ngIf="company.status != 3"
+                              (click)="upgradeStudio($event,company)"></span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+<!--business list end-->
+
+<div class="but-home-page pull-left"
+     tooltip [tooltip]="{content:'New Tip', position:'left'}"
+     (click)="openTipsDialog($event)">
+    <span class="font-chatinput"></span>
+</div>
+<div class="but-home-help pull-left"
+     help
+     tooltip [tooltip]="{content:'help', position:'left'}"
+     (click)="showHelpDialog()"><em>?</em></div>
+
+<global-search
+        (closeSearchTab)="doCloseSearchTab()"
+        *ngIf="isShowGlobalSearchResult"
+        [setSearchType]="searchData"
+></global-search>
+

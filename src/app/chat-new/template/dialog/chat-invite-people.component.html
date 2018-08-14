@@ -1,0 +1,13 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'INVITE' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <dropdown-search
+            [dropdownOptions]="connectDropdownOptions"
+            [selectedOptions]="connectSelectedOptions"
+            [dropdownSettings]="connectDropdownSettings"
+            (optionModelArrChange)="setContactsList($event)"
+    ></dropdown-search>
+    <p class="g-show-error-color" *ngIf="showError.isShow">{{showError.text}}</p>
+</div>

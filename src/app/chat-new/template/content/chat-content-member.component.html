@@ -1,0 +1,26 @@
+<div class="ch-r-right-item-title add-pointer" (click)="toggleMemberMenuStatus($event)">
+    <span class="font-user ch-item-title-left g-margin-top2"></span>
+    <i class="f16-f"><em>{{onlineCount}}</em>/{{groupMemberInfo.length}} {{'Member' | translate}}</i>
+    <span class="font-selectbutton-soildclose pull-right"></span>
+</div>
+<div class="ch-r-right-item-content">
+    <ul class="ch-r-right-member-list">
+        <li class="ch-member-list-item clearfix" *ngFor="let member of groupMemberInfo">
+            <!--<span (click)="showMemberDetail(member)" class="pull-left">-->
+                <!--<img src="{{member.user_profile_path ? appConfig.resourceDomain + member.user_profile_path : ''}}" alt="">-->
+                <!--<span class="f32-f ch-member-list-item-name">{{member.work_name}}</span>-->
+            <!--</span>-->
+            <profile-img class="pull-left" (outClick)="showMemberDetail(member)"
+                         [userInfo]="member" [settings]="{show_work_name: true, mini_dialog: false}"></profile-img>
+            <span class="f13-f ch-member-you" *ngIf="member.isMyself">You</span>
+            <span class="font-delete add-pointer"
+                  *ngIf="currentUserIsHost && !member.isMyself && menuItem.is_mission !== '1'"
+                  (click)="deleteGroupMember($event,member)"></span>
+            <span class="icon1-approved add-pointer"
+                  tooltip [tooltip]="{content: 'channel host', position: 'right'}"
+                  *ngIf="member.isHost"></span>
+            <span *ngIf="member.isMyself" class=" pull-right change-im-status {{member.onlineStatusCls}}"></span>
+            <span *ngIf="!member.isMyself" class="pull-right change-im-status {{member.onlineStatusCls}}"></span>
+        </li>
+    </ul>
+</div>

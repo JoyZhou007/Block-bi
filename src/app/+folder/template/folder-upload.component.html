@@ -1,0 +1,81 @@
+<div style="overflow: hidden">
+    <div class="folder-upload-file">
+        <div class="di-con">
+            <div class="di-people-height">
+                <div class="clearfix di-people di-margin10" [ngStyle]="{'margin': (uploadFileList.length - 1 === i) ? 0 : ''}" *ngFor="let item of uploadFileList let i = index">
+                    <div class="clearfix">
+                        <div *ngIf="!item.isImage">
+                    <span class="icon-file-excel di-fo-file-icon"
+                          *ngIf="item.fileType==='excel'">
+                            <em class="path1"></em>
+                        </span>
+                            <span class="icon-file-word di-fo-file-icon"
+                                  *ngIf="item.fileType==='word'">
+                            <em class="path1"></em>
+                         </span>
+                            <span class="icon-file-other di-fo-file-icon"
+                                  *ngIf="item.fileType==='other'">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                    </span>
+                            <span class="icon-file-acrobat di-fo-file-icon"
+                                  *ngIf="item.fileType==='pdf'">
+                         <em class="path1"></em>
+                    </span>
+                            <span class="icon1-excel di-fo-file-icon" *ngIf="item.fileType==='ppt'">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                    </span>
+                        </div>
+                        <div class="pull-left" *ngIf="item.isImage">
+                            <img class="g-img34" src="{{item.fileSrc ?item.fileSrc:''}}">
+                        </div>
+                        <span class="f19-f g-margin-bottom5">{{ item.name }}</span>
+                        <span class="f5-f" style="line-height: 1em;">{{'Last edit' | translate}}{{item.lastUpdateTemplate}}</span>
+                    </div>
+                    <span class="font-delete" (click)="deleteTemporaryFile($event,item,i)"></span>
+                </div>
+            </div>
+            <div *ngIf="isCanShare">
+                <div class="g-title" style="margin-top:0;">
+                    <span class="f9-f">{{'COMMENTS' | translate}}</span>
+                </div>
+                <div class="g-textArea-set">
+                    <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="comments"></textarea>
+                </div>
+                <p class="f33-f">{{'Maximum 200' | translate}}</p>
+            </div>
+        </div>
+
+        <div class="di-con" style="line-height: inherit;" *ngIf="isCanShare">
+            <div >
+                <div class="clearfix di-new-contact di-float-but" [class.hide]="!isShowSelectBox">
+                    <div class="pull-left di-new-contact-left" style="width: 100%">
+                        <div class="g-title">
+                            <span class="f9-f">{{'AUTHORIZED PERSON' | translate}}</span>
+                            <em class="f14-f">{{'required' | translate}}</em>
+                        </div>
+                        <div class="se-input">
+                            <dropdown-search (optionModelArrChange)="modelChange($event)"
+                                             (doCloseDropDown)="closeDropDown($event)"
+                                             [dropdownSettings]="dropdownSettings"
+                                             [dropdownOptions]="dropdownOptions[currentPermission]"
+                                             [selectedOptions]="shareArr"
+                            ></dropdown-search>
+                        </div>
+                    </div>
+                </div>
+                <div class="but but-add id-but-h30 di-float-but"
+                     [class.hide]="isShowSelectBox"
+                     (click)="addPermission($event)">
+                    <span class="base">{{'ADD OTHER PERMISSION USERS' | translate}}</span>
+                </div>
+                <drag [selectOption]="inputSelectMember"
+                      (doSelectPermission)="selectCurrentPermission($event)"
+                      (doDragOption)="dragTheOption($event)"
+                      (doDeleteOption)="deleteOption($event)"
+                ></drag>
+            </div>
+        </div>
+    </div>
+</div>

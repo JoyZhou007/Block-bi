@@ -1,0 +1,33 @@
+<!--S forward-->
+<div class="di-con">
+    <div class="g-title">
+        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <dropdown-search
+            [dropdownOptions]="shareList"
+            [dropdownSettings]="shareSettings"
+            [selectedOptions]="selectedOptions"
+            (optionModelArrChange)="setSelectedOption($event)"
+    ></dropdown-search>
+
+    <div class="di1-warp">
+        <div class="clearfix di1-checkbox">
+            <span class="g-checkbox"
+                  [class.font-selectbutton-select]="forwardSelect===COPY"
+                  [class.g-checkbox-selected]="forwardSelect===COPY"
+                  (click)="selectCheckbox($event)"
+            ></span>
+            <span class="f9-f">{{'Share and sync comments' | translate}}</span>
+        </div>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'COMMENTS' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="commentContent"></textarea>
+    </div>
+    <p class="f33-f">{{'Maximum 200' | translate}}</p>
+
+</div>
+<!--E forward-->

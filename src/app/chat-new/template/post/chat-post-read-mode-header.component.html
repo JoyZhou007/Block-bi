@@ -1,0 +1,79 @@
+<header class="g-header">
+    <div class="pull-left m-header-title m-create-header-title m-header-application">
+        <div class="clearfix m-create-title">
+            <span class="icon-title-post"></span>
+            <span class="pull-left f18-f">{{'POST' | translate}}</span>
+        </div>
+        <div class="clearfix ch-post-create ">
+            <div class="pull-left f13-f m-header-edit-type ch-h-i-dep-icon clearfix">
+                <i class="pull-left ch-post-postname" #displayName
+
+                >{{draftTitle}}</i>
+
+                <i class="ch-post-hr-line pull-left"></i>
+                <em class="ch-post-hr f19-f pull-left" *ngIf="!isFriend">{{currentGroupName}} </em>
+                <em class="ch-post-hr f19-f pull-left" *ngIf="isFriend">{{currentFriendName}} </em>
+                <span class="ch-h-icon pull-left {{currentGroupClsName}}" *ngIf="!isFriend"></span>
+            </div>
+            <div class="edit-type" [hidden]="!showName" (keydown)="editName($event)">
+                <input type="text" class="js-postName" placeholder="Type your post name in here" autofocus
+                       [(ngModel)]="postNameValue" #typeName>
+                <span>{{'Enter to submit, ESC to cancel' | translate}}</span>
+            </div>
+            <span class="pull-left m-create-line"></span>
+        </div>
+
+
+    </div>
+    <div class="pull-right">
+        <div class="pull-left m-create-header-but">
+        </div>
+        <div class="pull-left g-header-icon hearder-icon-lst">
+            <div class="pull-left ch-post-line hide">
+            </div>
+            <div class="pull-right">
+                <div  class="pull-left" *ngIf="showDelete">
+                    <span class="g-header-icon-list font-trash g-trash" (click)="revokePost($event)"></span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list font-archive"
+                          tooltip [tooltip]="{content:'archive', position:'bottom'}"
+                          (click)="archiveToFolder($event)"
+                    >
+                    </span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list bi-icon-download"
+                          tooltip [tooltip]="{content: 'download', position:'bottom'}"
+                          (click)="downloadThePost($event)"
+                    >
+                    </span>
+                </div>
+                <div class="pull-left">
+                <span class="g-header-icon-list bi-icon-about"
+                      (click)="showCont($event,'about')"
+                      [class.g-header-icon-active]="_showAboutDetail"
+                ></span><!--添加.g-header-icon-active选中状态-->
+                </div>
+                <div class="pull-left" >
+                    <span class="g-header-icon-list font-forward"
+                          (click)="openForwardDialog($event)"
+                    ></span>
+                </div>
+                <div class="pull-left">
+                   <span class="g-header-icon-list g-icon-width24 g-icon-position-1"
+                         tooltip [tooltip]="{content: 'comments', position:'bottom'}"
+                         (click)="showCont($event,'comment')"
+                         [class.g-header-icon-active]="_showCommentDetail">
+                        <i class="g-transition2 font-comments-1">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                            <em class="path3"></em>
+                        </i>
+                   </span>
+                </div>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="returnToChat($event)"></a>
+    </div>
+</header>

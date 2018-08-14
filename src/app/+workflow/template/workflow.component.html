@@ -1,0 +1,26 @@
+<div class="wo-esc">
+    <div class="pull-left g-header-icon">
+        <div class="pull-left" (click)="showWorkflowHelp($event)">
+            <span class="g-header-icon-list font-help"></span>
+        </div>
+    </div>
+    <a href="javascript:;" class="pull-left font-page-esc" (click)="closeWorkflow()"></a>
+</div>
+<div class="clearfix wo-width1" [class.wo-width2]="workflowCreate.isActive">
+    <workflow-menu #workflowMenu
+                   [currentId]="_currentId"
+                   [currentIds]="_currentIds"
+                   (outCurrentId) = "setCurrentId($event)"
+                   (outCreateNew) = "createWorkflow($event)"></workflow-menu>
+    <workflow-create #workflowCreate
+                     [currentId]="_currentId"
+                     [currentIds]="_currentIds"
+                     (outRedirectToNew)="redirectToNewWorkflow($event)"
+                     (outRefreshEntirety)="refreshWorkflow($event)"></workflow-create>
+    <workflow-entirety #workflowEntirety
+                       [currentId]="_currentId"
+                       [currentIds]="_currentIds"
+                       [setConcurrencyUserArr]="concurrencyUserArr"
+                       (outEditDetail) = "editWorkflow($event)"
+                       (outNewWorkflow)= "createWorkflow($event)"></workflow-entirety>
+</div>

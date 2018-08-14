@@ -1,0 +1,61 @@
+<!--第二种-->
+<div class="pull-left s-edit-position" [class.s-edit-position-hide]="formHide">
+    <p class="s-edit-position-title f7-f ">
+        {{(isNew ? 'NEW DEPARTMENT' : 'EDIT DEPARTMENT') | translate}}
+        <span (click)="closeForm()" class="s-edit-position-close font-page-esc-small"></span>
+    </p>
+
+
+    <div class="s-contact-detail ">
+        <perfect-scrollbar class="ps-container s-contact-detail-scroll">
+            <div class="s-contact-detail-input">
+                <div class="g-title" style="padding-top: 1px;">
+                    <span class="f9-f">{{'DEPARTMENT NAME' | translate}}</span>
+                    <em class="f14-f">{{'required' | translate}}</em>
+                </div>
+
+                <div class="se-input">
+                    <div class="se-input-select">
+                        <span class="font-selectbutton-soildclose hide"></span>
+                    </div>
+                    <input class="show g-input-color g-input-box-shadow" type="text"
+                           [(ngModel)]="localDepartmentInfo.name">
+
+
+                    <!--<p class="f33-f">Choose people to operate this mission</p>-->
+                </div>
+
+            </div>
+            <div class="s-contact-detail-input">
+                <div class="g-title g-padding-top0">
+                    <span class="f9-f">{{'DEPARTMENT HEADER' | translate}}</span>
+                    <em class="f14-f">{{'required' | translate}}</em>
+                </div>
+                <dropdown-search
+                        (optionModelArrChange)="headerChange($event)"
+                        [dropdownSettings]="headerSettings" [dropdownOptions]="headerOptions"
+                        [selectedOptions]="headerSelectedOptions"
+                ></dropdown-search>
+            </div>
+
+            <div class="s-contact-detail-input">
+                <div class="g-title g-padding-top0">
+                    <span class="f9-f">{{'TEAM MEMBERS' | translate}}</span>
+                    <!--<em class="f14-f">require</em>-->
+                </div>
+                <dropdown-search
+                        (optionModelArrChange)="teamChange($event)"
+                        [dropdownSettings]="teamSettings" [dropdownOptions]="teamOptions"
+                        [selectedOptions]="teamSelectedOptions"
+                ></dropdown-search>
+            </div>
+        </perfect-scrollbar>
+    </div>
+
+    <div (click)="deleteDepartment()" class="s-contact-detail-save-button but but-delete">
+        <span class="base">{{'DELETE' | translate}}</span>
+    </div>
+    <div (click)="saveEditDepartment()" class="s-contact-detail-del-button but but-save">
+        <span class="base">{{'SAVE' | translate}}</span>
+    </div>
+</div>

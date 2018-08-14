@@ -1,0 +1,19 @@
+<div  class="n-cursor" (click)="openReplyDialog()">
+    <img src="{{senderInfo?.user_profile_path ? appConfig.resourceDomain + senderInfo?.user_profile_path : ''}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{'OUT OFFICE APPLICATION' | translate}}</h3>
+        <div class="n-con">
+            <div class="clearfix n-time f20-f">
+                <span class="pull-left">
+                    {{formatStartDate.hour}}:{{formatStartDate.minute}} {{formatStartDate.monthDay}} {{formatStartDate.stringMonth}} {{formatStartDate.year}}
+                </span>
+                <span class="icon1-Shape-2"></span>
+                <span class="pull-left">
+                   {{formatEndDate.hour}}:{{formatEndDate.minute}} {{formatEndDate.monthDay}} {{formatEndDate.stringMonth}} {{formatEndDate.year}}
+                </span>
+            </div>
+            <p class="f20-f">{{notificationIn?.message}}</p>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo.work_name}}</span>
+    </div>
+</div>

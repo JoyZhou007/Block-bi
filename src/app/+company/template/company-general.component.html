@@ -1,0 +1,7 @@
+
+<!--header start-->
+<company-header (parentSaveData)="doSaveData($event)" [setCouldEdit]="couldEdit" [btnFailData]="btnFailObj"></company-header>
+<!--header end-->
+
+<edit-company *ngIf="couldEdit" #editCompany [setCouldEdit]="couldEdit" (btnFailOutput)="btnFailEvent($event)"></edit-company>
+<view-company *ngIf="!couldEdit" [setCouldEdit]="couldEdit"></view-company>

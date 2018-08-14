@@ -1,0 +1,236 @@
+<!--<div class="ct-occupation-warp">
+    <h2 class="f53-f text-center">{{'EDIT OCCUPATION' | translate}}</h2>
+    <div class="a-list-top">
+        <h3 class="f7-f">{{'JOB INFORMATION' | translate}}</h3>
+        <p class="f14-f">{{'That information' | translate}}</p>
+    </div>
+
+    <a class="pull-left font-page-esc g-top-right-close" (click)="closeOccupation()"></a>
+</div>-->
+
+<div class="occupation scroll-element" [hidden]="!showOccupation" style="margin-right:20px; margin-left: 20px;">
+  <!--  <div class="a-list-top">
+        <h3 class="f7-f">{{'JOB INFORMATION' | translate}}</h3>
+        <p class="f14-f">{{'That information' | translate}}</p>
+    </div>-->
+    <div class="ct-occupation">
+        <div class="g-title">
+            <span class="f9-f">{{'WORK EMAIL' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" inputBlur>
+            <input class="g-input-box-shadow" type="text"
+                   [(ngModel)]="fetchOccupation.workEmail"
+                   name="Email"
+                   data-type="email" #verificationInput>
+            <p class="hide" #errorMessage></p>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'WORK PHONE' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" inputBlur>
+            <input class="g-input-box-shadow" type="text" [(ngModel)]="fetchOccupation.workPhone" name="Phone" data-type="phone"
+                   #verificationInput>
+            <p class="hide" #errorMessage></p>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'CONTRACT TERM' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div inputBlur>
+            <div class="clearfix se-input se-date g-transition2 g-time g-input-box-shadow" #contractElement #verificationTime>
+                <input class="se-date-input" type="text"
+                       [(ngModel)]="showTimeCommencement.start"
+                       readonly
+                       (click)="onClickDate($event, true, 'contract', contractElement, contractMessageElement, contractAttrElement,'start')"
+                       name="Contract term start and end time"
+                       data-type="time"
+                       #verificationInput
+                       #contractAttrElement>
+                <span class="icon1-Shape-2"></span>
+                <input class="se-date-input" type="text"
+                       [(ngModel)]="showTimeCommencement.end"
+                       name="Contract term"
+                       readonly
+                       (click)="onClickDate($event, false, 'contract', contractElement, contractMessageElement, contractAttrElement,'end')">
+            </div>
+            <p class="hide" #errorMessage #contractMessageElement></p>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'PROBATION' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div inputBlur>
+            <div class="clearfix se-input se-date g-transition2 g-time g-input-box-shadow" #probationElement #verificationTime>
+                <input class="se-date-input" type="text"
+                       [(ngModel)]="showTime.start"
+                       readonly
+                       (click)="onClickDate($event, true, 'probation', probationElement, probationMessageElement, probationAttrElement,'start')"
+                       name="probation start and end time"
+                       data-type="time"
+                       #verificationInput
+                       #probationAttrElement>
+                <span class="icon1-Shape-2"></span>
+                <input class="se-date-input" type="text"
+                       [(ngModel)]="showTime.end"
+                       name="probationEndTime"
+                       readonly
+                       (click)="onClickDate($event, false, 'probation', probationElement, probationMessageElement, probationAttrElement,'end')">
+            </div>
+            <p class="hide" #errorMessage #probationMessageElement></p>
+        </div>
+        <div class="absolute z-index-num4" #calendarProfile>
+            <bi-calendar-profile
+                    *ngIf="isShowCalendar"
+                    [multiselectOption]="multiCalendar"
+                    (outSelectData)="getSelectData($event)"
+                    (outDefault)="getOutDefault()"></bi-calendar-profile>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'SALARY' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" toggleSelectGroup #toggleInput (callBackData)="doCallBackData($event)" [currClass]="'se-input-selected'">
+            <div inputBlur>
+                <div #toggleSelectBut>
+                    <div class="se-input-select se-input-select-ctrl">
+                        <span class="f14-f input-time-txt"><em>{{currCurrency}}</em>{{currPeriod | translate}}</span>
+                        <span class="font-selectbutton-soildclose input-time-txt-btn"></span>
+                    </div>
+                    <input class="g-input-box-shadow" type="text" [(ngModel)]="fetchOccupation.salary" name="Salary" data-type="number"
+                           #verificationInput>
+                </div>
+                <p class="hide" #errorMessage></p>
+            </div>
+            <div class="d-salary" #toggleSelect>
+                <div class="clearfix">
+                    <ul class="pull-left selectSalary">
+                        <li *ngFor="let currency of currencyArray; let i = index;" #currencyEl
+                            (click)="selectCurrency(currency, (i + 1), currencyEl)">
+                            <span class="base">{{currency}}</span>
+                        </li>
+                    </ul>
+                    <ul class="pull-left selectPeriod">
+                        <li *ngFor="let period of periodArray; let i = index;" #periodEl
+                            (click)="selectPeriodVal(period, (i + 1), periodEl)">
+                            <span class="base">{{period | translate}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="but but-select-done" (click)="doneValue()"><span class="base">{{'DONE' | translate}}</span></div>
+            </div>
+        </div>
+        <ul class="a-p-general">
+            <li class="clearfix">
+                <div class="pull-left a-list-half" style="width: calc(50% - 10px);">
+                    <div class="g-title">
+                        <span class="f9-f">{{'ANNUAL LEAVE' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <div class="se-input" inputBlur>
+                        <div class="se-input-select se-input-select-offset10">
+                            <span class="f14-f">{{'Days' | translate}}</span>
+                        </div>
+                        <input class="g-input-box-shadow" type="text" [(ngModel)]="fetchOccupation.marriageLeave" name="Annual leave"
+                               data-type="lessThan" #verificationInput>
+                        <p class="hide" #errorMessage></p>
+                    </div>
+                </div>
+                <div class="pull-right a-list-half"  style="width: calc(50% - 10px);">
+                    <div class="g-title">
+                        <span class="f9-f">{{'MARRIAGE LEAVE' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <div class="se-input">
+                        <div inputBlur>
+                            <div class="se-input-select se-input-select-offset10">
+                                <span class="f14-f">{{'Days' | translate}}</span>
+                            </div>
+                            <input class="g-input-box-shadow" type="text" [(ngModel)]="fetchOccupation.annualLeave" name="Marriage leave"
+                                   data-type="lessThan" #verificationInput>
+                            <p class="hide" #errorMessage></p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="g-title">
+            <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="100"
+                      [(ngModel)]="fetchOccupation.description"></textarea>
+        </div>
+        <div class="g-margin-bottom20">
+            <p class="f33-f g-line-height20 ">{{'Maximum 100' | translate}}</p>
+        </div>
+
+        <!--<div class="pull-right but but-done" (click)="doUploadInfo()">UPLOAD</div>-->
+    </div>
+</div>
+
+<div class="permission" [hidden]="showOccupation">
+    <ul class="g-d-drag" *ngIf="!showNoPermission">
+        <li class="clearfix" *ngFor="let permissionObj of permissionList;">
+            <div class="pull-left">
+                <span class="f9-f">{{permissionObj.name}}</span>
+                <span class="font-selectbutton-soildclose font-selectbutton-soildclose-occupation"
+                      [class.font-selectbutton-soildclose-occupation-hide]="!permissionObj.isExpand"
+                      *ngIf="permissionObj.hasOwnProperty('children')"
+                      (click)="clickExpendPermission($event,permissionObj)"
+                ></span>
+                <p class="f10-f">{{permissionObj.description}}</p>
+                <div class="g-text-indent2" [hidden]="!permissionObj.isExpand">
+                    <div [hidden]="!permissionObj.hasOwnProperty('children')" *ngFor="let childPermission of permissionObj.children">
+                        <span class="f9-f" [class.g-text-line-through]="ownPermissionList.indexOf(childPermission.key) === -1">{{childPermission.name}}</span>
+                        <span class="font-selectbutton-soildclose font-selectbutton-soildclose-occupation"
+                              [class.font-selectbutton-soildclose-occupation-hide]="!childPermission.isExpand"
+                              *ngIf="childPermission.hasOwnProperty('children')"
+                              (click)="clickExpendPermission($event,childPermission)"
+                        ></span>
+                        <p class="f10-f"  [class.g-text-line-through]="ownPermissionList.indexOf(childPermission.key) === -1">{{childPermission.description}}</p>
+                        <div class="g-text-indent3" [hidden]="!childPermission.isExpand">
+                            <div [hidden]="!childPermission.hasOwnProperty('children')" *ngFor="let childPer of childPermission.children">
+                                <span class="f9-f"  [class.g-text-line-through]="ownPermissionList.indexOf(childPer.key) === -1">{{childPer.name}}</span>
+                                <span class="font-selectbutton-soildclose font-selectbutton-soildclose-occupation"
+                                      [class.font-selectbutton-soildclose-occupation-hide]="!childPer.isExpand"
+                                      *ngIf="childPer.hasOwnProperty('children')"
+                                      (click)="clickExpendPermission($event,childPer)"
+                                ></span>
+                                <p class="f10-f"  [class.g-text-line-through]="ownPermissionList.indexOf(childPer.key) === -1">{{childPer.description}}</p>
+
+                                <div class="g-text-indent4" [hidden]="!childPer.isExpand">
+                                    <div [hidden]="!childPer.hasOwnProperty('children')" *ngFor="let chi of childPer.children">
+                                        <span class="f9-f" [class.g-text-line-through]="ownPermissionList.indexOf(chi.key) === -1">{{chi.name}}</span>
+                                        <p class="f10-f" [class.g-text-line-through]="ownPermissionList.indexOf(chi.key) === -1">{{chi.description}}</p>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+            <div class="g-drag1-width1" *ngIf="!isSelf">
+                <switch-button [initVal]="{perm: !permissionObj.isClose?1:0, bgColorClass: 'g-d-bg1'}"
+                               (switchButEvent)="clickOpenPermission($event,permissionObj)"></switch-button>
+               <!-- <div class="g-drag1"
+                     [class.g-set-but-right-style]="!permissionObj.isClose"
+                     [class.g-d-bg1]="!permissionObj.isClose"
+                     [class.g-set-but-left-style]="permissionObj.isClose"
+                     (click)="clickOpenPermission($event,permissionObj)"><span></span></div>-->
+            </div>
+        </li>
+    </ul>
+    <div *ngIf="showNoPermission" class="g-d-drag">
+        <p class="text-center g-no-data-color g-padding-bottom10">{{'you have no permission to examine.' | translate}}</p>
+
+    </div>
+    <div class="g-d-drag g-no-data-color" *ngIf="showNoData">
+        <p class="text-center g-no-data-color g-padding-bottom10">{{'No Data' | translate}}</p>
+    </div>
+</div>

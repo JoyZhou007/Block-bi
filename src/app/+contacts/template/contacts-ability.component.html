@@ -1,0 +1,72 @@
+<perfect-scrollbar class="ps-container pull-left ct-right-left">
+    <div *ngIf="init">
+        <div class="a-list-top">
+            <h3 class="f7-f">{{'SKILL' | translate}}</h3>
+        </div>
+        <p class="f19-f g-no-data-color" *ngIf="skillList && skillList.length == 0 || !skillList">{{noData | translate}}</p>
+        <ul class="a-p-skill ct-skill" *ngIf="skillList | dataLength">
+            <li class="clearfix" *ngFor = "let skill of skillList">
+                <div class="pull-left">
+                    <div class="g-title">
+                        <span class="f9-f">
+                            {{isZhLan? skillNameList[skill.skill_name - 1].name :  skillNameList[skill.skill_name - 1].name_en}}
+                        </span>
+                    </div>
+                    <span class="pull-left f19-f">{{skillLevel[skill.level - 1]}}</span>
+                </div>
+                <div class="pull-right">
+                    <div class="pull-left skill-people-list" elementRolling>
+                        <a class="pull-left font-page-next-small g-transition2" href="javascript:;" #rollLeftBut></a>
+                        <div class="pull-left skill-people-list-img">
+                            <div class="skill-people-list-warp" #rollContent>
+                                <div class="pull-left" *ngFor="let like of skill.likeUsers">
+                                    <profile-img [userInfo]="like" [settings]="{show_work_name: false}"></profile-img>
+                                </div>
+                            </div>
+                        </div>
+                        <a class="pull-right font-page-next-small g-transition2" href="javascript:;" #rollRightBut></a>
+                    </div>
+                    <span class="pull-left f27-f skill-people-num">{{skill.likeUsers.length}}</span>
+                    <span class="font-color-good current g-transition2"
+                          [class.ct-skill-good-color1]="skill.is_point && skill.is_point === 1"
+                          (click)="doPoint(skill.is_point, skill)"></span>
+                </div>
+            </li>
+        </ul>
+        <div class="a-list-top g-margin-top30">
+            <h3 class="f7-f">{{'COMPREHENSIVE CAPACITY' | translate}}</h3>
+        </div>
+        <div class="text-center"><img src="{{config.staticResourceDomain + 'assets/images/personal-analysis-img.jpg'}}"></div>
+        <div class="a-analysis-agree a-analysis-agree-align">
+            <span class="font-color-good"></span>
+            <em></em>
+            <span class="font-color-good"></span>
+        </div>
+        <ul class="a-analysis-list">
+            <li class="clearfix">
+                <span class="f9-f"><i class="base">{{'Work experience' | translate}}</i></span>
+                <span class="f19-f"><i class="base">4</i></span>
+                <span class="v7-f"><i class="base">{{'Below' | translate}}</i></span>
+                <span class="f12-f"><i class="base">23.9%</i></span>
+            </li>
+            <li class="clearfix">
+                <span class="f9-f"><i class="base">{{'Total completed tasks' | translate}}</i></span>
+                <span class="f19-f"><i class="base">222</i></span>
+                <span class="v7-f"><i class="base">{{'More than' | translate}}</i></span>
+                <span class="f12-f"><i class="base">99.9%</i></span>
+            </li>
+            <li class="clearfix">
+                <span class="f9-f"><i class="base">{{'BI average' | translate}}</i></span>
+                <span class="f19-f"><i class="base">3.4</i></span>
+                <span class="v7-f"><i class="base">{{'More than' | translate}}</i></span>
+                <span class="f12-f"><i class="base">99.9%</i></span>
+            </li>
+        </ul>
+    </div>
+    <div class="profile-loadding" *ngIf="!init">
+        <loaders-css [loader]="'ball-scale-ripple-multiple'">
+            <div class="loader-inner ball-pulse"></div>
+        </loaders-css>
+    </div>
+
+</perfect-scrollbar>

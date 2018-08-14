@@ -1,0 +1,13 @@
+<img src="{{groupCreatorProfile}}" alt="{{groupCreator}}">
+<div class="n-right">
+    <h3 class="f27-f">{{objInfo.title}}</h3>
+    <div class="n-con n-company n-file-margin" *ngIf="hasInit">
+        <div class="clearfix n-channel">
+            <em class="pull-left f20-f" [innerHtml]="objInfo.simpleMsg">{{groupName}}</em>
+            <span class="{{groupType}} font-chat-private" style="margin-left:5px;"></span>
+        </div>
+        <p class="f5-f">{{groupMemberCount}} person</p>
+    </div>
+    <span class="f32-f pull-left">{{groupCreator}}</span>
+    <span class="f5-f pull-right">{{groupCreateTime}}</span>
+</div>

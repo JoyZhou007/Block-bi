@@ -1,0 +1,182 @@
+<div class="g-padding20 g-style1 relative m-t-r-bidding g-padding-top0"
+     *ngIf="!isEditModel"
+>
+    <div class="g-title">
+        <span class="f9-f">{{'BIDDING' | translate}}</span>
+        <em class="f14-f" *ngIf="biddingInfo.type==='1'">{{'unanimous' | translate}}</em>
+        <em class="f14-f" *ngIf="biddingInfo.type==='2'">{{'%decision' | translate}}</em>
+        <em class="f14-f" *ngIf="biddingInfo.type==='3'">{{'vote' | translate}}</em>
+    </div>
+    <div class="clearfix date-time">
+        <div class="pull-left date-curr-time">
+            <span class="f13-f">{{'Start' | translate}}</span>
+            <span class="pull-left f49-f">{{biddingStartDate.day}}</span>
+            <div class="date-t">
+                <span class="f32-f">{{biddingStartDate.month}} {{biddingStartDate.year}}</span>
+                <span class="f27-f">{{biddingStartDate.hour}}:{{biddingStartDate.minute}} {{biddingStartDate.week}}</span>
+            </div>
+        </div>
+        <div class="pull-right date-curr-time">
+            <span class="f13-f">{{'End' | translate}}</span>
+            <span class="pull-left f49-f">{{biddingEndDate.day}}</span>
+            <div class="date-t">
+                <span class="f32-f">{{biddingEndDate.month}} {{biddingEndDate.year}}</span>
+                <span class="f27-f">{{biddingEndDate.hour}}:{{biddingEndDate.minute}} {{biddingEndDate.week}}</span>
+            </div>
+        </div>
+        <i class="icon1-Shape-2"></i>
+    </div>
+    <div *ngIf="!isBidder">
+        <div class="f13-f m-t-r-b-choice g-margin-top10" style="height: 12px">
+               <span>{{(isApprover && missionObj.available_btns.vote &&
+            (missionObj.mission_status === missionConstant.MISSION_STATUS_DOING))? 'your choice':''}}</span>
+        </div>
+        <ul>
+            <li *ngFor="let bidder of biddingInfo.bidder">
+                <img class="pull-left m-t-r-b-img" title="{{bidder.user_info.name}}"
+                     src="{{config.resourceDomain + bidder.user_info.user_profile_path}}">
+                <div class="pull-left m-t-r-b-status" *ngIf="bidder.status=== missionConstant.MISSION_USER_OPERATOR_PENDING">
+                    <i class="m-t-r-b-pending"></i>
+                    <span class="f13-f">{{'pending' | translate}}</span>
+                </div>
+                <div class="pull-left m-t-r-b-status" *ngIf="bidder.status===missionConstant.MISSION_USER_OPERATOR_ACCEPT">
+                    <i class="m-t-r-b-process"></i>
+                    <span class="f13-f">{{'in process' | translate}}</span>
+                </div>
+                <div class="pull-left m-t-r-b-status" *ngIf="bidder.status===missionConstant.MISSION_USER_OPERATOR_REFUSE">
+                    <i class="m-t-r-b-refused"></i>
+                    <span class="f13-f">{{'refused' | translate}}</span>
+                </div>
+                <div class="clearfix m-t-r-b-people">
+                    <a class="pull-left m-t-r-b-prev"
+                       (click)="moveVoter(-1,'list',bidder)"
+                       href="javascript:;"><i class="font-selectbutton-line"></i></a>
+                    <div class="m-t-r-b-people-list">
+                        <div class="clearfix m-t-r-b-people-list-move" [style.left]="bidder.moveLeft+'px'">
+                            <div class="pull-left" *ngFor="let voteInfo of bidder.vote_info">
+                                <img class="pull-left" src="{{config.resourceDomain + voteInfo.user_info.user_profile_path}}" title="{{voteInfo.user_info.name}}">
+                            </div>
+                        </div>
+                    </div>
+                    <a class="pull-right m-t-r-b-next"
+                       (click)="moveVoter(1,'list',bidder)"
+                       href="javascript:;"><i class="font-selectbutton-line"></i></a>
+                </div>
+                <span class="pull-right m-t-r-b-select"
+                      *ngIf="isApprover && missionObj.available_btns.vote  && (missionObj.mission_status === missionConstant.MISSION_STATUS_DOING)
+                    && (bidder.status === missionConstant.MISSION_USER_OPERATOR_ACCEPT) "
+                      (click)="chooseTheBidder(bidder)">
+            </span>
+                <span class="pull-right m-t-r-b-win f46-f" *ngIf="bidder.isWinner
+            && (missionObj.mission_status === missionConstant.MISSION_STATUS_DONE)">{{'win' | translate}}</span>
+                <span class="pull-right m-t-r-b-fail f9-f" *ngIf="!bidder.isWinner
+            && (missionObj.mission_status === missionConstant.MISSION_STATUS_DONE)">{{'fail' | translate}}</span>
+            </li>
+        </ul>
+        <div class="m-t-r-b-propcess"  *ngIf="biddingInfo.type==='2'">
+            <a class="m-t-r-b-prev" href="javascript:;" (click)="moveVoter(-1,'voter')" ><i class="font-selectbutton-line"></i></a>
+            <div  class="approver-div">
+                <ol class="clearfix"
+                    [style.left]="moveLeft+'px'">
+                    <li *ngFor="let approver of biddingInfo.amount let i=index"
+                        (click)="showApproverData(i)"
+                        class="pull-left"
+                        [class.current]="i===currentApproverIndex">
+                        <img title="{{approver.user_info.name}}"
+                             src="{{config.resourceDomain + approver.user_info.user_profile_path}}">
+                        <span *ngIf="i===currentApproverIndex">{{approver.scale}}%</span>
+                    </li>
+                </ol>
+            </div>
+            <a class="m-t-r-b-next" href="javascript:;" (click)="moveVoter(1,'voter')"><i class="font-selectbutton-line"></i></a>
+        </div>
+    </div>
+    <div class="m-t-r-fail" *ngIf="isBidder && (missionObj.mission_status === missionConstant.MISSION_STATUS_DONE) && !isWinner ">{{'FAIL' | translate}}</div>
+    <div class="m-t-r-win" *ngIf="isBidder && (missionObj.mission_status === missionConstant.MISSION_STATUS_DONE) && isWinner ">{{'WIN' | translate}}</div>
+    <div class="m-t-r-process" *ngIf="isBidder && (missionObj.mission_status === missionConstant.MISSION_STATUS_DOING) && isCanVote">{{'IN PROCESS' | translate}}</div>
+</div>
+
+
+<!--------------编辑模式下的BIDDING--------------------->
+<div class="g-style1" *ngIf="isEditModel">
+    <div class="m-r-c-tab m-t-c-tab" style="position:static;">
+        <ul class="clearfix m-r-c-tab-list">
+            <li [class.current]="biddingInfo.type === '1'" (click)="switchBiddingType('UNANIMOUS')"><span>{{'UNANIMOUS' | translate}}</span></li>
+            <li [class.current]="biddingInfo.type === '2'" (click)="switchBiddingType('%')"><span>{{'%DECISION' | translate}}</span></li>
+            <li [class.current]="biddingInfo.type === '3'" (click)="switchBiddingType('VOTE')"><span>{{'VOTE' | translate}}</span></li>
+        </ul>
+        <div class="g-title">
+            <span class="f9-f">{{'BID TIME' | translate}}</span>
+        </div>
+        <div class="clearfix g-time" style="position: relative;">
+            <input class="pull-left " readonly="" type="text"
+                   style="width: 200px"
+                   [class.g-color-not-select]='!hasTime'
+                   (click)="showCalendar($event,'start')"
+                   [(ngModel)]="startTemplate">
+            <span class="pull-left icon1-Shape-2"></span>
+            <input class="pull-left " readonly="" type="text"
+                   style="width: 200px"
+                   [class.g-color-not-select]='!hasTime'
+                   (click)="showCalendar($event,'end')"
+                   [(ngModel)]="endTemplate">
+        </div>
+        <div class="absolute" #calendarProfile>
+            <bi-calendar-multiselect
+                    *ngIf="isShowCalendar"
+                    [multiselectOption]="multiCalendar"
+                    (outSelectData)="getSelectData($event)"
+                    (outDefault)="getOutDefault()">
+            </bi-calendar-multiselect>
+        </div>
+        <div *ngIf="biddingInfo.type === '2'">
+            <div class="g-title">
+                <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input m-r-c-tab-common se-input-hover g-transition2 g-input-box-shadow m-r-c-self-goal"  *ngFor="let voter of biddingInfo.amount" >
+                <div class="se-input-select">
+                    <span class="f14-f">%</span>
+                </div>
+                <div class="pull-left m-r-c-tab-common-people">
+                    <profile-img class="g-line-height26" [userInfo]="voter.user_info" [settings]="{show_work_name: true}"></profile-img>
+                </div>
+                <input
+                        *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_TODO)
+                       || (missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING) "
+                        class="current-color"
+                       type="text"
+                        (keydown)="onKeyDown($event)"
+                       (blur)="calculateBidding(voter.scale)"
+                       [(ngModel)]="voter.scale">
+                <input  *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_TODO)
+                        && (missionObj.mission_status !== missionConstant.MISSION_STATUS_PENDING) "
+                        class="current-color"
+                       disabled
+                       type="text"
+                       [(ngModel)]="voter.scale">
+            </div>
+            <div class="g-title">
+                <span class="f9-f">{{'WEIGHT' | translate}}</span>
+            </div>
+            <div class="m-r-c-select-percent">
+                <span class="font-min" (click)="changeAcceptLine('min')"></span>
+                <span class="font-add"  (click)="changeAcceptLine('add')"></span>
+                <div class="m-r-c-select-percent-pos">
+                    <input *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_TODO)
+                       || (missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING) "
+                            class="f20-f" type="text"
+                           (blur)="calculateAcceptLine(biddingInfo.accept_line)"
+                           [(ngModel)]="biddingInfo.accept_line">
+                    <input *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_TODO)
+                        && (missionObj.mission_status !== missionConstant.MISSION_STATUS_PENDING) "
+                            class="f20-f" type="text"
+                           disabled
+                           style='background: #ffffff;'
+                           [(ngModel)]="biddingInfo.accept_line">
+                    <span class="f14-f">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

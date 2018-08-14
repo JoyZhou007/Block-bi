@@ -1,0 +1,100 @@
+<header class="g-header" >
+    <div class="pull-left">
+        <div class="clearfix m-create-title">
+            <span class="icon-title-post"></span>
+            <span class="pull-left f18-f">{{'POST' | translate}}</span>
+        </div>
+        <div class="clearfix g-title-des g-display-inline-block">
+            <div class="pull-left f13-f m-header-edit-type ch-h-i-dep-icon clearfix">
+                <i class="pull-left ch-post-postname" #displayName
+                   (click)="showTypeName($event,typeName)"
+                >{{draftTitle | translate}}</i>
+                <span class="bi-icon-edit pull-left ch-post-font-pin1 margin-left10"
+                      (click)="showTypeName($event,typeName)"
+                ></span>
+                <i class="ch-post-hr-line pull-left"></i>
+<!--                <em class="ch-post-hr f19-f pull-left">{{postGroupName}}</em>
+                <span class="ch-h-icon {{postGroupClsName}}"></span>-->
+                <em class="ch-post-hr f19-f pull-left" *ngIf="!isFriend">{{postGroupName}} </em>
+                <em class="ch-post-hr f19-f pull-left" *ngIf="isFriend">{{postFriendName}} </em>
+                <span class="ch-h-icon pull-left {{postGroupClsName}}" *ngIf="!isFriend"></span>
+            </div>
+            <div class="edit-type" [hidden]="!showName" (keydown)="editName($event)">
+                <input type="text" class="js-postName" placeholder="{{'Type your post name in here' | translate}}" autofocus
+                       [(ngModel)]="postNameValue" #typeName>
+                <span>{{'Enter to submit, ESC to cancel' | translate}}</span>
+            </div>
+            <span class="pull-left m-create-line"></span>
+        </div>
+
+    </div>
+    <div class="pull-right">
+        <div class="pull-left m-create-header-but" style="position: relative; top: 5px;">
+            <span class="pull-left but but-refuse ch-post-save"
+                  saveDataGroup #saveElement (outSaveData)="addIntoDraft($event,saveElement)"
+            ><em class="base">{{'SAVE' | translate}}</em>
+                 <i class="font-selectbutton-select but-status"></i>
+                 <i class="font-remove but-status"></i>
+            </span>
+            <span class="pull-left but but-approve"
+                  saveDataGroup #saveDataElement (outSaveData)="uploadChatPost($event,saveDataElement)"
+            ><em class="base">{{'UPLOAD' | translate}}</em>
+                <i class="font-selectbutton-select but-status"></i>
+                 <i class="font-remove but-status"></i>
+            </span>
+        </div>
+        <div class="pull-left g-header-icon hearder-icon-lst">
+            <div class="pull-left ch-post-line">
+            </div>
+            <div class="pull-right">
+                <div class="pull-left"
+                     tooltip [tooltip]="{content: 'main information', position: 'bottom'}"
+                >
+                <span class="g-header-icon-list bi-icon-about"
+                      (click)="showCont($event,'about')"
+                      [class.g-header-icon-active]="_showAboutDetail"
+                ></span><!--添加.g-header-icon-active选中状态-->
+                </div>
+                <!--<div class="pull-left">
+                    <span class="g-header-icon-list bi-icon-rectangle"
+                          (click)="returnToChat($event)"
+                    ></span>
+                </div>-->
+                <div class="pull-left"
+                     tooltip [tooltip]="{content: 'draft', position: 'bottom'}"
+                >
+                    <span class="font-draft g-header-icon-list"
+                          (click)="showCont($event,'draft')"
+                          [class.g-header-icon-active]="_showDraftDetail"
+                    ></span>
+                </div>
+                <div class="pull-left"
+                     tooltip [tooltip]="{content: 'upload files', position: 'bottom'}"
+                >
+                    <span class="bi-icon-upload g-header-icon-list"
+                          (click)="uploadFile($event,inputFile)"
+                    ></span>
+                    <input type="file" class="hide" multiple="multiple" #inputFile
+                           (change)="selectedFile($event, inputFile)"
+                    >
+                </div>
+                <div class="pull-left"
+                     tooltip [tooltip]="{content: 'import files', position: 'bottom'}">
+                    <span class="bi-icon-import g-header-icon-list" (click)="importFileFromBI($event)"></span>
+                </div>
+                <div class="pull-left"
+                     tooltip [tooltip]="{content: 'share to', position: 'bottom'}">
+                    <span class="bi-icon-addpeople g-header-icon-list"
+                          (click)="openShareToDialog($event)"
+                    ></span>
+                </div>
+                <div class="pull-left" (click)="showNewPostHelp($event)">
+                    <span class="g-header-icon-list font-help"></span>
+                </div>
+            </div>
+
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="returnToChat($event)"></a>
+    </div>
+    <em class="g-show-error-color pull-right g-margin-top20 g-margin-right10" title="{{btnFail | translate}}">{{btnFail | translate}}</em>
+</header>

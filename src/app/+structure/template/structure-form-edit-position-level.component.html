@@ -1,0 +1,58 @@
+<!--第三种-->
+<div class="pull-left s-edit-position border-box s-edit-position-hide"  [class.s-edit-position-hide] ="formHide">
+  <p class="s-edit-position-title f7-f ">
+    {{'POSITION LEVEL' | translate}}
+    <span (click)="closeForm()" class="s-edit-position-close font-page-esc-small"></span>
+  </p>
+
+  <perfect-scrollbar class="ps-container s-edit-level-list">
+    <ul>
+      <li class="f17-f" *ngFor="let item of positionLevelList;let i = index;">
+        <p class="f32-f s-edit-level-list-text  clearfix">{{item.level}} {{'LEVEL' | translate}}
+          <span (click)="newPosition(item)" class="font-add pull-right" *ngIf="i != 0"> </span>
+        </p>
+
+        <ul class="s-edit-level-select ">
+          <li class="f17-f" [class.hide] = "isShowNewPosition(item.p_level)">
+            <p>
+              <input type="text" class="f17-f" #positionName
+                     (keyup.enter)="showNewPositionByEdit($event,item, positionName)"
+                     (keyup)="closeNewPositionByEdit($event,item)"
+                     (mouseenter)="autoFocus($event)"
+                     (blur)="showNewPositionByEdit($event,item, positionName)"
+                     >
+              <span (click)="showNewPositionByEdit($event, item, positionName)" class="pull-right icon-input-return"></span>
+            </p>
+          </li>
+          <li *ngFor="let i of item.position" class="f17-f" [class.s-edit-level-select-edit]="!ipt.readOnly">
+            <p>
+              <input type="text" value="{{i.p_name}}" class="f17-f"
+                     readonly="true" #ipt
+                     (blur)="confirmEditPosition(i,ipt)"
+                     (keyup)="isShowEditPosition($event,i,ipt)">
+              <span (click)="deletePosition(i)" class="pull-right font-delete "
+                    *ngIf="(ipt.readOnly && ipt===currentEditInput) || !hasSelected"
+                    [hidden]="i.p_level==='1' && i.p_name=='CEO'"
+              ></span>
+              <span (click)="editPosition($event, i,ipt)" class="pull-right bi-icon-edit g-padding-right2"
+                    *ngIf="(ipt.readOnly && ipt===currentEditInput) || !hasSelected"
+                    [hidden]="i.p_level==='1' && i.p_name=='CEO'"
+              ></span>
+              <span class="pull-right icon-input-return g-transition2" *ngIf="!ipt.readOnly"
+                (click)="clickConfirmEditPosition($event,i,ipt)"></span>
+              <span class="pull-right font-remove s-clear g-transition2" *ngIf="!ipt.readOnly" (click)="ipt.value=''"></span>
+            </p>
+          </li>
+          <!--<li class="f17-f"><p>manager <span class="pull-right font-bi-icon-edit"></span></p></li>-->
+          <!--<li class="f15-f"><p>manager <span class="pull-right font-bi-icon-edit"></span></p></li>-->
+          <!--<li class="f15-f"><p>manager <span class="pull-right icon-input-return"></span></p></li>-->
+
+        </ul>
+      </li>
+    </ul>
+  </perfect-scrollbar>
+  <div class="setting-detail-open" (click)="newPositionLevel()">
+    <span class="f5-f base">{{'NEW POSITION LEVEL' | translate}}</span>
+  </div>
+
+</div>

@@ -1,0 +1,78 @@
+<div class="pull-left fo-side">
+    <perfect-scrollbar class="ps-container folder-left-scroll">
+        <ul id="step_folder_1" data-step="step_folder_1">
+            <li (click)="switchFolderType(personal,1)"
+                #personal
+                [class.current]="isPersonal && !isDefaultPage">
+                <span class="f16-f">{{'Personal Folder' | translate}}</span>
+                <span class="f8-f">{{'Only stock individual files' | translate}}</span>
+            </li>
+            <li (click)="switchFolderType(business,2)"
+                #business
+                [class.current]="isBusiness && !isDefaultPage"
+                [class.d-opacity]="!isHaveCompany">
+                <span class="f16-f">{{'Business Folder' | translate}}</span>
+                <span class="f8-f">{{'Only stock business files' | translate}}</span>
+            </li>
+            <li (click)="searchTheFile(folderConstant.FOLDER_TYPE_INFORMATION)"
+                [class.current]="isInformation && !isDefaultPage"
+            >
+                <span class="f16-f">{{'All Information' | translate}}</span>
+                <span class="f8-f">{{'Only stock information' | translate}}</span>
+            </li>
+            <li (click)="searchTheFile(folderConstant.FOLDER_TYPE_ANALYSIS)"
+                [class.current]="isAnalysis && !isDefaultPage"
+            >
+                <span class="f16-f">{{'All Analysis' | translate}}</span>
+                <span class="f8-f">{{'Only stock analysis files' | translate}}</span>
+            </li>
+            <li (click)="searchTheFile(folderConstant.FOLDER_TYPE_POST)"
+                [class.current]="isPosts && !isDefaultPage"
+            >
+                <span class="f16-f">{{'All Posts' | translate}}</span>
+                <span class="f8-f">{{'Only stock posts' | translate}}</span>
+            </li>
+            <li (click)="searchTheFile(folderConstant.FOLDER_TYPE_IMAGE)"
+                [class.current]="isImage && !isDefaultPage"
+            >
+                <span class="f16-f">{{'All Images' | translate}}</span>
+                <span class="f8-f">{{'Only stock images' | translate}}</span>
+            </li>
+            <li [class.current]="isPins && !isDefaultPage"
+                class="d-opacity">
+                <span class="f16-f">{{'All Pins' | translate}}</span>
+                <span class="f8-f">{{'Only stock pins files' | translate}}</span>
+            </li>
+            <li (click)="showYourShareFile(folderConstant.FOLDER_TYPE_PERSONAL_SHARE)"
+                [class.current]="isPersonalShare && !isDefaultPage"
+            >
+                <span class="f16-f">{{'Your Personal Share' | translate}}</span>
+                <span class="f8-f">{{'Only stock personal share files' | translate}}</span>
+            </li>
+            <li (click)="showYourShareFile(folderConstant.FOLDER_TYPE_BUSINESS_SHARE)"
+                [class.current]="isBusinessShare && !isDefaultPage"
+            >
+                <span class="f16-f">{{'Your Business Share' | translate}}</span>
+                <span class="f8-f">{{'Only stock business share files' | translate}}</span>
+            </li>
+        </ul>
+    </perfect-scrollbar>
+    <div class="fo-side-file-process"
+         *ngIf=" !isDefaultPage && initSpaceSuccess && (isPersonal || isBusiness)">
+        <em>
+            <i class="fo-side-file-process-bg"
+               [ngStyle]="{'width': ((occupiedSpacePercent < 5) ? 5 : occupiedSpacePercent) + '%'}"></i>
+            <i class="c2-f">{{occupiedSpacePercent}}%</i>
+        </em>
+        <div class="pull-left fo-side-file">
+            <span class="f9-f">
+                {{totalSpace/(1024*1024) > 1? (((occupiedSpace/(1024*1024)).toFixed(4)<0.0001 && occupiedSpace !== 0) ? '0.0001': (occupiedSpace/(1024*1024)).toFixed(4)): (occupiedSpace/1024).toFixed(4) }}
+                {{totalSpace/(1024*1024) > 1? 'G'  :'M' }}/
+            </span>
+            <span class="f9-f">
+                {{totalSpace/(1024*1024) > 1? (totalSpace/(1024*1024)).toFixed(2) : (totalSpace/1024).toFixed(2)}}{{totalSpace/(1024*1024) > 1? 'G'  :'M' }}
+            </span>
+            <p class="f13-f hide">total:193948 files</p>
+        </div>
+    </div>
+</div>

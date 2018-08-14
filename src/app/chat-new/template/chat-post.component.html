@@ -1,0 +1,168 @@
+<style>
+    :host /deep/ .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit;
+    }
+
+    :host /deep/ .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<div class="chat-post-wrap" [class.hide]="showChatPost">
+
+    <!--头部开始-->
+    <chat-post-header
+            [btnFailData]="btnFail"
+            (displayChatPost)="displayChatPost($event)"
+            (saveDraft)="saveIntoDraft($event)"
+            (showDetail)="showDetailCont($event)"
+            (OutLoadChatPost)="uploadChatPost($event)"
+            (OutUploadFile)="uploadFile($event)"
+            (OutOpenShareToDialog)="openShareToDialog($event)"
+            [setchannelFormChat]="channelFormChat"
+            #chatPostHeader
+    ></chat-post-header>
+    <!--头部结束-->
+    <!--主要内容开始-->
+    <div class="ch-post-main">
+        <!--左侧-->
+        <div class="ch-post-left pull-left" style="overflow: inherit;">
+            <quill-editor #quillEditor [readOnly]="settings.quillReadOnly" [theme]="'bubble'" [modules]="toolbar"
+                          [placeholder]="'Insert text here...' | translate"
+                          (onContentChanged)="postContentChange($event)"></quill-editor>
+        </div>
+        <!--右侧-->
+        <div class="ch-post-right pull-right"
+             [class.ch-post-right-hide]="!showAboutDetail && !showDraftDetail && !showCommentDetail"
+        >
+            <!--添加.ch-post-right-hide隐藏-->
+            <!--about it-->
+            <div class="ch-post-aboutIt" [hidden]="!showAboutDetail">
+                <div class="ch-post-title f24-f">
+                   {{'About it' | translate}}
+                    <span class="font-remove" (click)="closeDetail()"></span>
+                </div>
+                <perfect-scrollbar class="ps-container ch-post-content">
+                    <div class="">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+                    </div>
+                    <div class="clearfix">
+                        <p *ngIf="!(currentDraftObj && currentDraftObj?.shareToDetailArr.length)">{{'No Data' | translate}}</p>
+                        <div *ngIf="currentDraftObj && currentDraftObj?.shareToDetailArr.length">
+                            <div class="m-r-c-tab-common-people pull-left"
+                                 *ngFor="let shareToObj of currentDraftObj.shareToDetailArr; let i=index;"
+                            >
+                                <div class="friend-wrap">
+                                    <!--<img class="pull-left" src="{{config.resourceDomain + shareToObj.user_profile_path}}">-->
+                                    <span class="f4-f ch-post-shareto">
+                                    <i class="pull-left">{{shareToObj.name}}</i>
+                                    <div class="ch-post-font-remove pull-left"
+                                         (click)="deleteShareTo($event,shareToObj)"
+                                    >
+                                        <em class="font-remove"></em>
+                                    </div>
+                                </span>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="g-title">
+                        <span class="f9-f">{{'ATTACHMENT' | translate}}</span>
+                    </div>
+                    <p *ngIf="!(currentDraftObj && currentDraftObj?.attachment.length)">{{'No Data' | translate}}</p>
+                    <div *ngIf="currentDraftObj && currentDraftObj?.attachment.length">
+                        <div class="clearfix di-people ch-post-di-people"
+                             *ngFor="let fileObj of currentDraftObj.attachmentFileList; let i=index;"
+                             (click)="downloadAttachment($event,fileObj)"
+                        >
+                            <div class="clearfix">
+                                <!-- excel-->
+                                <span class="di-fo-file-icon icon-file-excel di-fo-file-post"
+                                      *ngIf="fileObj.whichFileType.isExcel"
+                                >
+                             <em class="path1"></em>
+                         </span>
+                                <!--word-->
+                                <span class="icon-file-word di-fo-file-icon di-fo-file-post"
+                                      *ngIf="fileObj.whichFileType.isWord"
+                                >
+                            <em class="path1"></em>
+                        </span>
+                                <!--pdf-->
+                                <span class="icon-file-acrobat di-fo-file-icon di-fo-file-post"
+                                      *ngIf="fileObj.whichFileType.isAcrobat"
+                                >
+                            <em class="path1"></em>
+                        </span>
+                                <!--ppt-->
+                                <span class="icon1-excel di-fo-file-icon di-fo-file-post"
+                                      *ngIf="fileObj.whichFileType.isPpt"
+                                >
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+                                <!--other-->
+                                <span class="icon-file-other di-fo-file-icon"
+                                      *ngIf="fileObj.whichFileType.isOther"
+                                >
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+                                <!--image-->
+                                <img class="di-fo-file-icon pull-left di-fo-file-img"
+                                     src="{{config.resourceDomain+ fileObj?.thumb_s}}"
+                                     *ngIf="fileObj.isImage"
+                                >
+                                <span class="f19-f">{{fileObj.name}}</span>
+                                <span class="f5-f">{{'Last edit' | translate}}{{fileObj.fileUploadTime}}</span>
+                                <span class="font-remove"
+                                      (click)="removeFileList($event,fileObj)"
+                                ></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                </perfect-scrollbar>
+            </div>
+            <!--draft-->
+            <div class="ch-post-draft" [hidden]="!showDraftDetail" #scrollToBottom>
+                <div class="ch-post-title f24-f">
+                    {{'draft' | translate}}
+                    <span class="font-remove" (click)="closeDetail()"></span>
+                </div>
+                <!--<perfect-scrollbar class="ps-container ">-->
+                <div class="ch-post-content" id="postContent">
+                    <div class="clearfix di-people ch-post-di-people"
+                         *ngFor="let draftObj of draftArr; let i=index;"
+                         (click)="clickReadDraftDetail($event, draftObj , i)"
+                         [class.active-draft]="currDraftIdx === i"
+                    >
+                        <div class="clearfix">
+                            <span class="f19-f">{{draftObj.title}}.post</span>
+                            <span class="f5-f">{{'Last edit' | translate}}{{draftObj.draftCreateTime}}</span>
+                            <span class="font-remove"
+                                  (click)="deleteDraft($event,draftObj)"
+                            ></span>
+                        </div>
+                    </div>
+                    <div class="loader" *ngIf="isLoading">
+                        <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                            <div class="loader-inner ball-pulse"></div>
+                        </loaders-css>
+                    </div>
+                </div>
+                <!--</perfect-scrollbar>-->
+            </div>
+        </div>
+    </div>
+    <!--主要内容结束-->
+
+</div>

@@ -1,0 +1,47 @@
+<ul class="di1-tab4 f9-f text-center">
+    <li *ngFor="let build of buildData" [class.current]="build.isShow" (click)="selectTabType(build)">
+        <span>{{build.tab | translate}}</span>
+    </li>
+</ul>
+<div class="di-edit-people di-edit-people-list" elementRolling>
+    <a class="font-page-next-small" href="javascript:;" #rollLeftBut [class.hide]="isShowBut"></a>
+    <div [class.di-edit-people-warp]="!isShowBut">
+        <ul #rollContent [ngStyle]="{'margin-left': (dataNumber !== 0) && adminType !== 3 ? 'auto' : '', 'margin-right': (dataNumber !== 0) && adminType !== 3 ? 'auto' : ''}">
+            <li *ngFor="let list of sendData; let i = index">
+                <profile-img [userInfo]="list" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+                <span class="font-delete" *ngIf="!isShowBut" (click)="deleteSelect(list, i)"></span>
+            </li>
+        </ul>
+    </div>
+    <a class="font-page-next-small" href="javascript:;" #rollRightBut [class.hide]="isShowBut"></a>
+</div>
+<div class="hide" [class.g-show-error]="isErrorShow">{{'No changes have been made to the current staff' | translate}}</div>
+<div class="g-show-error" *ngIf="isEditShow">{{'you have no permission to edit'}} {{name}}</div>
+<div *ngIf="isShow">
+    <div class="g-title">
+        <span class="f9-f">{{'PERSON' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="g-search-wrap g-input-box-shadow">
+        <span class="font-search-blue1"></span>
+        <span class="font-remove" (click)="onSearchClose()" *ngIf="searchVal"></span>
+        <div class="search-style1-warp">
+            <input class="pull-left s-last-input f26-f g-font-normal" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchVal" (keyup)="searchContactsImport()">
+        </div>
+    </div>
+    <ul class="di-search-list" [class.di-search-list-height]="(searchData | dataLength) && searchVal">
+        <li *ngFor="let list of searchData" (click)="selectedCurrentPersonal(list)" [class.current]="list.current">
+            <img src="{{list.user_profile_path ? config.resourceDomain + list.user_profile_path : ''}}">
+            <span class="f19-f">{{list.work_name}}</span>
+            <span class="f5-f">{{list.company_name}}</span>
+        </li>
+    </ul>
+    <div class="g-title">
+        <span class="f9-f">{{'COMMENTS' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea" data-maxLength="100" [(ngModel)]="comment"></textarea>
+    </div>
+    <p class="f33-f" style="margin-top: 5px;">{{'Maximum 50' | translate}}</p>
+</div>
+<p class="pull-left f31-f di-edit-people-text">{{'If have share' | translate}}</p>

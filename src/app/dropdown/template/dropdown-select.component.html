@@ -1,0 +1,108 @@
+<div class="d-select d-select-people" #dSelectPeople [class.d-select-choose]="!settings.enableTab">
+    <ol *ngIf="settings.enableTab && settings.group.length > 0">
+        <li [class.current]="currentGroup.key === group.key"
+            *ngFor="let group of settings.group" (click)="switchGroup($event, group)">
+            <span>{{(group.title ? group.title : group.key) | translate}}
+            </span>
+        </li>
+    </ol>
+    <div *ngIf="settings.enableTab">
+        <perfect-scrollbar class="ps-container select-scroll"
+        >
+            <div *ngIf="settings.enableTab && settings.group.length > 0" style="text-align: center;">
+                <div *ngFor="let group of settings.group" [class.hide]="currentGroup.key !== group.key">
+                    <span class="f19-f g-no-data-color"
+                          *ngIf="filterFlags && filterFlags?.hasOwnProperty(group.key) && filterFlags[group.key].count === 0">
+                        {{'No Data' | translate}}
+                    </span>
+                    <span class="f19-f g-no-data-color"
+                          *ngIf="group.count === 0 &&  filterFlags && filterFlags?.hasOwnProperty(group.key) &&
+                        filterFlags[group.key].count !== 0">">{{'No Data' | translate}}</span>
+                </div>
+            </div>
+            <ul class="d-select-people-margin">
+                <!-- 普通分组 -->
+                <li *ngFor="let option of dropdownOptions; let i=index;"
+                    (click)="dropdownElementClick($event, option, i)"
+                    [class.hide]="option.hasFiltered || option.group !== currentGroup.key"
+                    [class.current]="option.isCurrent"
+                    [class.d-select-channel]="option.imageLabel === 'NaN'">
+                    <i *ngIf="option.imageLabel === 'NaN'" class="d-select-channel-h">
+                        {{option.desc ? option.desc.charAt(0) : (option.label ? option.label.charAt(0) : '')}}
+                    </i>
+                    <div *ngIf="option.imageLabel === 'NaN' || option.imageLabel === ''">
+                        <span class="f19-f g-display" style="line-height: 12px">{{option.label | translate}}</span>
+                        <span class="f5-f g-display g-margin-top5">{{option.desc | translate}}</span>
+                    </div>
+                    <profile-img [userInfo]="option"
+                                 [settings]="{show_work_name: true, show_pos_name: true, img_size: 34}"
+                                 *ngIf="option.imageLabel !== '' && option.imageLabel !== 'NaN'"></profile-img>
+                    <em class="font-selectbutton-select d-selected"></em>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+    </div>
+    <div *ngIf="!settings.enableTab">
+        <perfect-scrollbar class="ps-container d-select-choose-height">
+            <div *ngIf="settings.group.length > 0" class="d-select-people-margin">
+            <ul *ngFor="let group of settings.group;let i = index" [class.g-margin-top15]="i!= 0">
+                <li class="clearfix se-title">
+                    <span class="pull-left">{{group.title | translate}}</span>
+                    <span class="pull-right f14-f" *ngIf="settings.isMultiple" (click)="toggleChooseAll($event, group)">
+                        <em class="pull-left">{{'choose all' | translate}}</em><span class="pull-right se-title-all-select"
+                       [class.current]="isGroupSelectAll(group)"></span></span>
+                </li>
+                <li class="s-no-data g-no-data-color" style="text-align: center; margin-top:0;"
+                    *ngIf="dropdownOptions.length == 0">
+                    <span class="f19-f g-no-data-color">{{'No Data' | translate}}</span>
+                </li>
+                <li class="s-no-data g-no-data-color" style="text-align: center; margin-top:0;"
+                    *ngIf="filterFlags && filterFlags?.hasOwnProperty(group.key) && filterFlags[group.key].count == 0">
+                    <span class="f19-f g-no-data-color">{{'No Data' | translate}}</span>
+                </li>
+                <li class="s-no-data g-no-data-color" style="text-align: center; margin-top:0;"
+                    *ngIf="group.count == 0 &&  dropdownOptions.length != 0 &&
+                        filterFlags && filterFlags?.hasOwnProperty(group.key) &&
+                        filterFlags[group.key].count !== 0">
+                    <span class="f19-f g-no-data-color">{{'No Data' | translate}}</span>
+                </li>
+                <li *ngFor="let option of dropdownOptions; let i=index;"
+                    (click)="dropdownElementClick($event, option, i)"
+                    [class.hide]="option.hasFiltered || option.group !== group.key"
+                    [class.current]="option.isCurrent"
+                    [class.d-select-channel]="option.imageLabel === 'NaN'">
+                    <i *ngIf="option.imageLabel === 'NaN'" class="d-select-channel-h g-border4 g-margin-right5">{{option.desc ? option.desc.charAt(0) : (option.label ? option.label.charAt(0) : '')}}</i>
+                    <!--<img *ngIf="option.imageLabel !== 'NaN' && option.imageLabel !== ''" src="{{option.imageLabel}}">-->
+                    <div *ngIf="option.imageLabel === 'NaN' || option.imageLabel === ''">
+                        <span class="f19-f g-display">{{option.label}}</span>
+                        <span class="f5-f g-display g-margin-top5">{{option.desc}}</span>
+                    </div>
+                    <profile-img [userInfo]="option" [settings]="{show_work_name: true, show_pos_name: true, img_size: 34}"
+                                 *ngIf="option.imageLabel !== '' && option.imageLabel !== 'NaN'"></profile-img>
+                    <em class="font-selectbutton-select d-selected"></em>
+                </li>
+            </ul>
+        </div>
+        </perfect-scrollbar>
+        <perfect-scrollbar class="ps-container d-select-choose-height">
+        <ul *ngIf="settings.group.length == 0">
+            <li *ngFor="let option of dropdownOptions; let i=index;"
+                (click)="dropdownElementClick($event, option, i)"
+                [class.hide]="option.hasFiltered || option.group !== currentGroup.key"
+                [class.current]="option.isCurrent"
+                [class.d-select-channel]="option.imageLabel === 'NaN'">
+                <i *ngIf="option.imageLabel === 'NaN'" class="d-select-channel-h">{{option.desc ? option.desc.charAt(0) : (option.label ? option.label.charAt(0) : '')}}</i>
+                <!--<img *ngIf="option.imageLabel !== 'NaN' && option.imageLabel !== ''" src="{{option.imageLabel}}">-->
+                <div *ngIf="option.imageLabel === 'NaN' || option.imageLabel === ''">
+                    <span class="f19-f g-display">{{option.label}}</span>
+                    <span class="f5-f g-display g-margin-top5">{{option.desc}}</span>
+                </div>
+                <profile-img [userInfo]="option" [settings]="{show_work_name: true, show_pos_name: true, img_size: 34}" *ngIf="option.imageLabel !== '' && option.imageLabel !== 'NaN'"></profile-img>
+                <em class="font-selectbutton-select d-selected"></em>
+            </li>
+            <li class="s-no-data" *ngIf="dropdownOptions.length == 0" style="text-align: center;margin-top:0;"><span class="f19-f g-no-data-color">{{'No Data' | translate}}</span></li>
+        </ul>
+        </perfect-scrollbar>
+    </div>
+    <div *ngIf="settings.isMultiple && dropdownOptions.length != 0" class="but but-select-done" (click)="closeDropdown($event)"><span class="base">{{'DONE' | translate}}</span></div>
+</div>

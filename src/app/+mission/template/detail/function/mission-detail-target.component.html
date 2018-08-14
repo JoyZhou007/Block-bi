@@ -1,0 +1,180 @@
+<div *ngIf="!isEditModel">
+    <div class="g-style1 m-as-goal" *ngIf="targetData.type==='1'">
+        <span class="f9-f">{{'COMMON GOAL' | translate}}</span>
+        <ul class="g-as-goal-unit">
+            <li>
+                <span class="m-as-goal-progress"></span>
+                <span class="f9-f">{{targetData.total}} {{targetData.unit}}</span>
+            </li>
+        </ul>
+        <div class="clearfix m-as-goal-res m-as-goal-res-border">
+            <ul class="pull-left">
+                <li class="clearfix" *ngFor="let target of targetData.amount">
+                    <img class="pull-left" src="{{config.resourceDomain + target.user_profile_path}}"
+                         title="{{target.name}}"
+                         *ngIf=" target.user_profile_path !== '' ">
+                    <span *ngIf=" target.user_profile_path === '' "
+                          class="pull-left search-style2-list-bg d-letter-h"
+                          style="width: 20px;
+                        height: 20px;
+                        line-height: 20px;
+                        text-align: center;
+                        border: 1px solid rgba(151,151,151,.5);
+                        margin-right: 15px;
+                        -moz-border-radius: 2px;
+                        -webkit-border-radius: 2px;
+                        -ms-border-radius: 2px;
+                        -o-border-radius: 2px;
+                        border-radius: 2px;">
+                         {{target.p_name.charAt(0)}}
+                    </span>
+                    <em class="pull-left m-as-goal-res-color1"></em>
+                    <span class="f13-f m-as-goal-res-span1">{{'in progress' | translate}}</span>
+                    <span class="f13-f m-as-goal-res-span2">{{target.percent}}%</span>
+                    <span class="f47-f m-as-goal-res-span3">{{target.amount}}</span>
+                </li>
+            </ul>
+            <div class="pull-right m-as-goal-chat">
+                <span></span>
+            </div>
+        </div>
+        <div *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_DOING) && isOperator">
+            <div class="clearfix se-input" >
+                <span class="font-min"  (click)="changeTargetAmount('reduce')"></span>
+                <span class="font-add"  (click)="changeTargetAmount('add')"></span>
+                <input class="current-color text-center"
+                       (keydown)="onKeyDown($event)"
+                       type="text" [(ngModel)]="currentAmount">
+            </div>
+            <div class="m-as-goal-but">
+                <div class="but but-cancel" (click)="cancelTheChange($event)">
+                    <em class="base">{{'CANCEL' | translate}}</em>
+                </div>
+                <div class="but but-done" (click)="uploadProgress($event)">
+                    <em class="base">{{'UPLOAD' | translate}}</em>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="g-style1 m-as-goal" *ngIf="targetData.type==='2'">
+        <span class="f9-f">{{'SELF GOAL' | translate}}</span>
+        <ul class="g-as-goal-unit m-as-self">
+            <li class="clearfix" *ngFor="let target of targetData.amount">
+                <img class="pull-left" src="{{config.resourceDomain + target.user_profile_path}}"
+                     title="{{target.name}}"
+                     *ngIf=" target.user_profile_path !== '' "
+                >
+                    <span *ngIf=" target.user_profile_path === '' "
+                          style="width: 18px;height: 18px;margin-right: 10px;
+                          text-align: center;line-height: 20px;margin-top: 7px;border-radius: 2px;
+                          border: 1px solid rgba(151,151,151,.5);"
+                          class="pull-left search-style2-list-bg d-letter-k">
+                        {{target.p_name.charAt(0)}}
+                    </span>
+                <div class="pull-left">
+                <span class="m-as-goal-progress">
+                    <em class="f4-f"  *ngIf="target.amount" [ngStyle]="{'width.%':target.percent>100?100:target.percent}">{{target.percent}}%</em>
+                </span>
+                    <span class="f47-f">{{target.amount ? target.amount:0}} {{targetData.unit}} /</span>
+                    <span class="f9-f">{{target.data}} {{targetData.unit}}</span>
+                    <span class="pull-right f13-f">{{'in process' | translate}}</span>
+                </div>
+            </li>
+        </ul>
+        <div *ngIf="missionObj?.available_btns?.target_upload">
+            <div class="clearfix se-input" >
+                <span class="font-min"  (click)="changeTargetAmount('reduce')"></span>
+                <span class="font-add"  (click)="changeTargetAmount('add')"></span>
+                <input class="current-color text-center"
+                       (keydown)="onKeyDown($event)"
+                       type="text" [(ngModel)]="currentAmount">
+            </div>
+            <div class="m-as-goal-but">
+                <div class="but but-cancel" (click)="cancelTheChange($event)">
+                    <em class="base">{{'CANCEL' | translate}}</em>
+                </div>
+                <div class="but but-done" (click)="uploadProgress($event)">
+                    <em class="base">{{'UPLOAD' | translate}}</em>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isEditModel">
+    <div class="g-style1" >
+        <div class="m-r-c-tab">
+            <ul class="clearfix m-r-c-tab-list">
+                <li class="pull-left f46-f " (click)="switchGoalType('common')" [class.current]="targetData.type === '1'">{{'COMMON GOAL' | translate}}</li>
+                <li class="pull-right f46-f" (click)="switchGoalType('self')"[class.current]="targetData.type === '2'">{{'SELF GOAL' | translate}}</li>
+            </ul>
+            <div *ngIf="targetData.type==='2'">
+                <div class="g-title">
+                    <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                    <em class="f14-f">{{'required' | translate}}</em>
+                </div>
+                <div class="se-input m-r-c-tab-common m-r-c-self-goal g-input-box-shadow g-transition2 se-input-hover" *ngFor="let target of targetData.amount" toggleSelectGroup>
+                    <div class="se-input-select" #toggleSelectBut>
+                        <span class="f14-f">{{targetData.unit}}</span>
+                        <span class="font-selectbutton-soildclose"></span>
+                    </div>
+                    <div class="m-r-c-tab-common-people pull-left">
+                        <!--<span-->
+                           <!--*ngIf="(target.user_profile_path==='') || (target.user_profile_path==='NaN')"-->
+                           <!--style="width: 18px; height: 18px;-->
+                            <!--border: 1px solid rgba(151,151,151,.5);-->
+                            <!-- -moz-border-radius: 2px 0 0 2px;-->
+                            <!-- -webkit-border-radius: 2px 0 0 2px;-->
+                            <!-- -ms-border-radius: 2px 0 0 2px;-->
+                            <!-- -o-border-radius: 2px 0 0 2px;-->
+                            <!--padding: 0px;-->
+                            <!--text-align: center;-->
+                            <!--line-height: 18px;-->
+                            <!--color: red;-->
+                            <!--border-radius: 2px 0 0 2px;"-->
+                            <!--class="pull-left search-style2-list-bg d-letter-t">-->
+                             <!--{{target.p_name.charAt(0)}}-->
+                        <!--</span>-->
+                        <!--<div  *ngIf="(target.user_profile_path !=='') && (target.user_profile_path !=='NaN')">-->
+                            <!--<img class="pull-left"  *ngIf="!target.isAdd"  src="{{config.resourceDomain + target.user_profile_path}}" title="{{target.name}}">-->
+                            <!--<img class="pull-left"  *ngIf="target.isAdd" src="{{target.user_profile_path}}" title="{{target.name}}">-->
+                        <!--</div>-->
+                        <!--<span class="f4-f"  *ngIf="(target.user_profile_path !=='') && (target.user_profile_path !=='NaN')">{{target.name}}</span>-->
+                        <!--<span class="f4-f" *ngIf="(target.user_profile_path==='') || (target.user_profile_path==='NaN')">{{target.p_name}}</span>-->
+                        <div class="m-r-c-tab-common-bg clearfix g-border4 g-transition2">
+                            <profile-img class="g-line-height26" [userInfo]="target" [settings]="{show_work_name: true, whiteCol: true}"></profile-img>
+                        </div>
+                    </div>
+                    <input class="current-color" [(ngModel)]="target.data">
+                    <div class="d-select d-select-min-width" #toggleSelect #div1>
+                        <perfect-scrollbar class="ps-container g-height140" style="max-height:200px;">
+                            <ul class="ps-container g-height140 g-max-height-inherit" #toggleSelectContent>
+                                <li  *ngFor="let unit of unitList" (click)="selectUnit(target,unit.key)">{{unit.key}}</li>
+                            </ul>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="targetData.type==='1'">
+                <div class="g-title">
+                    <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                    <em class="f14-f">{{'required' | translate}}</em>
+                </div>
+                <div class="se-input m-r-c-tab-common" toggleSelectGroup [currClass]="'se-input-current'">
+                    <div class="se-input-select" #toggleSelectBut>
+                        <span class="f14-f">{{targetData.unit}}</span>
+                        <span class="font-selectbutton-soildclose"></span>
+                    </div>
+                    <input class="current-color g-input-box-shadow" type="text" [(ngModel)]="targetData.total">
+                    <div class="d-select d-select-min-width" #div1 #toggleSelect>
+                        <perfect-scrollbar class="ps-container g-height140" style="max-height:200px;">
+                            <ul class="ps-container g-height140 g-max-height-inherit" #toggleSelectContent>
+                                <li  *ngFor="let unit of unitList" (click)="selectUnit(operator,unit.key)">{{unit.key}}</li>
+                            </ul>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

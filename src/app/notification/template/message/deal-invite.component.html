@@ -1,0 +1,43 @@
+ <div class="wa-middle margin-bottom20 margin-top20" *ngIf="inviteList">
+   <div class="chat-work-new">
+     <div class="work-top clearfix ">
+       <h6 class="padding-bottom0">Select The People You Want To Invite</h6>
+       <div class="border-radius5 public-after public-relative chat-content-wrap">
+         <div class="chat-content-line" (click)="invitePeople()">
+           <p *ngFor="let member of newWorkMembers">
+             <img src="{{appConfig.resourceDomain +member.contactIn.user_profile_path}}" class="pull-left">
+                        <span>
+                            {{member.contactIn.work_name}}
+                            <em (click)="deleteTheMember(member,$event)"></em>
+                        </span>
+           </p>
+         </div>
+         <div class="public-select-style1 chat-invite-box" [class.hide]="!addMemberList">
+           <div class="public-scroll-y">
+             <div class="chat-forward-title clearfix">
+               <div class="clearfix chat-forward-title-right">
+                 <i class="public-icon"></i>
+                                <span class="clearfix">
+                                    <em>All</em>
+                                    <i (click)="selectAllInviteMembers(inviteList?.members)"></i>
+                                </span>
+               </div>
+             </div>
+             <ul>
+               <li class="clearfix" *ngFor="let friend of inviteList?.members" (click)="selectInviteMember(friend)">
+                 <img src="{{appConfig.resourceDomain +friend.contactIn.user_profile_path}}" class="pull-left">
+                                <span class="pull-left">
+                                    <b>{{friend.contactIn.work_name}}</b>
+                                    <i>{{friend.contactIn.p_name}}</i>
+                                </span>
+               </li>
+             </ul>
+           </div>
+           <a class="margin-top10" href="javascript:" (click)="done()">Done</a>
+         </div>
+       </div>
+     </div>
+   </div>
+ </div>
+
+

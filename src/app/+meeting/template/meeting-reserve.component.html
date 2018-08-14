@@ -1,0 +1,88 @@
+<div class="di-con">
+    <div class="g-title">
+        <span class="f9-f">{{'TITLE' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <!--<input class="current-color g-add-transition" type="text" [(ngModel)]="roomTitle" name="roomTitle"-->
+               <!--(blur)="onRoomTitleBlur()" [class.g-show-input-error]="isShowTitleError" disabled>-->
+        <p class="f10-f">{{roomTitle}}</p>
+        <p class="meeting-show-error" [class.hide]="!isShowTitleError">{{titleEmpty | translate}}</p>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'ATTENDEE AMOUNT' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <!--<input class="current-color g-add-transition" type="text" [(ngModel)]="roomNumber" name="roomNumber" [class.g-show-input-error]="isShowNumberError"-->
+               <!--(blur)="onRoomNumberBlur()" (change)="onRoomChange()" (keydown)="onKeyDown($event)" disabled>-->
+        <p class="f10-f">{{roomNumber}}</p>
+        <p class="meeting-show-error" [class.hide]="!isShowNumberError">{{numberErrorText | translate}}</p>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'MEETING PROJECT' | translate}}</span>
+    </div>
+    <ul class="g-d-drag">
+        <li class="clearfix">
+            <div class="pull-left">
+                <p class="f10-f">{{'Weather the room is setted it' | translate}}</p>
+            </div>
+            <div class="g-drag1-width1">
+                <switch-button [initVal]="meetingRoomProject"
+                               (switchButEvent)="getSwitchButEvent($event)"></switch-button>
+            </div>
+        </li>
+    </ul>
+    <div class="g-title">
+        <span class="f9-f">{{'CONFERENCE VIDEO' | translate}}</span>
+    </div>
+    <ul class="g-d-drag">
+        <li class="clearfix">
+            <div class="pull-left">
+                <p class="f10-f">{{'Weather the room is setted it' | translate}}</p>
+            </div>
+            <div class="g-drag1-width1">
+                <switch-button [initVal]="meetingRoomVideo"
+                               (switchButEvent)="getSwitchButEvent($event)"></switch-button>
+            </div>
+        </li>
+    </ul>
+
+    <div class="g-title">
+        <span class="f9-f">{{'MEETING TIME' | translate}}</span>
+    </div>
+    <div class="clearfix g-time g-add-transition" style="position:relative;"
+         [class.g-show-input-error]="isShowStartError && isShowEndError">
+        <input class="pull-left ng-pristine ng-valid ng-touched date-input-width" readonly="" type="text" [(ngModel)]="startTime"
+               [class.g-color-not-select]='!hasTime'
+               name="startTime" (click)="onClickStart($event)">
+
+        <span class="pull-left icon1-Shape-2"></span>
+
+        <input class="pull-left ng-pristine ng-valid ng-touched date-input-width" readonly="" type="text" [(ngModel)]="endTime"
+               [class.g-color-not-select]='!hasTime'
+               name="endTime" (click)="onClickEnd($event)">
+        <bi-calendar-multiselect [multiselectOption]="multiCalendar" (outSelectData)="getSelectData($event)"
+                                 style="position: absolute;top:-261px;left:-2px;">
+        </bi-calendar-multiselect>
+    </div>
+    <p class="meeting-show-error" [class.hide]="!isShowStartError || !isShowEndError">{{timeEmpty}}</p>
+    <div class="g-title">
+        <span class="f9-f">{{'AVAILABLE ROOM' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <input class="current-color" type="text" readonly="" [(ngModel)]="roomName"
+               name="roomName" (click)="onClickRoomNumber()" [class.g-show-input-error]="isShowNameError">
+        <div class="d-select" [class.hide]="isSelectHide">
+            <ul>
+                <li *ngFor="let room of roomList" (click)="onSelectRoom(room)"
+                    [class.hide]="!room.isNumberOk || !room.isProjectOk || !room.isVideoOk || !room.isTimeOk">
+                    {{room.name}}
+                </li>
+            </ul>
+        </div>
+        <p class="meeting-show-error meeting-error-position" [class.hide]="!isShowNameError">{{roomEmpty}}</p>
+    </div>
+    <!--</form>-->
+</div>

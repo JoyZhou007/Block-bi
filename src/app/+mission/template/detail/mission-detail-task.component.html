@@ -1,0 +1,111 @@
+<div class="m-right-part g-style1" *ngIf="!isEditModel">
+    <span class="pull-right f13-f g-margin-right10 margin-top20">{{userRoleIntro}}</span>
+    <div class="m-right-part-desc">
+        <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+        <div class="clearfix m-right-part-desc-people g-margin-top10">
+            <div class="pull-left">
+                <profile-img [userInfo]="missionObj.creator_info.user_info" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+            </div>
+            <span class="pull-left f5-f g-margin-left10">{{createFormatDate.hour}}:{{createFormatDate.minute}} {{createFormatDate.days}} {{createFormatDate.month}} {{createFormatDate.year}}</span>
+        </div>
+        <p class="v7-f m-right-part-con">
+            {{missionObj.description}}
+        </p>
+    </div>
+    <div class="clearfix date-time g-padding20 g-border-bottom-none">
+        <div class="clearfix">
+            <div class="pull-left date-curr-time" *ngIf="isShowStartTime">
+                <span class="f13-f">{{'Start' | translate}}</span>
+                <span class="pull-left f49-f">{{showStartTime.day}}</span>
+                <div class="date-t">
+                    <span class="f32-f">{{showStartTime.month}} {{showStartTime.year}}</span>
+                    <span class="f27-f">{{showStartTime.hour}}:{{showStartTime.minute}} {{showStartTime.week}}</span>
+                </div>
+            </div>
+            <div class="pull-left date-curr-time" *ngIf="!isShowStartTime">
+                <span class="f13-f">{{'Start' | translate}}</span>
+                <span class="pull-left f49-f">{{'PENDING' | translate}}</span>
+            </div>
+            <div class="pull-right date-curr-time" *ngIf="isShowEndTime">
+                <span class="f13-f">{{'End' | translate}}</span>
+                <span class="pull-left f49-f">{{showEndTime.day}}</span>
+                <div class="date-t">
+                    <span class="f32-f">{{showEndTime.month}} {{showEndTime.year}}</span>
+                    <span class="f27-f">{{showEndTime.hour}}:{{showEndTime.minute}} {{showEndTime.week}}</span>
+                </div>
+            </div>
+            <div class="pull-right date-curr-time" *ngIf="!isShowEndTime && !isEndPending">
+                <span class="f13-f">{{'End' | translate}}</span>
+                <span class="v8-f">{{datePeriod}}</span>
+            </div>
+            <div class="pull-right date-curr-time g-margin-top5" *ngIf="!isShowEndTime && isEndPending">
+                <span class="f13-f">{{'End' | translate}}</span>
+                <span class="pull-left f49-f">{{'PENDING' | translate}}</span>
+            </div>
+        </div>
+        <i class="icon1-Shape-2 g-margin-top5"></i>
+        <div class="date-curr-time-est v9-f">
+            <span class="pull-left" *ngIf="isShowStartEst && startDiffer"><span class="f13-f">Act</span> <em>{{startDiffer.differTmplate}}</em></span>
+            <span class="pull-right" *ngIf="isShowEndEst && endDiffer"><span class="f13-f">Act</span> <em>{{endDiffer.differTmplate}}</em></span>
+        </div>
+    </div>
+</div>
+<div class="m-right-part g-style1 g-border-top-none g-margin-top10" *ngIf="!isEditModel">
+    <mission-detail-person [missionObj]="missionObj"></mission-detail-person>
+</div>
+
+<div class="g-style1" *ngIf="isEditModel">
+    <div class="m-r-c-tab">
+        <ul class="f46-f g-tab-radio " *ngIf="!isUnlockBidding" [class.g-tab-radio-an]="!isApprover">
+            <li (click)="switchPublisherId('APPROVER')" [class.current]="isApprover">AS APPROVER</li>
+            <li (click)="switchPublisherId('OPERATOR')" [class.current]="!isApprover">AS OPERATOR</li>
+        </ul>
+        <div class="g-title {{isUnlockBidding ? 'g-padding-top0' : ''}}">
+            <span class="f9-f">{{'APPROVER' | translate}}</span>
+            <!--<em class="f14-f">{{'required' | translate}}</em>-->
+        </div>
+        <div class="se-input">
+            <dropdown-search  *ngIf="approveDropdownOptions" (optionModelArrChange)="approveModelChange($event)"
+                              [dropdownSettings]="approveDropdownSettings" [dropdownOptions]="approveDropdownOptions"
+                              [selectedOptions]="approveArr"
+            ></dropdown-search>
+            <p class="f33-f">{{'Choose people to check this mission' | translate}}</p>
+        </div>
+        <div *ngIf="!isUnlockBidding">
+            <div class="g-title">
+                <span class="f9-f">{{'OPERATOR' | translate}}</span>
+                <!--<em class="f14-f">{{'required' | translate}}</em>-->
+            </div>
+            <div class="se-input">
+                <dropdown-search *ngIf="operatorDropdownOptions" (optionModelArrChange)="operatorModelChange($event)"
+                                 [dropdownSettings]="operatorDropdownSettings" [dropdownOptions]="operatorDropdownOptions"
+                                 [selectedOptions]="operatorArr"
+                ></dropdown-search>
+                <p class="f33-f">{{'Choose people to operate this mission' | translate}}</p>
+            </div>
+        </div>
+        <div *ngIf="isUnlockBidding">
+            <div class="g-title">
+                <span class="f9-f">{{'BIDDER' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input">
+                <dropdown-search *ngIf="bidderDropdownOptions" (optionModelArrChange)="bidderModelChange($event)"
+                                 [dropdownSettings]="bidderDropdownSettings" [dropdownOptions]="bidderDropdownOptions"
+                                 [selectedOptions]="bidderArr"
+                ></dropdown-search>
+                <p class="f33-f">{{'Choose people to attend bidding' | translate}}</p>
+            </div>
+        </div>
+
+        <div class="g-title">
+            <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="100" [(ngModel)]="missionObj.description"></textarea>
+        </div>
+        <p class="f33-f g-max-charset">{{'Maximum 100' | translate}}</p>
+    </div>
+</div>
+
+

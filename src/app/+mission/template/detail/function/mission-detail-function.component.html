@@ -1,0 +1,312 @@
+<div class="m-a-side-fun g-border-top-none">
+    <div class="clearfix m-a-side-title">
+        <span class="pull-left font-function"></span>
+        <span class="f16-f">{{'Function' | translate}}</span>
+    </div>
+    <p class="f33-f g-title-des g-display-inline-block">{{'Set those function to be satisfy request' | translate}}</p>
+    <!------------Meeting------------------>
+    <ul *ngIf="isMeeting">
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox  font-selectbutton-select"></span>
+                <span class="f9-f">{{'Participant' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Only realize mission situation' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select" [class.g-checkbox-selected]="isUnlockRecorder"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_MEMO_RECORDER,$event)"></span>
+                <span class="f9-f">{{'Memo' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Record the mission summary' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select" [class.g-checkbox-selected]="isUnlockImportance"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                <span class="f9-f">{{'Priority level' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'3 level to set from low to high' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select" [class.g-checkbox-selected]="isUnlockTrack"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Income or outlay' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Set expense process' | translate}}</span>
+        </li>
+    </ul>
+    <!-------------Application------------>
+    <ul *ngIf="isApplication">
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"  [class.g-checkbox-selected]="isUnlockParticipant"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                <span class="f9-f">{{'Participant' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Only realize mission situation' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Memo' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Record the mission summary' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"   [class.g-checkbox-selected]="isUnlockImportance"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                <span class="f9-f">{{'Priority level' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'3 level to set from low to high' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"  [class.g-checkbox-selected]="isUnlockExpense"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_EXPENSE,$event)"></span>
+                <span class="f9-f">{{'Income or outlay' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Set expense process' | translate}}</span>
+        </li>
+    </ul>
+    <!-------------Project--------------------->
+    <ul *ngIf="isProject">
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"  [class.g-checkbox-selected]="isUnlockParticipant"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                <span class="f9-f">{{'Participant' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Only realize mission situation' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Memo' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Record the mission summary' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"   [class.g-checkbox-selected]="isUnlockImportance"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                <span class="f9-f">{{'Priority level' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'3 level to set from low to high' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Income or outlay' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Set expense process' | translate}}</span>
+        </li>
+    </ul>
+    <!-------------Assignment------------------>
+    <ul *ngIf="isAssignment">
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"  [class.g-checkbox-selected]="isUnlockParticipant"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                <span class="f9-f">{{'Participant' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Only realize mission situation' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Memo' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Record the mission summary' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"   [class.g-checkbox-selected]="isUnlockImportance"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                <span class="f9-f">{{'Priority level' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'3 level to set from low to high' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select" [class.g-checkbox-selected]="isUnlockTrack"
+                      (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select" [class.g-checkbox-selected]="isUnlockTarget"
+                      (click)="showFunction(missionConstant.MISSION_FUNCTION_TARGET,$event)"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Income or outlay' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Set expense process' | translate}}</span>
+        </li>
+    </ul>
+    <!-----------TASK-------------->
+    <ul *ngIf="isTask">
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              [class.g-checkbox-selected]="isUnlockParticipant"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                <span class="f9-f">{{'Participant' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Only realize mission situation' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Memo' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Record the mission summary' | translate}}</span>
+        </li>
+        <li class="current">
+            <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              [class.g-checkbox-selected]="isUnlockImportance"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                <span class="f9-f">{{'Priority level' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'3 level to set from low to high' | translate}}</span>
+        </li>
+        <li *ngIf="isUnlockBidding">
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li class="current" *ngIf="!isUnlockBidding">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              [class.g-checkbox-selected]="isUnlockTrack"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                <span class="f9-f">{{'Track' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+        </li>
+        <li *ngIf="isUnlockTarget || isUnlockTrack">
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li class="current" *ngIf="!isUnlockTarget && !isUnlockTrack">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              [class.g-checkbox-selected]="isUnlockBidding"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_BIDDING,$event)"></span>
+                <span class="f9-f">{{'Bidding' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to compare' | translate}}</span>
+        </li>
+        <li *ngIf="isUnlockBidding">
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li class="current" *ngIf="!isUnlockBidding">
+            <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              [class.g-checkbox-selected]="isUnlockTarget"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TARGET,$event)"></span>
+                <span class="f9-f">{{'Target' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+        </li>
+        <li>
+            <div class="clearfix">
+                <span class="g-checkbox font-selectbutton-select"></span>
+                <span class="f9-f">{{'Income or outlay' | translate}}</span>
+            </div>
+            <span class="f13-f">{{'Set expense process' | translate}}</span>
+        </li>
+    </ul>
+
+
+</div>

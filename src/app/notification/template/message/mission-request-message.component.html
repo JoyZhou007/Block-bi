@@ -1,0 +1,47 @@
+<div (click)="linkToTheMission($event)">
+    <div>
+        <img src="{{ notificationOwner?.user_profile_path ? config.resourceDomain +notificationOwner?.user_profile_path:''}}"
+             *ngIf="notificationIn.owner && notificationOwner?.status == 1"
+        >
+        <span class="f4-f notification-system"
+              *ngIf="notificationIn.owner && notificationOwner?.status == 0"> {{notificationOwner?.p_name? notificationOwner?.p_name.charAt(0) : '空'}}</span>
+              <span class="f4-f notification-system"
+                    *ngIf="notificationIn.owner && notificationOwner?.status == -1">空</span>
+        <span class="f4-f notification-system"
+              *ngIf="!notificationIn.owner">S</span>
+        <div class="n-right">
+            <h3 class="f27-f" [innerHtml]="obj.title"></h3>
+            <div class="n-con n-company n-file-margin">
+                <p class="f19-f">{{missionInfo?.name}}</p>
+                <p class="c4-f">{{missionInfo?.desc}}</p>
+            </div>
+            <span class="f32-f pull-left" *ngIf="notificationIn.owner && notificationOwner?.status == 1">{{notificationOwner?.work_name}}</span>
+            <span class="f32-f pull-left" *ngIf="notificationIn.owner &&  notificationOwner?.status == 0">{{notificationOwner?.p_name? notificationOwner?.p_name : '空职位'}}</span>
+            <span class="f32-f pull-left" *ngIf="notificationIn.owner &&  notificationOwner?.status == -1">未知职位</span>
+            <span class="f32-f pull-left" *ngIf="!notificationIn.owner">{{'System' | translate}}</span>
+            <div class="pull-right n-but" *ngIf="notificationIn?.notification?.type === 2  && !notificationIn.handled">
+                <div class="but but-refuse-small" *ngIf="notificationIn?.isRefuseBtn"
+                     (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_REFUSE)">
+                    {{'REFUSE' | translate}}
+                </div>
+                <div class="but but-invite-small" *ngIf="notificationIn?.isAcceptBtn"
+                     (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_ACCEPT)">
+                    {{'ACCEPT' | translate}}
+                </div>
+                <div class="but but-invite-small" *ngIf="notificationIn?.isApproveBtn"
+                     (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_APPROVOR)">
+                   {{'APPROVE' | translate}}
+                </div>
+                <div class="but but-invite-small" *ngIf="notificationIn?.isCheckBtn"
+                     (click)="operateTheMission($event)">
+                   {{'CHECK' | translate}}
+                </div>
+            </div>
+
+            <span class="f5-f pull-right" *ngIf="notificationIn?.notification?.type === 1  || notificationIn.handled">{{notificationTime}}</span>
+        </div>
+    </div>
+</div>
+
+
+

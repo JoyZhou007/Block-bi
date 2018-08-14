@@ -1,0 +1,71 @@
+<div class="clearfix relative" toggleSelectGroup (callBackData)="getData($event)">
+    <div class="se-input pull-left g-input-box-shadow">
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+
+        <div class="import-file-wrap">
+            <div class="clearfix s-style1" style="overflow: hidden" #toggleSelectBut>
+                <div class="di-folder-path">
+                    <span class="icon-folder-small icon-folder-small-icon"></span>
+                    <span class="chat-di-list-name"
+                          style="max-width:60px;margin-left:5px;overflow: hidden;display: inline-block;white-space: nowrap;text-overflow: ellipsis">
+                    {{selectPath}}
+                </span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="d-select chat-di-select folder-import" style="width:100%;z-index: 13" #toggleSelect>
+        <ul class="tree-dialog" *ngIf="isFolderShow">
+            <perfect-scrollbar class="ps-container g-height140">
+                <tree-root [nodes]="nodes" (toggleExpanded)="onEvent($event)">
+                <template #treeNodeTemplate let-node let-index="index">
+                    <div class="folder-tree-content " (click)="selectThePath($event,node.data)">
+                                        <span class="icon-folder-small" style="margin-top: 5px; margin-right: 5px; margin-left: 5px;"></span>
+                        <span>{{node.data.name}}</span>
+                    </div>
+                </template>
+            </tree-root>
+            </perfect-scrollbar>
+        </ul>
+    </div>
+    <div class="s-style1 s-style2 pull-left g-input-box-shadow">
+        <span class="font-search-blue1"></span>
+        <div>
+            <input class="pull-left f26-f s-last-input global-width" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchKeyWord"
+                   (keyup)="keyToSearch($event,searchKeyWord)" style="height: 34px;">
+        </div>
+    </div>
+</div>
+<perfect-scrollbar class="ps-container fo-type1-list">
+    <div class="import-file" onselectstart="return false" style="position: relative" #bigContent
+     (mousedown)="startChoose($event,ul,bigContent,selectBox)">
+    <div style="position: absolute;background:#7078F7;opacity: 0.1;z-index: 2;" #selectBox></div>
+    <ul class="clearfix file-thum-new" #ul>
+        <li *ngFor="let file of fileList" [class.current]="file.isSelect">
+            <div class="fo-type1-list-select "
+                 title="{{file.name}}">
+                <div class="fo-type1-list-checkbox" (click)="selectCurrent(file,$event)">
+                    <i class="font-selectbutton-select g-checkbox selectBtn"></i>
+                </div>
+                <span *ngIf="file.ext_type !='image'">
+                                <span *ngIf="file.chn==0"
+                                      class="icon-file-new-thum selectBtn icon-file-new-thum-{{file.ext_type}}"></span>
+                                <span *ngIf="file.chn==1" class="icon-file-new-thum icon-file-new-thum-share"></span>
+                                <span *ngIf="file.chn==2" class="icon-file-new-thum icon-file-new-thum-chat"></span>
+                                <span *ngIf="file.chn==3" class="icon-file-new-thum icon-file-new-thum-mission"></span>
+                             </span>
+                <img *ngIf="file.ext_type =='image'" class="file-image selectBtn"
+                     src="{{file.thumb_l ? config.resourceFolderDomain + file.thumb_l : ''}}">
+                <div class="font-pin2" *ngIf="file.is_starred === 1"></div>
+            </div>
+            <h3 class="f5-f"
+                style="max-width: 60px;max-height: 29px;overflow: hidden;white-space:nowrap; text-overflow:ellipsis;"
+            ><i class="base">{{file.name}}</i></h3>
+        </li>
+    </ul>
+</div>
+</perfect-scrollbar>
+<p class="g-show-error-color">{{btnError | translate}}</p>

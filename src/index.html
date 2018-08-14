@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title><%= htmlWebpackPlugin.options.title %></title>
+
+  <meta name="description" content="<%= htmlWebpackPlugin.options.title %>">
+
+  <% if (webpackConfig.htmlElements.headTags) { %>
+  <!-- Configured Head Tags  -->
+  <%= webpackConfig.htmlElements.headTags %>
+  <% } %>
+  <!-- base url -->
+  <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+  <script src="assets/intro.min.js"></script>
+  <!--<script src="https://cdn.jsdelivr.net/emojione/3.1.1/lib/js/emojione.min.js"></script>-->
+  <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/emojione/3.1.1/extras/css/emojione.min.css"/>-->
+</head>
+
+<body>
+
+<blockbi-app>Loading...</blockbi-app>
+
+<% if (htmlWebpackPlugin.options.metadata.isDevServer && htmlWebpackPlugin.options.metadata.HMR !== true) { %>
+<!-- Webpack Dev Server reload -->
+<script src="/webpack-dev-server.js"></script>
+<% } %>
+
+</body>
+<% if (htmlWebpackPlugin.options.metadata.cnzzSrc) { %>
+<script type="text/javascript">
+  var cnzz_protocol =(("https:" == document.location.protocol) ? " https://" : " http://");
+  var cnzz_id = '<%= htmlWebpackPlugin.options.metadata.cnzzSrc %>';
+  document.write(unescape("%3Cspan  style='display:none' id='cnzz_stat_icon_"+cnzz_id+"'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s19.cnzz.com/z_stat.php%3Fid%3D"+cnzz_id+"' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<!--<script src="<%= htmlWebpackPlugin.options.metadata.cnzzSrc %>"  language="JavaScript"></script>-->
+<% } %>
+</html>

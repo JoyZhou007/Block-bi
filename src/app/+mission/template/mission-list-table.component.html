@@ -1,0 +1,237 @@
+<style>
+    :host /deep/ .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit;
+    }
+
+    :host /deep/ .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<section class="m-c-list-warp" #scrollToBottom>
+    <ul class="clearfix f33-f o-fun-title">
+        <li class="m-c-width">
+            <!-- <span class="g-checkbox select-all g-checkbox-selected font-selectbutton-select"
+                   [class.g-checkbox-selected]="isChooseAll"
+                   [class.font-selectbutton-select]="isChooseAll"
+                   (click)="clickChooseAll($event)"></span>-->
+        </li>
+        <li class="m-c-width1 g-text-left"><span class="">{{'Publisher' | translate}}</span></li>
+        <li class="m-c-width2 g-text-left"><span class="">{{'Mission name' | translate}}</span></li>
+        <li class="m-c-width3"><span class="">{{'Mission type' | translate}}</span></li>
+        <li class="m-c-width4"><span class="">{{'Type Est.start' | translate}}</span></li>
+        <li class="m-c-width5"><span class="">{{'dates Act.start' | translate}}</span></li>
+        <li class="m-c-width6"><span class="">{{'dates Est.due' | translate}}</span></li>
+        <li class="m-c-width7"><span class="">{{'dates Act.due' | translate}}</span></li>
+        <li class="m-c-width8 relative m-header-select">
+            <span (click)="clickShowProgressMenu($event)">{{'dates Progress' | translate}}</span>
+            <div class="d-select d-select-calender" [hidden]="!showProgressMenu">
+                <perfect-scrollbar class="ps-container g-height140">
+                    <ul class="g-max-height-inherit">
+                        <li class="reset-select" *ngFor="let status of missionStatusNameList"
+                            (click)="clickFilterStatus($event,status)">
+                            <span class="">{{status.name | translate}}</span>
+                        </li>
+                    </ul>
+                </perfect-scrollbar>
+            </div>
+        </li>
+        <li class="m-c-width9 relative">
+            <span class="font-selectbutton-soildclose font-selectbutton-soildclose-table pull-left cursor"
+                  (click)="clickShowProgressMenu($event)"></span>
+            <span class="">{{'Status' | translate}}</span>
+        </li>
+        <li class="m-c-width10"></li>
+    </ul>
+    <!--<perfect-scrollbar class="ps-container m-c-list">-->
+    <ul class="m-c-list" id="dashboard">
+        <li class="clearfix"
+            *ngFor="let missionObj of tplShownDataList; trackBy: missionObj?.mid;"
+            [hidden]="!((missionObj.status ===currentMissionStatusKey) || currentMissionStatusKey==='-1')">
+            <div class="clearfix o-fun-style g-transition2 m-c-list-item">
+                <div class="m-c-width text-center">
+                    <!--<span class="g-checkbox"
+                          [class.g-checkbox-selected]="missionObj.isChooseToDraw"
+                          [class.font-selectbutton-select]="missionObj.isChooseToDraw"
+                          (click)="clickChooseMission($event,missionObj)"></span>-->
+                </div>
+                <div class="m-c-width1 cursor"
+                     (click)="clickCloseProject($event,missionObj)">
+                    <span class="pull-left m-c-list-select"
+                          *ngIf="missionObj.type===missionConstant.MISSION_TYPE_PROJECT && missionObj?.detail?.internal?.length">
+                        <span class="font-selectbutton-soildclose m-c-list-select-arrow"
+                              [class.font-selectbutton-soildclose-move]="missionObj.isCloseProject"></span>
+                    </span>
+                    <profile-img style="display:block;margin-top:4px;" [userInfo]="missionObj.creator_info.user_info"
+                                 [settings]="{show_work_name: true}"></profile-img>
+                </div>
+                <div class="f21-f m-c-width2 m-c-name m-c-width2-content" title="{{missionObj.name}}">
+                    <em class="">{{missionObj.name}}</em>
+                </div>
+                <div class="f5-f text-center m-c-width3" title="{{missionObj.typeTitle | translate}}">
+                    <em class="">{{missionObj.typeTitle | translate}}</em>
+                </div>
+                <div class="v8-f text-center m-c-width4 cursor"
+                     title="{{missionObj.link_info.before[0].name}}"
+                     *ngIf="missionObj.link_info.before?.length"
+                     (click)="redirectToDetail($event, missionObj)">
+                    <em class="">{{missionObj.link_info.before[0].name}}</em>
+                    <span
+                        class="g-border2 g-transition2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white link-forward g-new-icon">
+                        <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                    </span>
+                </div>
+                <div class="f5-f text-center m-c-width4" *ngIf="!missionObj.link_info.before?.length" title="{{
+                        (missionObj.start==='' || missionObj.start=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.start,formatStr)) | translate
+                        }}">
+                    <em class="">
+                        {{
+                        (missionObj.start==='' || missionObj.start=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.start,formatStr)) | translate
+                        }}
+                    </em>
+                </div>
+                <div class="f5-f text-center m-c-width5" title="{{
+                        (missionObj.real_start==='' || missionObj.real_start=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.real_start,formatStr)) | translate
+                        }}">
+                    <em class="">
+                        {{
+                        (missionObj.real_start==='' || missionObj.real_start=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.real_start,formatStr)) | translate
+                        }}
+                    </em>
+                </div>
+                <div class="f5-f text-center m-c-width6" title="{{
+                        (missionObj.end==='' || missionObj.end=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.end,formatStr)) |translate
+                        }}">
+                    <em class="">
+                        {{
+                        (missionObj.end==='' || missionObj.end=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.end,formatStr)) |translate
+                        }}
+                    </em>
+                </div>
+                <div class="f5-f text-center m-c-width7" title="{{
+                        (missionObj.real_end==='' || missionObj.real_end=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.real_end,formatStr)) | translate
+                        }}">
+                    <em class="">
+                        {{
+                        (missionObj.real_end==='' || missionObj.real_end=== missionConstant.MISSION_TIME_NULL ?
+                        missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                        'pending' : dateFormatService.formatWithTimezone(missionObj.real_end,formatStr)) | translate
+                        }}
+                    </em>
+                </div>
+                <div class="f5-f text-center m-c-width8" title="{{missionObj.missionStatusName | translate}}">
+                    <em class="">{{missionObj.missionStatusName | translate}}</em>
+                </div>
+                <div class="f5-f text-center m-c-width9" title="{{(missionObj.delayed==1?'On schedule': 'delayed') | translate}}">
+                    <em class="">{{(missionObj.delayed==1?'On schedule': 'delayed') | translate}}</em>
+                </div>
+                <div class="f5-f text-center m-c-width10 o-fun-style-operation g-transition2">
+                    <span class="bi-icon-open" (click)="redirectToDetail($event, missionObj)"></span>
+                    <span class="bi-icon-rectangle" (click)="openMissionChatDialog($event, missionObj)"
+                          *ngIf="missionObj.type != missionConstant.MISSION_TYPE_APPLICATION && !missionObj.is_observer"></span>
+                </div>
+            </div>
+
+            <!--project 的子mission-->
+            <div *ngIf="missionObj.type===missionConstant.MISSION_TYPE_PROJECT && !missionObj.isCloseProject">
+                <div class="clearfix m-c-selected-list o-fun-style g-transition2"
+                     *ngFor="let childMissionObj of missionObj.detail.internal">
+                    <div class="m-c-width text-center">
+                        <!--           <span class="g-checkbox"
+                                         [class.g-checkbox-selected]="childMissionObj.isChooseToDraw"
+                                         [class.font-selectbutton-select]="childMissionObj.isChooseToDraw"
+                                         (click)="clickChooseMission($event,childMissionObj)"></span>-->
+                    </div>
+                    <div class="m-c-width1 m-c-list-personal"></div>
+                    <div class="f21-f m-c-width2 m-c-name" title="{{childMissionObj.name}}">
+                        <em class="">{{childMissionObj.name}}</em>
+                    </div>
+                    <div class="f5-f text-center m-c-width3"><em class="">{{childMissionObj.typeTitle | translate}}</em></div>
+                    <div class="f5-f text-center m-c-width4">
+                        <em class="">
+                            {{
+                            (childMissionObj.start==='' || childMissionObj.start=== missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.start,formatStr)) | translate
+                            }}
+                        </em>
+                    </div>
+                    <div class="f5-f text-center m-c-width5" title="{{childMissionObj.real_start==='' || childMissionObj.real_start===
+                            missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.real_start,formatStr)}}">
+                        <em class="">
+                            {{
+                            childMissionObj.real_start==='' || childMissionObj.real_start===
+                            missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.real_start,formatStr)
+                            }}
+                        </em>
+                    </div>
+                    <div class="f5-f text-center m-c-width6" title="{{childMissionObj.end==='' || childMissionObj.end=== missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.end,formatStr)}}">
+                        <em class="">
+                            {{
+                            (childMissionObj.end==='' || childMissionObj.end=== missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.end,formatStr)) | translate
+                            }}
+                        </em>
+                    </div>
+                    <div class="f5-f text-center m-c-width7" title="{{childMissionObj.real_end==='' || childMissionObj.real_end===
+                            missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.real_end,formatStr)}}">
+                        <em class="">
+                            {{(
+                            childMissionObj.real_end==='' || childMissionObj.real_end===
+                            missionConstant.MISSION_TIME_NULL ?
+                            missionObj.type===missionConstant.MISSION_TYPE_PROJECT? 'planning' :
+                            'pending' : dateFormatService.formatWithTimezone(childMissionObj.real_end,formatStr)) | translate
+                            }}
+                        </em>
+                    </div>
+                    <div class="f5-f text-center m-c-width8" title="{{MissionDetailTplModel.initMissionStatusName(childMissionObj.status)}}">
+                        <em class="">{{MissionDetailTplModel.initMissionStatusName(childMissionObj.status) | translate}}</em>
+                    </div>
+                    <div class="f5-f text-center m-c-width9" title="{{(childMissionObj.delayed==='1'?'On Schedule': 'delayed') | translate}}">
+                        <em class="">{{(childMissionObj.delayed==='1'?'On Schedule': 'delayed') | translate}}</em>
+                    </div>
+                    <div class="f5-f text-center m-c-width10 o-fun-style-operation g-transition2">
+                        <span class="bi-icon-open" (click)="redirectToDetail($event, childMissionObj)"></span>
+                        <span class="bi-icon-rectangle"
+                              *ngIf="childMissionObj.type != missionConstant.MISSION_TYPE_APPLICATION">
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+        </li>
+        <div class="loader" *ngIf="isLoading">
+            <loaders-css [loader]="'ball-scale-ripple-multiple'" [loaderClass]="'my-loader'">
+                <div class="loader-inner ball-pulse"></div>
+            </loaders-css>
+        </div>
+    </ul>
+    <!--</perfect-scrollbar>-->
+</section>

@@ -1,0 +1,21 @@
+<div [class.n-cursor]="notificationObj.hasOwnProperty('isInMail')" (click)="clickOnNotice($event)">
+    <img src="{{ notificationOwner?.user_profile_path ? appConfig.resourceDomain +notificationOwner?.user_profile_path:''}}"
+         *ngIf="!objInfo.hideProfile && notificationIn.owner">
+    <span class="f4-f notification-system"
+          *ngIf="!notificationIn.owner">S</span>
+    <div class="n-right">
+        <h3 class="f27-f">{{objInfo.title}}</h3><!--notificationIn?.title-->
+        <div class="n-con" [class.n-company]="notificationIn.company_name">
+            <p class="pull-left f20-f" [innerHtml]="objInfo.simpleMsg | sanitizeHtml"></p><!--notificationIn?.msg-->
+            <p class="pull-left c4-f" *ngIf="notificationIn?.feedback">{{notificationIn?.feedback}}</p>
+            <p class="pull-left c4-f" *ngIf="notificationIn?.remark">{{notificationIn.remark}}</p>
+            <p class="pull-left c4-f" *ngIf="notificationIn?.comments">{{notificationIn.comments}}</p>
+            <span class="pull-right f9-f" *ngIf="objInfo.isOperation">{{(objInfo.isOperation ? 'accept' : 'refuse') | translate}}</span>
+            <span class="f4-f n-con-company-name" *ngIf="notificationIn.company_name">
+                <i class="base">{{notificationIn.company_name}}</i>
+            </span>
+        </div>
+        <span class="f32-f pull-left" *ngIf="!objInfo.hideProfile">{{notificationOwner?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>

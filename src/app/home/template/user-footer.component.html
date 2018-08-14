@@ -1,0 +1,23 @@
+<footer class="clearfix login-footer navbar-fixed-bottom">
+  <a href="javascript:;" [routerLink]="['/home/register']"
+     class="pull-left but but-share border-radius5 left" [class.concat-us-btns]="isShowContactUs || product">
+    <span class="base">{{"SIGN UP" | translate}}</span>
+  </a>
+  <span class="pull-left f55-f but-txt" [routerLink]="['/home/register']" [class.join-us]="isShowContactUs || product">
+    <em class="base">{{"Join us now" | translate}}</em>
+  </span>
+  <a class="pull-right but but-share border-radius5 right" [class.concat-us-btns]="isShowContactUs || product"
+     (click)="clickShowContactUs($event)">
+    <span class="base">{{"CONTACT US" | translate}}</span>
+  </a>
+  <div class="login-share">
+    <ul class="clearfix ">
+      <li><span class="icon1-linkedin"></span></li>
+      <li><span class="icon1-tiff"></span></li>
+      <li><span class="icon1-pin"></span></li>
+      <li><span class="icon1-amazon"></span></li>
+      <li><span class="icon1-wechat"></span></li>
+      <li><span class="icon1-facebook"></span></li>
+    </ul>
+  </div>
+</footer>

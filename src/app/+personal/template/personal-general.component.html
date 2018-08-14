@@ -1,0 +1,148 @@
+
+<!--personal header-->
+<personal-header [btnFailData]="btnFail" (uploadInfo)="doUploadInfo($event)"></personal-header>
+<!--personal end-->
+
+<!--section start-->
+<section class="clearfix g-width a-section">
+    <div class="pull-left a-left">
+        <perfect-scrollbar class="ps-container pull-left a-list">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'INDIVIDUAL INFORMATION' | translate}}</h3>
+                <p class="f14-f">{{'General information visible' | translate}}</p>
+            </div>
+            <ul class="a-p-general g-margin-bottom20">
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'WORK NAME' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <div>
+                    <div class="se-input">
+                        <input type="text" value="Louis Herrera" name="work_name"  class="g-add-transition g-input-box-shadow"
+                               [class.g-show-input-error]="nameError.isShow"
+                               [(ngModel)]="personalInformation.work_name"
+                               #iemail="ngModel"
+                               (blur)="nameBlur($event)">
+                    </div>
+                        <p [class.hide]="!nameError.isShow" class="g-show-error-color" style="width: 200%;">{{nameError.text}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'GENDER' | translate}}</span>
+                    </div>
+                    <div class="se-input" toggleSelectGroup [currClass]="'se-input-selected'">
+                        <div #toggleSelectBut>
+                            <div class="se-input-select">
+                                <span class="font-selectbutton-soildclose"></span>
+                            </div>
+                            <input class="g-input-box-shadow" type="text" name="genderType" [(ngModel)] = "genderType" readonly>
+                        </div>
+                        <div class="d-select" #toggleSelect>
+                            <ul #toggleSelectContent>
+                                <li (click) = "setGenderView('MALE', '1')"><span class="base">{{'MALE' | translate}}</span></li>
+                                <li (click) = "setGenderView('FEMALE',  '2')"><span class="base">{{'FEMALE' | translate}}</span></li>
+                                <li (click) = "setGenderView('OTHER', '3')"><span class="base">{{'OTHER' | translate}}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'BIRTHDAY' | translate}}</span>
+                    </div>
+                    <div class="se-input">
+                        <input type="text" name="birthday" class="no-select add-pointer g-input-box-shadow"
+                               [(ngModel)]="personalInformation.birthday" selectDate #selectTime readonly
+                               [setDateOption]="dateOption" [class.show-input-error] ='isShowBirthdayError'>
+                        <p [class.hide]="!isShowBirthdayError" [class.g-show-error]="isShowBirthdayError">{{dateError}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="pull-right a-list-half">
+                        <div class="g-title">
+                            <span class="f9-f">{{'COUNTRY' | translate}}</span>
+                        </div>
+                        <select-filter [selectOption]="countryData" (outPutCurrentValue)="getCurrentValue($event)"></select-filter>
+                    </div>
+                    <div class="pull-left a-list-half">
+                        <div class="g-title">
+                            <span class="f9-f">{{'CITY' | translate}}</span>
+                        </div>
+                        <div class="se-input"><input class="g-input-box-shadow" type="text" name="nation" [(ngModel)]="personalInformation.nation"></div>
+                    </div>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+        <perfect-scrollbar class="ps-container pull-right a-list">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'PRIVACY INFORMATION' | translate}}</h3>
+                <p class="f14-f">{{'Sensitive information' | translate}}</p>
+            </div>
+            <ul class="a-p-general g-margin-bottom20">
+                <li class="clearfix">
+                    <div class="se-input personal-name clearfix">
+                        <div class="g-title">
+                            <span class="f9-f">{{'REAL NAME' | translate}}</span>
+                        </div>
+                        <input class="g-input-box-shadow" type="text" name="accountInformation.first_name" [(ngModel)]="personalInformation.first_name"/>
+                    </div>
+                    <div class="pull-right se-input personal-name clearfix">
+                        <div class="g-title">
+                            <span class="f9-f">{{'LAST NAME' | translate}}</span>
+                        </div>
+                        <input class="g-input-box-shadow" type="text" name="accountInformation.last_name" [(ngModel)]="personalInformation.last_name"/>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'ID' | translate}}</span>
+                    </div>
+                    <div class="se-input"><input class="g-input-box-shadow" type="text" name="identity_card" [(ngModel)]="accountInformation.identity_card"></div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'PASSPORT' | translate}}</span>
+                    </div>
+                    <div class="se-input"><input class="g-input-box-shadow" type="text" name="passport" [(ngModel)]="accountInformation.passport"></div>
+                </li>
+                <li class="clearfix hide">
+                    <div class="g-title">
+                        <span class="f9-f">{{'WAGE CARD' | translate}}</span>
+                    </div>
+                    <div class="se-input" toggleSelectGroup>
+                        <div class="se-input-select" #toggleSelectBut>
+                            <span class="f14-f">{{banksName}} Bank</span>
+                            <span class="font-selectbutton-soildclose"></span>
+                        </div>
+                        <input type="text" [(ngModel)]="accountInformation.wage_card" name="wage_card">
+                        <div class="d-select" #toggleSelect>
+                            <ul #toggleSelectContent>
+                                <li *ngFor = "let wageCardBanks of banksListArray; let i=index" (click) = "setWageCarView(i)">
+                                    <span class="base">{{wageCardBanks.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'HOME ADDRESS' | translate}}</span>
+                    </div>
+                    <div class="g-textArea-set">
+                        <textarea textareaHeight class="g-textArea" data-maxLength="255"
+                                  [(ngModel)]="personalInformation.home_address"></textarea>
+                    </div>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+    </div>
+
+    <!--photo start-->
+    <personal-photo [uploadPic]="isUploadPic"></personal-photo>
+    <!--[uploadPic]="isUploadPic"-->
+    <!--photo end-->
+
+</section>
+<!--section end-->

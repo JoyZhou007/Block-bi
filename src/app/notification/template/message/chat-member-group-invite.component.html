@@ -1,0 +1,11 @@
+<div class="n-cursor" (click)="doChatGroupMessage(notificationIn)">
+    <profile-img [userInfo]="senderInfo" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+    <div class="n-right">
+        <h3 class="f27-f" [innerHtml]="objInfo.title | sanitizeHtml"></h3>
+        <div class="n-con n-company">
+            <p class="f20-f" [innerHtml]="objInfo.simpleMsg | sanitizeHtml"></p>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>

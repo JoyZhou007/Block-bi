@@ -1,0 +1,40 @@
+<!-- 基本信息 -->
+<div [class.hide]="isDefaultContent || isFriendContent" class="ch-r-right-item ch-r-right-general"
+     [class.ch-r-right-item-hide]="generalMenuStatus"><!--添加.ch-r-right-item-hide收起-->
+    <div class="ch-r-right-item-title add-pointer" (click)="toggleMenuStatus('general')">
+        <span class="font-information1 ch-item-title-left"></span>
+        <i class="f16-f">{{'General' | translate}}</i>
+        <span class="font-selectbutton-soildclose pull-right"></span>
+    </div>
+    <div class="ch-r-right-item-content">
+        <div class="ch-r-r-general-bussiness v7-f">{{groupType | translate}} {{'chat' | translate}}</div>
+        <div class="ch-r-r-general-create f13-f">{{'Created1' | translate}} {{creator}} {{'Created2' | translate}} {{createDate}}</div>
+    </div>
+</div>
+<!-- 成员列表 -->
+<div class="ch-r-right-item ch-r-right-member" [class.hide]="isDefaultContent || isFriendContent"
+     [class.ch-r-right-item-hide]="isDefaultContent || isFriendContent || memberMenuStatus">
+    <chat-content-member #chatContentMember (outClickMenu)="toggleMenuStatus('member', $event)"></chat-content-member>
+</div>
+<!--好友信息-->
+<div class="chat-member-photo" [class.hide]="isDefaultContent || !isFriendContent">
+    <img src="{{chatFriendUserInfo && chatFriendUserInfo?.user_profile_path ?
+    appConfig.resourceDomain + chatFriendUserInfo.user_profile_path : ''}}" alt="">
+    <div class="chat-member-name">
+        <!--chat-member-name-circle-busy,chat-member-name-circle-offline-->
+        <span class="{{chatFriendUserInfo?.onlineStatusCls}}"></span>
+        <span class="f19-f">{{chatFriendUserInfo?.work_name}}</span>
+        <div style="display: inline-block;position: relative;top: 4px;">
+            <profile-state  [states]="chatFriendUserInfo?.state" [uid]="chatFriendUserInfo?.uid"></profile-state>
+        </div>
+    </div>
+</div>
+
+<!-- pin -->
+<div class="ch-r-right-item ch-r-right-pins" [class.ch-r-right-item-hide]="!pinMenuStatus">
+    <chat-pin #chatPin (outClickMenu)="toggleMenuStatus('pin', $event)"></chat-pin>
+</div>
+<!-- share files -->
+<chat-post-files [class.hide]="isDefaultContent" #chatPostFiles></chat-post-files>
+
+<!--<chat-file-comments></chat-file-comments>-->

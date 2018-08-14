@@ -1,0 +1,58 @@
+<div class="g-style1 g-padding20 m-a-type"
+data-step="step_mission_20" id="step_mission_20"
+>
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'APPLICATION TYPE' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="se-input g-input-box-shadow g-border2 g-transition2" toggleSelectGroup [currClass]="'se-input-current'" (callBackData)="getCallBackData($event)">
+        <div class="s-style1" #toggleSelectBut>
+            <div class="search-style1-warp">
+                <div class="search-style1-list g-transition2 g-border4" style="margin-right:0;" *ngIf="createApplicationData.chosenWorkflow.name">
+                    <span class="search-key f4-f" title="{{createApplicationData.chosenWorkflow.name}}">
+                        <i class="base">{{createApplicationData.chosenWorkflow.name}}</i></span>
+                    <span class="remove-but" (click)="deleteTheWorkflow($event)">
+                        <i class="font-remove"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="d-select" #toggleSelect>
+            <perfect-scrollbar class="ps-container g-height140">
+                <ul class="g-max-height-inherit">
+                    <li class="se-title"><span>{{'INTERNAL' | translate}}</span></li>
+                    <div *ngIf="internalList?.length != 0">
+                        <li *ngFor="let internal of internalList"
+                            (click)="selectWorkflow(internal,$event)">
+                            <span class="base">{{internal?.name}}</span>
+                        </li>
+                    </div>
+                    <div *ngIf="internalList?.length == 0" class="g-no-data-color f19-f g-margin-bottom10 g-margin-left10" style="font-size:13px;">
+                        <span class="base">{{'No available workflow' | translate}}</span>
+                    </div>
+                    <li class="se-title d-title-margin"><span>{{'COOPERATOR' | translate}}</span></li>
+                    <div *ngIf="cooperatorList?.length != 0">
+                        <li *ngFor="let cooperator of cooperatorList"
+                            (click)="selectWorkflow(cooperator,$event)">
+                            <span class="base">{{cooperator?.name}}</span>
+                        </li>
+                    </div>
+                    <div *ngIf="cooperatorList.length == 0" class="g-no-data-color f19-f g-margin-bottom10 g-margin-left10" style="font-size:13px;">
+                        <span class="base">{{'No available workflow' | translate}}</span>
+                    </div>
+                </ul>
+            </perfect-scrollbar>
+        </div>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea style="margin-bottom:0;"  textareaHeight class="g-textArea" data-maxLength="100" [(ngModel)]="createApplicationData.missionDescription"></textarea>
+    </div>
+    <p class="f33-f">{{'Maximum 100' | translate}}</p>
+    <div class="g-title m-a-specification" *ngIf="createApplicationData.chosenWorkflow.desc">
+        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+    </div>
+    <p class="f13-f m-a-specification-con">{{createApplicationData.chosenWorkflow.desc}}</p>
+</div>

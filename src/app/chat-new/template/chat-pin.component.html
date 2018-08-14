@@ -1,0 +1,126 @@
+<div class="ch-r-right-item-title add-pointer" (click)="toggleMenuStatus($event)">
+    <span class="font-pin1 ch-item-title-left g-margin-top2"></span>
+    <i class="f16-f">{{'Pins' | translate}}</i>
+    <span class="font-selectbutton-soildclose pull-right"></span>
+</div>
+<div class="ch-r-right-item-content chat-pins-empty f31-f" *ngIf="pinList.length === 0 && init">
+    {{'no pin message' | translate}}
+</div>
+
+<div class="ch-r-right-item-content" *ngIf="pinList.length > 0 && init">
+    <div class="ch-r-right-pins-list add-pointer">
+        <ul>
+            <li *ngFor="let pinItem of pinList; let i = index;" class=" ch-pins-list-item {{pinItem.typeCls}}"
+            (click)="jumpToMessage($event,pinItem)"
+            >
+               <div *ngIf="pinItem.messageData.status ===1" toggleSelectGroup>
+                <span class="font-remove ch-pins-list-icon"
+                      tooltip [tooltip]="{content:'remove this pin', position:'top'}"
+                      (click)="removePin($event, pinItem, i)"></span>
+                <span class="font-more ch-pins-list ch-pins-list-icon" #showMenu #toggleSelectBut
+                      tooltip [tooltip]="{content:'more', position:'top'}"
+                ></span>
+                <div class="d-select" #toggleSelect>
+                    <ul style="max-height:400px;">
+                        <li *ngIf="!isDefaultContent" (click)="setPinMessageForward($event, pinItem.messageData)"><em class="base">{{'Forward' | translate}}</em></li>
+                        <li *ngIf="!isDefaultContent" (click)="setMessageAt($event, pinItem.messageData)"><em class="base">@</em></li>
+                        <li (click)="removePin($event, pinItem, i)"><em class="base">{{'Unpin it' | translate}}</em></li>
+                        <li *ngIf="!isDefaultContent" class="d-select-remove"
+                            (click)="removeTheMessage($event,pinItem.messageData)">
+                            <em class="base">{{'Remove this message' | translate}}</em>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 转发的 -->
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_FORWARD">
+                    <div *ngIf="pinItem.messageData.detail.original_msg.type === chatConfig.CHAT_MESSAGE_TYPE_TEXT">
+                        <p>
+                            <span class="f19-f ch-pins-list-item-word-name">{{pinItem.messageData.userInfo?.work_name}}</span>
+                            <span class="f5-f">{{pinItem.createDate}}</span></p>
+                        <p class="f20-f ch-pins-list-item-con" [innerHTML]="pinItem.messageData.safeMsg | emoji | sanitizeHtml"></p>
+                    </div>
+                    <div *ngIf="pinItem.messageData.detail.original_msg.type === chatConfig.CHAT_MESSAGE_TYPE_IMG">
+                        <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail.original_msg?.detail.file_name}}</p>
+                        <p>
+                            <span class="icon-board-image"></span> <span class="f5-f">Image</span>
+                        </p>
+                    </div>
+                    <div *ngIf="pinItem.messageData.detail.original_msg.type === chatConfig.CHAT_MESSAGE_TYPE_FILE">
+                        <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail.original_msg?.detail.file_name}}</p>
+                        <p>
+                            <span class="icon-board-file ch-files-list-icon"></span> <span class="f5-f">File</span>
+                        </p>
+                    </div>
+                    <div *ngIf="pinItem.messageData.detail.original_msg.type === chatConfig.CHAT_MESSAGE_TYPE_POST">
+                        <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail.original_msg?.detail.post_name}}</p>
+                        <p>
+                            <span class="icon-board-post"></span> <span class="f5-f">Post</span>
+                        </p>
+                    </div>
+
+                </div>
+                <!-- 共享的 -->
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_SHARE">
+                    <div *ngIf="pinItem.messageData.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_IMG">
+                        <p class="g-margin-bottom2">
+                            <span class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.file_name}} </span>
+                            <span class="f5-f"> Shared file </span>
+                        </p>
+
+                        <p>
+                            <span class="icon-board-image"></span> <span class="f5-f">Image</span>
+                        </p>
+                    </div>
+                    <div *ngIf="pinItem.messageData.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_FILE">
+                        <p class="g-margin-bottom2">
+                            <span class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.file_name}}</span>
+                            <span class="f5-f"> Shared file </span>
+                        </p>
+                        <p>
+                            <span class="icon-board-file ch-files-list-icon"></span> <span class="f5-f">File</span>
+                        </p>
+                    </div>
+                    <div *ngIf="pinItem.messageData.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_POST">
+                        <p class="g-margin-bottom2">
+                            <span class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.post_name}}</span>
+                            <span class="f5-f"> Shared file </span>
+                        </p>
+                        <p>
+                            <span class="icon-board-post"></span> <span class="f5-f">Post</span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_TEXT">
+                    <p>
+                        <span class="f19-f ch-pins-list-item-word-name">{{pinItem.messageData.userInfo?.work_name}}</span>
+                        <span class="f5-f">{{pinItem.createDate}}</span></p>
+                    <p class="f20-f ch-pins-list-item-con" [innerHTML]="pinItem.messageData.safeMsg | emoji | sanitizeHtml"></p>
+                </div>
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_IMG">
+                    <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.file_name}}</p>
+                    <p>
+                        <span class="icon-board-image"></span> <span class="f5-f">Image</span>
+                    </p>
+                </div>
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_FILE">
+                    <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.file_name}}</p>
+                    <p>
+                        <span class="icon-board-file ch-files-list-icon"></span> <span class="f5-f">File</span>
+                    </p>
+                </div>
+                <div *ngIf="pinItem.messageData.type === chatConfig.CHAT_MESSAGE_TYPE_POST">
+                    <p class="f21-f g-margin-bottom2">{{pinItem.messageData.detail?.post_name}}</p>
+                    <p>
+                        <span class="icon-board-post"></span> <span class="f5-f">Post</span>
+                    </p>
+                </div>
+            </div>
+                <div *ngIf="pinItem.messageData.status === 0">
+                    This message have been revoked, this pin will be removed automatically
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

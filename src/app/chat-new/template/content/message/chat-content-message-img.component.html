@@ -1,0 +1,96 @@
+<div class="clearfix ch-msg-list" *ngIf="messageData"
+     [class.ch-msg-self]="messageData.isSelf"
+     [class.ch-msg-pin]="messageData.hasPin">
+    <profile-img class="ch-msg-logo" [userInfo]="messageData.userInfo" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+    <div class="clearfix ch-msg-header">
+        <span class="f19-f g-margin-right10">{{messageData.userInfo.work_name}}</span>
+        <div>
+            <profile-state  [states]="messageData.userInfo?.state" [uid]="messageData.userInfo?.uid" [isChatContent]="true"></profile-state>
+        </div>
+        <span class="f5-f ch-msg-merge-time">{{!isMerge ? messageData.showTime :
+            messageData.showTime.substr(0, messageData.showTime.length - 2)}}</span>
+        <span class="font-alarm ch-msg-icon {{messageData.hasAlarm ? 'icon1-alarm alarm-clicked' : 'font-alarm'}}"
+              title="{{messageData.hasAlarm ? messageData.effective_time_display : ''}}"
+              tooltip [tooltip]="{content: 'set alarm', position:'top'}"
+              #alarm (click)="clickAlarm($event, alarm, alarmSelect,messageData) ">
+            <div class="d-select" [class.hide]="!alarm['show']" [style.top.px]="selectTop" #alarmSelect>
+                <perfect-scrollbar class="ps-container g-height140">
+                <ul class="g-max-height-inherit">
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 1)"><em class="base relative">5 Minutes</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 2)"><em class="base relative">10 Minutes</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 3)"><em class="base relative">30 Minutes</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 4)"><em class="base relative">1 Hour</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 5)"><em class="base relative">6 Hours</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 6)"><em class="base relative">1 Day</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 7)"><em class="base relative">3 Days</em></li>
+                    <li (click)="clickOnAlarm($event, messageData, alarm, 8)"><em class="base relative">1 Week</em></li>
+                     <li class="g-line-height-initial" (click)="deleteChatAlarm($event,messageData)"><em class="base relative">cancel</em></li>
+                </ul>
+                </perfect-scrollbar>
+            </div>
+        </span>
+      <!--  <span class="icon1-alarm ch-msg-icon alarm-clicked" *ngIf="messageData.hasAlarm"
+              title="{{messageData.effective_time_display}}"></span>-->
+        <span class="font-pin1 ch-msg-icon" tooltip [tooltip]="{content: 'pin', position: 'top'}" *ngIf="!messageData.hasPin"
+              (click)="clickOnPin($event, messageData)" ></span>
+        <span class="icon1-chat-pin ch-msg-icon" *ngIf="messageData.hasPin"
+              (click)="clickOnPin($event, messageData)"></span>
+        <span class="icon1-at ch-msg-icon" (click)="clickOnAt($event, messageData)"
+              *ngIf="!messageData.isSelf && !isMerge"></span>
+    </div>
+    <div class="clearfix ch-msg-text" (click)="(messageData.isClose = !messageData.isClose);">
+        <div *ngIf="messageData.type != chatConfig.CHAT_MESSAGE_TYPE_SHARE ">
+            <span class="v7-f">{{ 'Upload' | translate }}</span>
+            <span class="v8-f add-pointer font-ellipsis">{{messageData?.detail?.file_name}}.{{messageData?.detail?.ext}}</span>
+            <span class="font-selectbutton-soildclose" [class.current]="messageData.isClose">
+            </span>
+        </div>
+        <div *ngIf="messageData.type ==  chatConfig.CHAT_MESSAGE_TYPE_SHARE">
+            <span class="v7-f">{{'Shared' | translate}}</span>
+            <span class="v8-f add-pointer">{{messageData?.detail?.file_name}}.{{messageData?.detail?.ext}}</span>
+            <span class="font-selectbutton-soildclose" [class.current]="messageData.isClose">
+            </span>
+        </div>
+    </div>
+    <div class="clearfix ch-msg-img" [class.hide]="messageData.isClose">
+        <img src="{{messageData.detail.file_path ? appConfig.resourceDomain + messageData.detail.file_path : ''}}"
+             (click)="showBigImgDialog($event)"
+             (mouseenter)="fetchTheImageLikes($event)"
+             [ngStyle]="{'max-height': isMiniDialog? '150px':'350px','max-width':isMiniDialog? '150px':'500px'}"
+        >
+        <div class="ch-msg-img-opt" toggleSelectGroup>
+            <span class="g-border-ab g-bg-white g-border2 cursor g-transition2 g-icon-position icon1-like" [class.icon1-like-selected]="isLiked"
+                  (click)="likeTheImage(messageData.detail.fid,$event)"></span>
+            <span class="g-border-ab g-bg-white g-border2 cursor g-transition2 g-icon-position font-more"
+                   #menuBtn
+                  (click)="clickOnFileMenu($event, menuBtn, menuSelect)" #toggleSelectBut></span>
+            <span class="g-border-ab g-bg-white g-border2 cursor g-icon-position-1" (click)="showImageComments($event)"
+                  tooltip [tooltip]="{content: 'comments', position: 'top'}">
+                <i class="font-comments">
+                     <em class="path1"></em>
+                     <em class="path2"></em>
+                     <em class="path3"></em>
+                </i>
+            </span>
+            <div class="d-select" #menuSelect #toggleSelect>
+                <ul #toggleSelectContent>
+                    <li *ngIf="!currentItem.isFriend" (click)="clickOnShare($event, messageData)"><em class="base">{{'Share' | translate}}</em></li>
+                    <li (click)="downloadChatImage($event)"><em class="base">{{'Download' | translate}}</em></li>
+                    <li (click)="archiveToFolder($event,messageData)"><em class="base">{{'Archive to folder' | translate}}</em></li>
+                    <li *ngIf="!messageData.hasPin" (click)="clickOnPin($event, messageData)"><em class="base">{{'Pin it' | translate}}</em></li>
+                    <li *ngIf="messageData.hasPin" (click)="clickOnPin($event, messageData)"><em class="base">{{'UnPin it' | translate}}</em></li>
+                    <li class="d-select-remove" (click)="clickOnRevoke($event,messageData)"><em class="base">{{'Remove this message' | translate}}</em></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="ch-msg-opt">
+        <span class="font-forward g-icon-position g-transition2"
+              tooltip [tooltip]="{content: 'forward', position:'bottom'}"
+              (click)="clickOnForward($event, messageData)"></span>
+        <span class="font-page-esc-small g-icon-position g-transition2"
+              *ngIf="messageData.isAbleRevoke"
+              tooltip [tooltip]="{content: 'recall it', position:'bottom'}"  (click)="clickOnRevoke($event, messageData)">
+        </span>
+    </div>
+</div>

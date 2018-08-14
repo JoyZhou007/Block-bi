@@ -1,0 +1,328 @@
+<div #myTargetDiv>
+    <div class="fo-right" onselectstart="return false">
+        <div *ngIf="!isDefaultPage">
+            <div class="fo-choose" [class.fo-se-result]=isShowSearchResultPath>
+                <div class="pull-left fo-choose-check "
+                     [class.fo-choose-selected]="isAllSelected && selectFileCount !== 0"
+                     (click)="selectAllFile(fileList,$event)">
+                    <i class="font-selectbutton-select g-checkbox"></i>
+                </div>
+                <div class="pull-left f4-f fo-choose-all" *ngIf="selectInfoArr.length === 0">{{'choose all' |
+                    translate}}
+                </div>
+                <div class="pull-left f4-f fo-choose-all" *ngIf="selectInfoArr.length !== 0">{{'choose' | translate}}
+                    {{selectInfoArr.length}} {{'files h' | translate}}
+                </div>
+                <div class="f4-f pull-left fo-se-type" *ngIf="isShowSwitchBtn">
+                    <em [class.current]="isShowPersonalResult"
+                        (click)="switchSearchForm($event,true)">
+                        <span class="base">{{'Personal Folder' | translate}}</span>
+                    </em>
+                    <em [class.current]="!isShowPersonalResult"
+                        *ngIf="isHaveCompany"
+                        (click)="switchSearchForm($event,false)">
+                        <span class="base">{{'Business Folder' | translate}}</span>
+                    </em>
+                </div>
+                <div class="f4-f pull-left fo-se-type" *ngIf="isInKeywordSearchList">
+                    <em [class.current]="isGlobalSearch" *ngIf="currentForm ==1"
+                        (click)="switchSearchPath($event,true)">
+                        <span class="base">{{'Personal Folder' | translate}}</span>
+                    </em>
+                    <em [class.current]="isGlobalSearch" *ngIf="currentForm ==2"
+                        (click)="switchSearchPath($event,true)">
+                        <span class="base">{{'Business Folder' | translate}}</span>
+                    </em>
+                    <em [class.current]="!isGlobalSearch"
+                        *ngIf="isHaveCompany"
+                        (click)="switchSearchPath($event,false)">
+                        <span class="base">{{'Current Path' | translate}}</span>
+                    </em>
+                </div>
+                <div class="pull-right">
+                    <div class="pull-left fo-file-path" *ngIf="isShowSearchResultPath">
+                        <!--<a class="pull-left font-selectbutton-soildclose" href="javascript:;"></a>-->
+                        <div class="pull-left fo-file-path-warp">
+                            <ul>
+                                <li class="clearfix" *ngFor="let fullPath of fullPathArray;let i = index"
+                                    title="{{fullPath}}">
+                                <span class="icon-smallfolder">
+                                    <em class="path1"></em>
+                                    <em class="path2"></em>
+                                </span>
+                                    <i class="pull-left f6-f">{{fullPath}}</i>
+                                    <span class="font-selectbutton-line" *ngIf="i != fullPathArray.length-1"></span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!--<a class="pull-left font-selectbutton-soildclose" href="javascript:;"></a>-->
+                    </div>
+                    <div class="pull-left fo-choose-right">
+                        <div class="pull-left" toggleSelectGroup>
+                    <span class="fo-choose-type" #toggleSelectBut>
+                        {{fileType | translate}}
+                        <i class="font-selectbutton-soildclose"></i>
+                    </span>
+                            <div class="d-select fo-type" #toggleSelect>
+                                <perfect-scrollbar class="ps-container g-height140">
+                                    <ul class="g-max-height-inherit" #toggleSelectContent>
+                                        <li (click)="doChooseFileType($event,file.key)"
+                                            *ngFor="let file of fileTypeList">
+                                            <i class="base">{{file.key | translate}}</i>
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+                        <div class="pull-left" toggleSelectGroup>
+                            <div class="folder-choose-asc" #toggleSelectBut>
+                            <span class="font-selectbutton-arrange" tooltip
+                                  [tooltip]="{content: 'Filter', viewContainer: myTooTipTargetDiv , position:'top'}"
+                                  *ngIf="folderArrange">
+                            </span>
+                                <span class="icon1-copy"
+                                      tooltip
+                                      [tooltip]="{content: 'Filter', viewContainer: myTooTipTargetDiv , position:'top'}"
+                                      *ngIf="!folderArrange">
+                                </span>
+                            </div>
+                            <div class="d-select fo-arrange" #toggleSelect>
+                                <ul style="max-height:200px;" #toggleSelectContent>
+                                    <li (click)="sortTheFile($event,1)"><i class="base">{{'Last update' | translate}}
+                                        ↑</i>
+                                    </li>
+                                    <li (click)="sortTheFile($event,-1)"><i class="base">{{'Last update' | translate}}
+                                        ↓</i>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-----------------平铺视图------------------------>
+            <!--<perfect-scrollbar class="ps-container folder-right-scroll">-->
+            <div style="overflow: hidden">
+                <div class="fo-type1-list fo-file-thum"
+                     DragDropDirective
+                     (outDrop)="dealDropEvent($event)"
+                     data-intro='<h3 class="f53-f help-title help-title2">TUTORIAL
+                <span class="pull-right f14-f di2-import-team-title help-title-right">
+                <em>esc </em>to cancel</span></h3>
+                <div class="help-line"></div>
+                <div class="help-click">You can view or operate file here!</div>
+                <div class="help-line"></div>' id="step_4" data-step="4"
+                     (mousedown)="startChoose($event,bigViewList,bigContent,selectBox)"
+                     [class.hide]="!isShowBigView || isLoadingFile"
+                     style="position: relative;overflow-x:hidden;"
+                     #bigContent>
+                    <div class="dragBg" #selectBox style="position: absolute;opacity: 0.1;z-index: 2;"></div>
+                    <ul class="clearfix file-thum-new" #bigViewList id="bigViewList">
+                        <li *ngFor="let file of fileList; trackBy:file?.id"
+                            [class.current]="file.isSelect"
+                            (mouseenter)="mouseEnter(li1,bigViewList,iconBtn,$event,file,bigContent,true)"
+                            (mouseleave)="mouseLeave(iconBtn,$event)"
+                            class="tileViewLi"
+                            #li1
+                            onselectstart="return false"
+                        >
+                            <div class="fo-type1-list-select selectBtn"
+                                 [class.fo-type1-list-pin]="file.is_starred === 1"
+                                 title="{{file.name}}">
+                                <div class="fo-type1-list-checkbox" (click)="selectCurrent(file,$event)">
+                                    <i class="font-selectbutton-select g-checkbox selectBtn"></i>
+                                </div>
+                                <div (click)="enterTheFolder(file, $event)">
+                           <span *ngIf="file.ext_type !='image'">
+                                <span *ngIf="file.chn == 0 || file.chn == -1"
+                                      class="icon-file-new-thum selectBtn icon-file-new-thum-{{file.ext_type}}"></span>
+                                <span *ngIf="file.chn == 1 && file.is_dir == 1"
+                                      class="icon-file-new-thum icon-file-new-thum-share"></span>
+                                <span *ngIf="file.chn == 2 && file.is_dir == 1 "
+                                      class="icon-file-new-thum icon-file-new-thum-chat"></span>
+                                <span *ngIf="file.chn == 3 && file.is_dir == 1"
+                                      class="icon-file-new-thum icon-file-new-thum-mission"></span>
+                             </span>
+                                    <img *ngIf="file.ext_type =='image'" class="file-image selectBtn"
+                                         src="{{file.thumb_l ? config.resourceFolderDomain + file.thumb_l : ''}}">
+                                </div>
+                                <div class="icon1-chat-pin" *ngIf="file.is_starred === 1"></div>
+                            </div>
+                            <h3 class="f5-f"
+                                title={{file.name}}
+                                (click)="modifyFileName(file,$event,renameInput)"
+                                [class.hide]="file.isShowInput"
+                            >
+                                <span class="base">{{file.name}}{{file.ext ? '.':''}}{{file.ext ? file.ext:''}}</span>
+                            </h3>
+                            <input class="f5-f file-name-input g-transition2 g-input-box-shadow" type="text"
+                                   [class.hide]="!file.isShowInput"
+                                   [(ngModel)]="file.name"
+                                   #renameInput
+                                   (click)="stopPropagation($event)"
+                                   (keyup)="keyUpEvent(file,$event)"
+                                   (blur)="doReName(file,$event)"
+                            >
+                        </li>
+                    </ul>
+                    <div class="fo-icon" #iconBtn
+                         (mouseenter)="mouseEnterBtn(iconBtn)"
+                         (mouseleave)="mouseLeaveBtn(iconBtn)">
+                        <div class="fo-icon-bg" style="width: 188px">
+                <span class="bi-icon-download"
+                      tooltip [tooltip]="{content: 'download', position:'top'}"
+                      *ngIf="currentHoverFile.is_dir == 0"
+                      (click)="downloadTheFile($event)"></span>
+                            <span class="font-transfer" tooltip [tooltip]="{content: 'transfer', position:'top'}"
+                                  (click)="transferTheFile($event)"></span>
+                            <span class="font-share" tooltip [tooltip]="{content: 'share', position:'top'}"
+                                  (click)="shareTheFile($event)"></span>
+                            <span class="font-copy" tooltip [tooltip]="{content: 'copy', position:'top'}"
+                                  (click)="copyTheFile($event)"></span>
+                            <span class="bi-icon-move" tooltip [tooltip]="{content: 'move', position:'top'}"
+                                  (click)="moveTheFile($event)"></span>
+                            <span class="font-pin" *ngIf="currentHoverFile.is_dir == 1"
+                                  tooltip [tooltip]="{content: 'pin', position:'top'}"
+                                  (click)="pinTheFile($event)"></span>
+                            <span class="font-trash g-trash" tooltip [tooltip]="{content: 'delete', position:'top'}"
+                                  (click)="deleteTheFile($event)"></span>
+                        </div>
+                    </div>
+                    <div class="fo-no-data"
+                         style="margin-top: 22px"
+                         *ngIf="fileList.length === 0">
+                        <img src="{{config.staticResourceDomain + 'assets/images/file-empty.png'}}"
+                             style="width: 218px;">
+                        <p class="f41-f">{{'NO FILE OR FOLDER' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!--</perfect-scrollbar>-->
+            <!-------------列表视图--------------------->
+            <div style="overflow: hidden">
+                <div class="fo-type2-list"
+                     (mousedown)="startChoose($event,smallViewList,listContent,selectBox1)"
+                     [ngStyle]="{'border-top':fileList.length? '' : 'none' }"
+                     #listContent
+                     style="position: relative"
+                     [class.hide]="isShowBigView  || isLoadingFile"
+                >
+                    <div class="dragBg" #selectBox1 style="position: absolute;opacity: 0.1;z-index: 2;"></div>
+                    <ul class="f5-f file-new-list" #smallViewList>
+                        <li class="li2" #li2
+                            *ngFor="let file of fileList; trackBy:file?.id"
+                            (mouseenter)="mouseEnter(li2,smallViewList,iconBtn1,$event,file,listContent,false)"
+                            (mouseleave)="mouseLeave(iconBtn1,$event)"
+                            [class.current]="file.isSelect"
+                        >
+                            <div class="pull-left fo-choose-check"
+                                 [class.fo-choose-selected]="file.isSelect"
+                                 (click)="selectCurrent(file,$event)"
+                            >
+                                <i class="font-selectbutton-select g-checkbox"></i>
+                            </div>
+                            <div class="pull-left fo-file-icon" (click)="enterTheFolder(file,$event)">
+                    <span *ngIf="file.ext_type !='image'" style="margin-top: 0;">
+                        <span *ngIf="file.chn==2 && file.is_dir == 1" class="icon-new-list icon-new-list-chat"></span>
+                        <span *ngIf="file.chn==3 && file.is_dir == 1"
+                              class="icon-new-list icon-new-list-mission"></span>
+                        <span *ngIf="file.chn==1 && file.is_dir == 1" class="icon-new-list icon-new-list-share"></span>
+                        <span *ngIf="file.chn==0  || file.chn == -1"
+                              class="icon-new-list icon-new-list-{{file.ext_type}}"></span>
+                    </span>
+                                <img *ngIf="file.ext_type =='image'" class="pull-right file-list-image"
+                                     src="{{file.thumb_l ? config.resourceFolderDomain + file.thumb_l : ''}}"/>
+                            </div>
+                            <div class="pull-left fo-file-name">
+                                <span [class.hide]="file.isShowInput" (click)="modifyFileName(file,$event,renameInput1)">
+                                    {{file.name}}.{{file.ext ? file.ext:''}}
+                                </span>
+                                <input type="text"
+                                       [class.hide]="!file.isShowInput"
+                                       [(ngModel)]="file.name"
+                                       #renameInput1
+                                       (click)="stopPropagation($event)"
+                                       (keyup)="keyUpEvent(file,$event)"
+                                       (blur)="doReName(file,$event)"
+                                >
+                            </div>
+                            <div class="pull-left fo-file-size">{{(file.is_dir===1)? file.child+' files' : ''}}{{(file.is_dir===0)? file.size : ''}}
+                            </div>
+                            <div class="pull-left fo-file-size"></div>
+                            <div class="pull-left fo-file-time">{{'Last updated' | translate}}
+                                {{file.formatDate?.hour}}:{{file.formatDate?.minute}}
+                                {{file.formatDate?.day}} {{file.formatDate?.month}} {{file.formatDate?.year}}
+                            </div>
+                            <div class="pull-right fo-file-by">
+                                By
+                                <profile-img style="display: inline-block;margin-left:10px;" [userInfo]="file.ownerInfo"
+                                             [settings]="{show_work_name: false}"></profile-img>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="fo-no-data" *ngIf="fileList.length === 0">
+                        <img src="{{config.staticResourceDomain + 'assets/images/file-empty.png'}}"
+                             style="width: 218px">
+                        <p class="f41-f">{{'NO FILE OR FOLDER' | translate}}</p>
+                    </div>
+                    <div class="fo-icon" #iconBtn1
+                         (mouseenter)="mouseEnterBtn(iconBtn1)"
+                         (mouseleave)="mouseLeaveBtn(iconBtn1)"
+                    >
+                        <div class="fo-icon-bg" style="width: 188px">
+                <span class="bi-icon-download" *ngIf="currentHoverFile.is_dir == 0"
+                      tooltip [tooltip]="{content: 'download', position:'top'}"
+                      (click)="downloadTheFile($event)"></span>
+                            <span class="font-transfer" [tooltip]="{content: 'transfer', position:'top'}"
+                                  (click)="transferTheFile($event)"></span>
+                            <span class="font-share" [tooltip]="{content: 'share', position:'top'}"
+                                  (click)="shareTheFile($event)"></span>
+                            <span class="font-copy" [tooltip]="{content: 'copy', position:'top'}"
+                                  (click)="copyTheFile($event)"></span>
+                            <span class="bi-icon-move" [tooltip]="{content: 'move', position:'top'}"
+                                  (click)="moveTheFile($event)"></span>
+                            <span class="font-pin" *ngIf="currentHoverFile.is_dir==1"
+                                  [tooltip]="{content: 'share', position:'top'}"
+                                  (click)="pinTheFile($event)"></span>
+                            <span class="font-trash g-trash" [tooltip]="{content: 'delete', position:'top'}"
+                                  (click)="deleteTheFile($event)"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--------------加载文件中loading------------->
+            <div class="folder-loader" *ngIf="isLoadingFile">
+                <div class="loader">
+                    <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                        <div class="loader-inner ball-pulse"></div>
+                    </loaders-css>
+                </div>
+            </div>
+
+        </div>
+        <!-------------默认页面--------------->
+        <perfect-scrollbar class="ps-container folder-right-scroll">
+            <div class="fo-type1-list fo-file-thum" *ngIf="isDefaultPage">
+                <div class="clearfix g-default-prompt fo-no-data-position ">
+                    <div class="clearfix">
+                        <img src="{{config.staticResourceDomain + 'assets/images/folder-default-monkey.png'}}">
+                        <div class="g-default-prompt-right">
+                            <h1 class="LatoRegular">{{'Hello, are ready to work ?' | translate}}</h1>
+                            <p class="LatoLight">
+                                {{'You can share' | translate}}
+                                <span>{{'Whatever is' | translate}}</span>
+                            </p>
+                        </div>
+                    </div>
+                    <p class="v8-f" (click)="createNewFolder(1)"><span>{{'Create a private folder' | translate}}</span>
+                    </p>
+                    <p class="v8-f" (click)="createNewFolder(2)"><span>{{'Create a business folder' | translate}}</span>
+                    </p>
+                </div>
+            </div>
+        </perfect-scrollbar>
+    </div>
+</div>
+

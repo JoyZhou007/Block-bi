@@ -1,0 +1,191 @@
+<style>
+    :host /deep/ .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit;
+    }
+
+    :host /deep/ .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<div class="chat-post-wrap ch-message" [class.hide]="showChatPost">
+    <!--头部开始-->
+    <chat-post-read-mode-header
+            (outDownloadPost)="downloadThePost($event)"
+            (outArchivePostToFolder)="archivePostToFolder($event)"
+            (displayChatPost)="displayChatPost($event)"
+            (showDetail)="showDetailCont($event)"
+            (OutForward)="openForwardDialog($event)"
+            (OutputRevokePost)="clickOnRevoke($event)"
+            [settings]="mode"
+            [showDelete]="showDelete"
+            #chatPostHeader
+    ></chat-post-read-mode-header>
+    <!--头部结束-->
+    <!--主要内容开始-->
+    <div class="ch-post-main">
+        <!--左侧-->
+        <div class="ch-post-left pull-left">
+            <quill-editor #quillEditor [readOnly]="settings.quillReadOnly" [theme]="'bubble'" [modules]="toolbar"
+                          (onContentChanged)="postContentChange($event)"></quill-editor>
+        </div>
+        <!--右侧-->
+        <div class="ch-post-right pull-right"
+             [class.ch-post-right-hide]="!showAboutDetail && !showDraftDetail && !showCommentDetail"
+        >
+            <!--about it-->
+            <div class="ch-post-aboutIt" [hidden]="!showAboutDetail">
+                <div class="ch-post-title f24-f">
+                    {{'About it' | translate}}
+                    <span class="font-remove" (click)="closeDetail()"></span>
+                </div>
+                <perfect-scrollbar class="ps-container ch-post-content">
+                    <div class="">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+                    </div>
+                    <div class="clearfix">
+                        <p *ngIf="!currShareToDetailArr.length">{{'No Data' | translate}}</p>
+                        <div class="m-r-c-tab-common-people pull-left"
+                             *ngFor="let shareToObj of currShareToDetailArr; let i=index;"
+                        >
+                            <div class="friend-wrap" *ngIf="!shareToObj.hasOwnProperty('uid')">
+                                <!--<img class="pull-left" src="{{config.resourceDomain + shareToObj.user_profile_path}}">-->
+                                <span class="f4-f ch-post-shareto">
+                                    <i class="pull-left">{{shareToObj.name}}</i>
+
+                                </span>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="g-title">
+                        <span class="f9-f">{{'ATTACHMENT' | translate}}</span>
+                    </div>
+                    <p *ngIf="!attachmentFileList.length">{{'No Data' | translate}}</p>
+                    <div class="clearfix di-people ch-post-di-people"
+                         *ngFor="let fileObj of attachmentFileList; let i=index;"
+                         (click)="downloadAttachment($event,fileObj)"
+                    >
+                        <div class="clearfix">
+                            <!-- excel-->
+                            <span class="di-fo-file-icon icon-file-excel"
+                                  *ngIf="fileObj.whichFileType.isExcel"
+                            >
+                             <em class="path1"></em>
+                         </span>
+                            <!--word-->
+                            <span class="icon-file-word di-fo-file-icon"
+                                  *ngIf="fileObj.whichFileType.isWord"
+                            >
+                            <em class="path1"></em>
+                        </span>
+                            <!--pdf-->
+                            <span class="icon-file-acrobat di-fo-file-icon"
+                                  *ngIf="fileObj.whichFileType.isAcrobat"
+                            >
+                            <em class="path1"></em>
+                        </span>
+                            <!--ppt-->
+                            <span class="icon1-excel"
+                                  *ngIf="fileObj.whichFileType.isPpt"
+                            >
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+                            <!--other-->
+                            <span class="icon-file-other di-fo-file-icon"
+                                  *ngIf="fileObj.whichFileType.isOther"
+                            >
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+                            <!--image-->
+                            <img class="di-fo-file-icon pull-left di-fo-file-img g-border4"
+                                 src="{{config.resourceDomain+ fileObj.thumb_s}}"
+                                 *ngIf="fileObj.isImage"
+                            >
+                            <span class="f19-f">{{fileObj.name}}</span>
+                            <span class="f5-f">{{'Last edit' | translate}}{{fileObj.fileUploadTime}} {{'ago' | translate}}</span>
+                            <!--<span class="font-remove"-->
+                            <!--(click)="removeFileList($event,fileObj)"-->
+                            <!--&gt;</span>-->
+                        </div>
+                    </div>
+                </div>
+                </perfect-scrollbar>
+
+            </div>
+            <!--comments-->
+            <div class="ch-post-comments" [hidden]="!showCommentDetail">
+                <div class="ch-post-title f24-f">
+                    {{'Comments' | translate}}
+                    <span class="font-remove" (click)="closeDetail($event)"></span>
+                </div>
+                <perfect-scrollbar class="ps-container ">
+                    <div class="chat-post-scroll" #commentScroll>
+                    <div class="loader" [class.hide]="!isLoading">
+                        <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                            <div class="loader-inner ball-pulse"></div>
+                        </loaders-css>
+                    </div>
+                    <div class="ch-msg-beginning ch-msg-time" *ngIf="loadEnd && commentLists.length !== 0">
+                        <div class="ch-msg-time">
+                            <div class="ch-msg-time-event">
+                                <span class="c1-f">{{'No More Comments' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ch-post-comments-wrap">
+                        <!--comments list-->
+                        <div class="ch-post-comments-empty g-margin-top10" *ngIf="commentLists.length === 0"><!--添加.hide隐藏-->
+                            <img src="{{config.staticResourceDomain + 'assets/images/comments.png'}}">
+                        </div>
+                        <div class="ch-post-comments-list" *ngIf="commentLists.length !== 0">
+                            <dl *ngFor="let comment of commentLists">
+                                <dt>
+                                    <profile-img class="ch-msg-logo" [userInfo]="comment.userInfo" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                                </dt>
+                                <dd class="clearfix">
+                                    <p class="comments-username">
+                                        <span class="f19-f">{{comment.userInfo.work_name}}</span>
+                                        <em class="f5-f">{{comment.hour}}:{{comment.minute}}{{comment.ap}}
+                                            {{comment.day}} {{comment.month}}</em>
+                                        <em class="font-remove"
+                                            *ngIf="comment.owner === currentUUID || comment.owner === currentPSID"
+                                            (click)="deleteComment($event, comment)"></em>
+                                        <!--<em class="font-remove" ></em>-->
+                                    </p>
+                                    <p class="f20-f comments-usercomment g-margin-top2" [innerHTML]="comment.content">
+                                    </p>
+                                </dd>
+                            </dl>
+                        </div>
+                        <!--fixed input-->
+                    </div>
+                        <div class="chat-post-fix">
+                            <div class="ch-post-comments-input">
+                                <div class="pull-right s-style1 search-border">
+                                    <input class="f26-f"
+                                           type="text"
+                                           [(ngModel)]="sendCommentTxt"
+                                           (keydown)="addCommentKeyDown($event)"
+                                           placeholder="{{'Comments' | translate}}">
+                                    <span class="icon-input-return" (click)="sendComment()"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                </div>
+                </perfect-scrollbar>
+            </div>
+
+        </div>
+    </div>
+    <!--主要内容结束-->
+
+</div>

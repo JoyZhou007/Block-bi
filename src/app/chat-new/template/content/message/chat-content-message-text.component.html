@@ -1,0 +1,61 @@
+<div *ngIf="messageData"
+     class="ch-msg-list ch-msg-send-text"
+     [class.ch-merge-first]="!isMerge"
+     [class.ch-msg-self]="messageData.isSelf"
+     [class.ch-msg-pin]="messageData.hasPin"
+     [class.ch-msg-merge]="isMerge">
+    <profile-img *ngIf="!isMerge" class="ch-msg-logo" [userInfo]="messageData.userInfo"
+                 [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+    <div class="clearfix ch-msg-header">
+        <span class="f19-f {{!showStates ? 'g-margin-right10' : ''}}" *ngIf="!isMerge">{{messageData.userInfo.work_name}}</span>
+        <div *ngIf="!isMerge">
+            <profile-state  [states]="messageData.userInfo?.state" [uid]="messageData.userInfo?.uid" [isChatContent]="true"></profile-state>
+        </div>
+        <span class="f5-f ch-msg-merge-time">{{!isMerge ? messageData.showTime :
+            messageData.showTime.substr(0, messageData.showTime.length - 2)}}</span>
+        <em class="alarm-wrap">
+              <span class="font-alarm ch-msg-icon {{messageData.hasAlarm ? 'icon1-alarm alarm-clicked' : 'font-alarm'}}"
+                    title="{{messageData.hasAlarm ? messageData.effective_time_display : ''}}"
+                    tooltip [tooltip]="{content: 'set alarm', position:'top'}"
+                    #alarm (click)="clickAlarm($event, alarm, alarmSelect,messageData) ">
+            <!--[class.hide]="!alarm['show']"-->
+            <div class="d-select" [class.hide]="!alarm['show']" [style.top.px]="selectTop" #alarmSelect>
+                  <perfect-scrollbar class="ps-container g-height140">
+                        <ul class="g-max-height-inherit">
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 1)"><em
+                                    class="base relative">5 Minutes</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 2)"><em class="base relative">10 Minutes</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 3)"><em class="base relative">30 Minutes</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 4)"><em class="base relative">1 Hour</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 5)"><em
+                                    class="base relative">6 Hours</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 6)"><em class="base relative">1 Day</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 7)"><em class="base relative">3 Days</em></li>
+                            <li (click)="clickOnAlarm($event, messageData, alarm, 8)"><em class="base relative">1 Week</em></li>
+                             <li class="g-line-height-initial" (click)="deleteChatAlarm($event,messageData)"><em class="base relative">cancel</em></li>
+                        </ul>
+                  </perfect-scrollbar>
+            </div>
+        </span>
+        </em>
+        <span class="font-pin1 ch-msg-icon" tooltip [tooltip]="{content: 'pin', position: 'top'}" *ngIf="!messageData.hasPin"
+              tooltip [tooltip]="{content:'pin', position:'top'}"
+              (click)="clickOnPin($event, messageData)"></span>
+        <span class="icon1-chat-pin ch-msg-icon" *ngIf="messageData.hasPin"
+              tooltip [tooltip]="{content:'pin', position:'top'}"
+              (click)="clickOnPin($event, messageData)"></span>
+        <span class="icon1-at ch-msg-icon" (click)="clickOnAt($event, messageData)"
+              *ngIf="!messageData.isSelf && !isMerge && !currentMenuItem.isFriend"></span>
+
+    </div>
+    <div class="f20-f ch-msg-text" [innerHTML]="messageData.safeMsg | emoji | sanitizeHtml "></div>
+    <div class="ch-msg-opt">
+        <span class="font-forward g-icon-position g-transition2" tooltip
+              [tooltip]="{content: 'forward', position:'bottom'}"
+              (click)="clickOnForward($event, messageData)"></span>
+        <span class="font-page-esc-small g-icon-position g-transition2"
+              *ngIf="messageData.isAbleRevoke"
+              tooltip [tooltip]="{content: 'recall it', position:'bottom'}" (click)="clickOnRevoke($event, messageData)">
+        </span>
+    </div>
+</div>

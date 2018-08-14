@@ -1,0 +1,36 @@
+<div *ngIf="missionObj">
+    <div class="clearfix m-right-part-list" *ngFor="let info of tplPersonList">
+        <span class="f9-f">{{info.title | translate}}</span>
+        <ul>
+            <li *ngFor="let person of info.data" (click)="chatWithPerson($event,person,info.type)">
+                <profile-img [userInfo]="person" [settings]="{show_work_name: false}"
+                             *ngIf="(info.type==='1') && (person.user_profile_path !== '')"></profile-img>
+                <em class="f4-f m-right-part-mark m-right-part-mark-bg1"
+                    title="{{person.name?person.name:person.p_name}}"
+                    *ngIf="(person.status===missionConstant.MISSION_USER_OPERATOR_PENDING
+                               || (person.status===0)) && (info.type==='1') ">
+                    P</em>
+                <em class="f4-f m-right-part-mark m-right-part-mark-bg2"
+                    title="{{person.name}}"
+                    *ngIf="(person.status===missionConstant.MISSION_USER_OPERATOR_REFUSE) && (info.type==='1')">
+                    R</em>
+                <span *ngIf="(info.type==='1') && (person.user_profile_path === '') "
+                      style="width: 24px;height: 24px;line-height: 22px;border: 1px solid rgba(151,151,151,.5)"
+                      class="pull-left search-style2-list-bg d-letter-k g-border4 text-center">
+                        {{person.p_name.charAt(0)}}
+                    </span>
+                <profile-img [userInfo]="person.user_info" [settings]="{show_work_name: false}"
+                             *ngIf="info.type ==='2'  && (person.user_info.user_profile_path !== '')"></profile-img>
+                <em class="f4-f m-right-part-mark m-right-part-mark-bg1"
+                    title="{{person.user_info.name}}"
+                    *ngIf="(person.status===missionConstant.MISSION_USER_OPERATOR_PENDING
+                               || (person.status===0)) && (info.type==='2') ">
+                    P</em>
+                <em class="f4-f m-right-part-mark m-right-part-mark-bg2"
+                    title="{{person.user_info.name}}"
+                    *ngIf="(person.status===missionConstant.MISSION_USER_OPERATOR_REFUSE) &&  (info.type==='2')">
+                    R</em>
+            </li>
+        </ul>
+    </div>
+</div>

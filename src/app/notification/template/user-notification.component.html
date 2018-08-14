@@ -1,0 +1,42 @@
+<!--notification start-->
+<div class="g-fixed h-contact-box" *ngIf="loadNotification" [class.h-contact-box-an]="showNotification">
+  <!--setting start-->
+  <div class="g-side-width" (click)="preventBubbles($event)">
+    <span class="icon-logo"></span>
+    <ul class="h-noti-but">
+      <li class="current" [class.current]="hNotificationArr[0]" (click)="doHNotificationTab(1)">
+        <span class="f11-f">{{'YOUR REMINDER' | translate}}</span>
+        <span class="v4-f">{{'RECEIVED NOTIFICATIONS' | translate}}</span>
+        <div class="have-message" *ngIf="notificationStatus.notice"></div>
+      </li>
+      <li class="current" [class.current]="hNotificationArr[1]" (click)="doHNotificationTab(2)">
+        <span class="f11-f">{{'TBC' | translate}}</span>
+        <span class="v4-f">{{'RECEIVED APPLICATIONS' | translate}}</span>
+        <div class="have-message" *ngIf="notificationStatus.request"></div>
+      </li>
+      <li [class.current]="hNotificationArr[2]" (click)="doHNotificationTab(3)">
+        <span class="f11-f">{{'SENT NOTIFICATIONS' | translate}}</span>
+        <span class="v4-f">{{'SENT APPLICATION' | translate}}</span>
+      </li>
+      <li [class.current]="hNotificationArr[3]" (click)="doHNotificationTab(4)">
+        <span class="f11-f">{{'IN MAIL' | translate}}</span>
+        <span class="v4-f">{{'Pending staff channel & bi system suggestion or feedback' | translate}}</span>
+        <div class="have-message" *ngIf="notificationStatus.isMail"></div>
+      </li>
+    </ul>
+    <div class="but but-new-post set-but" (click)="doSettingBoxShow()"><span class="base">{{'SETTING' | translate}}</span></div>
+  </div>
+  <!--setting end-->
+
+  <!--notification setting start-->
+  <notification-setting *ngIf="loadNotificationSetting" #settingEl (closeNotification)="getCloseNotificationData()"></notification-setting>
+  <!--notification setting end-->
+
+  <!--notification message start-->
+  <notification-message #notificationMessage [noticeType]="noticeType"></notification-message>
+  <!--notification message end-->
+
+  <a href="javascript:;" class="pull-left font-page-esc" (click)="doShowUserNotification(false)"></a>
+</div>
+<send-notification-message #sendNotificationMessage [class.hide]="!showMySendNotification"></send-notification-message>
+<!--notification end-->

@@ -1,0 +1,223 @@
+<style>
+    .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit;
+    }
+
+    .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<section class="clearfix mission-warp schedule" *ngIf="!showChildMission">
+    <div class="pull-left m-left mission-left m-simple-left-height" style="min-height: inherit;">
+        <ul class="clearfix m-simple-time">
+            <li *ngFor="let obj of dateFilterPeriodArr"
+                [class.current]="obj.key === activePeriod"
+                (click)="switchFilterPeriod($event, obj)">{{obj.title}}
+            </li>
+        </ul>
+    </div>
+    <div class="m-simple-right">
+        <div class="m-simple-warp cursor">
+            <a href="javascript:;" class="font-page-next-small"
+               (click)="updateDataArr($event, 0)"
+            ></a>
+            <div #svgWrapper
+                 draggable="false"
+                 (mousedown)="clickStartDragSvg($event,svgWrapper)"
+            >
+                <!--<span class="icon-input-return"></span>-->
+                <ul *ngIf="activePeriod === 'day'" class="clearfix m-simple-right-hour">
+                    <li *ngFor="let times of dayArray; let i=index" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayDate}}</em>
+                        <span [class.current]=" times.detailTime ==showDayHighLight">{{times.time}}</span>
+                        <i>{{times.label}}</i>
+                    </li>
+
+                </ul>
+                <ul *ngIf="activePeriod === 'week'" class="clearfix m-simple-week">
+                    <li *ngFor="let weeks of weekArray; let i=index;" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayWeek}}</em>
+                        <!--<span  (click)="weekClick($event, weeks)" [class.current]="weeks.i === currentDate.getDay()">{{weeks.i}}</span>-->
+                        <i class="margin-top20"
+                           [class.current]="weeks.detailTime===showWeekHighLight">{{weeks.label}}</i>
+                    </li>
+
+                </ul>
+                <ul *ngIf="activePeriod === 'month'" class="clearfix m-simple-right-month">
+                    <li *ngFor="let month of monthArray; let i=index;" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayMonth}}</em>
+                        <span [class.current]="month.detailTime===showMonthHighLight">{{month.number}}</span>
+                        <i>{{month.label}}</i>
+                    </li>
+
+                </ul>
+
+            </div>
+
+            <a href="javascript:;" class="font-page-next-small"
+               (click)="updateDataArr($event, 1)"
+            ></a>
+        </div>
+    </div>
+    <div class="m-simple-warp ch-message" #scrollToBottom>
+        <div class="pull-left m-left mission-left relative overflow-hidden zIndex disable-select">
+<!--            <div  class="ch-msg-time" *ngIf="loadEnd" >
+                <div class="ch-msg-time-event">
+                    <span  class="c1-f">No More Missions</span>
+                </div>
+            </div>-->
+
+            <ul class="m-left-storage-list m-simple-left">
+                <li *ngFor="let missionObj of tplShownDataList" class="clearfix">
+                    <div class="mission-left-task-list">
+                        <h2 class="f21-f" title="{{missionObj.name}}">{{missionObj.name}}</h2>
+                        <p class="clearfix"><span class="icon-board-{{missionObj.typeClass}}"></span><span class="f5-f">{{missionObj.typeTitle}} {{missionObj.last_update_locale_time}}</span>
+                        </p>
+                        <div *ngIf="missionObj.last_update_info.hasOwnProperty('user_info')">
+                            <span class="icon-board-task icon-margin"></span>
+                            <profile-img [userInfo]="missionObj.last_update_info.user_info" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                    <div class="m-left-storage-pos m-left-storage-pos0">
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             *ngIf="missionObj.type != missionConstant.MISSION_TYPE_APPLICATION">
+                            <span class="icon-title-chat g-transition2 g-icon-center"></span>
+                        </div>
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             (click)="redirectToDetail($event, missionObj)">
+                            <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                        </div>
+
+                    </div>
+                </li>
+                <div class="loader" style="position: absolute; left:0;" [hidden]="!isLoading">
+                    <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                        <div class="loader-inner ball-pulse"></div>
+                    </loaders-css>
+                </div>
+            </ul>
+            <mission-link (showLink)="showMissionLink($event)" [showLinkTitle]="showLinkTitle" [class.hide]="!isShowMissionLink" #missionLink></mission-link>
+        </div>
+        <div class="m-simple-right">
+            <div class="m-simple-right-scroll"
+            >
+                <div *ngFor="let missionData of tplShownDataList">
+                    <mission-progress  (sendChildMission)="receiveMissionChildData($event)" (transportLinkInfo)="sendLinkInfo($event)" [eleData]="missionData" [mode]="mode"></mission-progress>
+                </div>
+            </div>
+            <i class="m-simple-line m-simple-line1"></i>
+            <i class="m-simple-line m-simple-line2"></i>
+            <i class="m-simple-line m-simple-line3"></i>
+            <i class="m-simple-line m-simple-line4"></i>
+            <i class="m-simple-line m-simple-line5"></i>
+        </div>
+    </div>
+</section>
+
+<!--project子mission-->
+<section class="clearfix mission-warp mission-children" *ngIf="showChildMission">
+    <div class="pull-left m-left mission-left m-simple-left-height" style="min-height: inherit;">
+        <ul class="clearfix m-simple-time">
+            <li *ngFor="let obj of dateFilterPeriodArr"
+                [class.current]="obj.key === activePeriod"
+                (click)="switchFilterPeriod($event, obj)">{{obj.title}}
+            </li>
+        </ul>
+    </div>
+    <div class="m-simple-right">
+        <div class="m-simple-warp" #scrollToBottom>
+            <a href="javascript:;" class="font-page-next-small"
+               (click)="updateDataArr($event, 0)"
+            ></a>
+            <div  #svgWrapper
+                  draggable="false"
+                  (mousedown)="clickStartDragSvg($event,svgWrapper)">
+                <span class="icon-input-return zIndex" (click)="returnToAgoMission()"></span>
+                <ul *ngIf="activePeriod === 'day'" class="clearfix m-simple-right-hour">
+                    <li *ngFor="let times of dayArray; let i=index" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayDate}}</em>
+                        <span [class.current]=" times.detailTime ==showDayHighLight">{{times.time}}</span>
+                        <i>{{times.label}}</i>
+                    </li>
+
+                </ul>
+                <ul *ngIf="activePeriod === 'week'" class="clearfix m-simple-week">
+                    <li *ngFor="let weeks of weekArray; let i=index;" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayWeek}}</em>
+                        <!--<span  (click)="weekClick($event, weeks)" [class.current]="weeks.i === currentDate.getDay()">{{weeks.i}}</span>-->
+                        <i class="margin-top20"
+                           [class.current]="weeks.detailTime===showWeekHighLight">{{weeks.label}}</i>
+                        <span>{{weeks.detailTime}},{{showWeekHighLight}}</span>
+                    </li>
+
+                </ul>
+                <ul *ngIf="activePeriod === 'month'" class="clearfix m-simple-right-month">
+                    <li *ngFor="let month of monthArray; let i=index;" class="disable-select">
+                        <em *ngIf="i===0" class="f13-f m-simple-curr-date">{{displayMonth}}</em>
+                        <span [class.current]="month.detailTime===showMonthHighLight">{{month.number}}</span>
+                        <i>{{month.label}}</i>
+                    </li>
+
+                </ul>
+
+                <a href="javascript:;" class="font-page-next-small"
+                   (click)="updateDataArr($event, 1)"
+                ></a>
+            </div>
+
+        </div>
+    </div>
+    <div class="m-simple-warp">
+        <div class="pull-left m-left mission-left schedule-left-lst relative">
+            <ul class="m-left-storage-list m-simple-left">
+                <li *ngFor="let missionObj of tplShownChildDataList" class="clearfix">
+                    <div class="mission-left-task-list">
+                        <h2 class="f21-f" title="{{missionObj.name}}">{{missionObj.name}}</h2>
+                        <p class="clearfix"><span class="icon-board-{{missionObj.typeClass}}"></span><span class="f5-f">{{missionObj.typeTitle}} {{missionObj.last_update_locale_time}}</span>
+                        </p>
+                        <div class="m-left-storage-people"
+                             *ngIf="missionObj.last_update_info.hasOwnProperty('user_info')">
+                            <span class="icon-board-task"></span>
+                            <img class="pull-left"
+                                 src="{{config.resourceDomain + missionObj.last_update_info.user_info.user_profile_path}}"/>
+                            <span class="pull-left f19-f">{{missionObj.last_update_info.user_info.name}}</span>
+                        </div>
+                    </div>
+                    <div class="m-left-storage-pos">
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                             *ngIf="missionObj.type != missionConstant.MISSION_TYPE_APPLICATION"
+                        >
+                            <span class="icon-title-chat g-transition2 g-icon-center"
+                            ></span>
+                        </div>
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                             (click)="redirectToDetail($event, missionObj)">
+                            <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                        </div>
+
+                    </div>
+                </li>
+            </ul>
+            <mission-link (showLink)="showMissionLink($event)" [showLinkTitle]="showLinkTitle" [class.hide]="!isShowMissionLink" #missionLink></mission-link>
+        </div>
+        <div class="m-simple-right">
+            <div class="m-simple-right-scroll">
+                <div *ngFor="let missionData of tplShownChildDataList">
+                    <mission-progress  #progress (transportLinkInfo)="sendLinkInfo($event)" [eleData]="missionData" [mode]="mode"></mission-progress>
+                </div>
+            </div>
+            <i class="m-simple-line m-simple-line1"></i>
+            <i class="m-simple-line m-simple-line2"></i>
+            <i class="m-simple-line m-simple-line3"></i>
+            <i class="m-simple-line m-simple-line4"></i>
+            <i class="m-simple-line m-simple-line5"></i>
+        </div>
+    </div>
+</section>
+
+

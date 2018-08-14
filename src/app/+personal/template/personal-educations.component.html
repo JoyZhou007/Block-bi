@@ -1,0 +1,47 @@
+<ul class="a-p-resume g-transition2" *ngIf = "getEducationsData.operation !== -1">
+    <li class="clearfix select-time">
+        <div class="g-title">
+            <span class="f9-f">{{'PERIOD' | translate}}</span>
+            <span class="font-delete" (click) = "deleteCurrentObj(getCurrent);"></span>
+        </div>
+        <div class="clearfix g-time profile-time-select g-input-box-shadow g-transition2 relative"
+             [class.g-show-input-error]="errorObj.timeEmpty && !hasStartEnd">
+            <input class="pull-left ng-pristine ng-valid ng-touched add-pointer education-start" readonly=""
+                   [class.g-color-not-select]="(showTime.start ? showTime.start : getEducationsData.start_date) == select_start"
+                   type="text" (click)="dateClick($event, 'start')" [(ngModel)] = "showTime.start ? showTime.start : getEducationsData.start_date">
+            <span class="pull-left icon1-Shape-2"></span>
+            <input class="pull-left ng-pristine ng-valid ng-touched add-pointer" readonly=""
+                   [class.g-color-not-select]="(showTime.end ? showTime.end : getEducationsData.end_date) == select_end"
+                   type="text" (click)="dateClick($event, 'end')" [(ngModel)] = "showTime.end ? showTime.end : getEducationsData.end_date">
+        </div>
+        <p [class.hide]="!errorObj.timeEmpty || hasStartEnd" class="resume-error">{{emptyError | translate}}</p>
+    </li>
+    <li class="clearfix">
+        <div class="g-title">
+            <span class="f9-f">{{'SCHOOL' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" inputBlur="">
+            <input class="se-date-input g-input-box-shadow" type="text" name="school" [(ngModel)] = "getEducationsData.school"
+                   #inputContent [class.g-show-input-error]="errorObj.schoolEmpty">
+            <p #inputError [class.hide]="!errorObj.schoolEmpty" class="resume-error">{{emptyError | translate}}</p>
+        </div>
+    </li>
+    <li class="clearfix">
+        <div class="g-title">
+            <span class="f9-f">{{'MAJOR' | translate}}</span>
+        </div>
+        <div class="se-input">
+            <input class="se-date-input g-input-box-shadow" type="text" name="major" [(ngModel)] = "getEducationsData.major">
+        </div>
+    </li>
+    <li class="clearfix">
+        <div class="g-title">
+            <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="getEducationsData.description"></textarea>
+            <p class="f33-f">{{'Maximum 200' | translate}}</p>
+        </div>
+    </li>
+</ul>

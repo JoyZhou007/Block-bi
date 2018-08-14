@@ -1,0 +1,30 @@
+<div class="di-con">
+    <div class="clearfix di-people">
+        <profile-img [userInfo]="notificationIn" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+    </div>
+    <div class="di-n-title">
+        <span class="f9-f">{{'RELATION TYPE' | translate}}</span>
+    </div>
+    <p class="v7-f">{{notificationIn?.co_type === 2 ? 'Branch' : 'Subsidiary'}}</p>
+    <p class="f13-f di-n-link" *ngIf="notificationIn?.data?.is_allow">{{'Allow main admin' | translate}}</p>
+    <div class="di-n-title">
+        <span class="f9-f">COMPANY</span>
+    </div>
+    <div><span class="f4-f di-n-company">{{notificationIn?.company_name}}</span></div>
+    <div class="di-n-title">
+        <span class="f9-f">COMMENTS</span>
+    </div>
+    <p class="v7-f di-n-con">{{notificationIn?.comment}}</p>
+</div>
+<div class="di-n-message di-n-success" [class.di-n-message-opacity]="diNSuccess">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-selectbutton-select"></span>
+        <p class="f55-f">ACCEPTED</p>
+    </div>
+</div>
+<div class="di-n-message di-n-error" [class.di-n-message-opacity]="diNError">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-page-esc-small"></span>
+        <p class="f55-f">REFUSE</p>
+    </div>
+</div>

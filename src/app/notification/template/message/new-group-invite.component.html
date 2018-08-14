@@ -1,0 +1,31 @@
+<div>
+  <div class="title clearfix"  >
+    <i class="pull-left non-icon-size icon-addpeople arrow"></i>
+    <span class="pull-left"><b>Invitation </b>Application</span>
+    <div class="title-but pull-right" *ngIf="notificationIn?.host===1">
+      <a href="javascript:" (click)="refuseInvite()">Refuse</a>
+      <a href="javascript:" (click)="acceptInvite()">Accept</a>
+    </div>
+    <div class="title-but pull-right" *ngIf="notificationIn?.host===0">
+      <a href="javascript:" (click)="refuseAll()">Refuse</a>
+      <a href="javascript:" (click)="selcetInvite()">Accept</a>
+    </div>
+  </div>
+  <div class="con clearfix">
+    <div class="pull-left invit" *ngIf="notificationIn?.host===1">
+      Invite to join group  {{notificationIn.name}}
+    </div>
+    <div class="pull-left invit" *ngIf="notificationIn?.host===0">
+      <div  class="pull-left" *ngFor="let member of notificationIn.members">
+        <img src="{{ config.resourceDomain +member.contactIn.user_profile_path}}" />
+      </div>
+    </div>
+    <div class="clearfix req">
+      REQUESTED BY
+      <span>{{notificationIn?.contactIn?.work_name}}</span>
+      <img src="{{notificationIn?.contactIn.user_profile_path?
+       config.resourceDomain + notificationIn?.contactIn.user_profile_path : ''}}" />
+    </div>
+  </div>
+</div>
+

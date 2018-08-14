@@ -1,0 +1,57 @@
+<div class="g-title">
+    <span class="f9-f">{{'WORK DAY' | translate}}</span>
+</div>
+<div class="se-input" toggleSelectGroup [currClass]="'se-input-current'">
+    <div #toggleSelectBut>
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <input class="current-color"
+               type="text"  [(ngModel)]="showWeekTemp"
+               readonly="true">
+    </div>
+    <div class="d-select d-select-week di1-select-week" #toggleSelect>
+        <perfect-scrollbar class="ps-container g-height140">
+            <ul class="g-max-height-inherit">
+                <li *ngFor="let week of weekArray;let i = index" (click)="selectTheWorkDay($event,week)">
+                    <em class="base">{{week.weekTemp}}</em>
+                    <span class="pull-right se-title-all-select" style="margin-top: 4px;"  [class.current]="week.isSelected"></span>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+        <div #toggleSelectContent>
+            <div class="but but-select-done" (click)="confirmDaySelect($event)"><span class="base">DONE</span></div>
+        </div>
+    </div>
+</div>
+<div class="g-title">
+    <span class="f9-f">{{'LATE ARRIVED TIME' | translate}}</span>
+</div>
+<div class="se-input" toggleSelectGroup>
+    <input class="current-color" type="text" readonly="true"
+           [(ngModel)]="arriveTime"
+           (click)="onClickSelectInput($event,'arrive')">
+    <bi-calendar-select [setOption]="arriveCalendarData" (outSelectInfo)="getSelectData($event,'arrive')"
+                        ></bi-calendar-select>
+</div>
+<div class="g-title">
+    <span class="f9-f">{{'EARLY LEFT TIME' | translate}}</span>
+</div>
+<div class="se-input">
+    <input class="current-color" type="text" readonly="true"
+           [(ngModel)]="leftTime"
+           (click)="onClickSelectInput($event,'leave')">
+    <bi-calendar-select [setOption]="leaveCalendarData" (outSelectInfo)="getSelectData($event,'leave')"
+                        ></bi-calendar-select>
+</div>
+<div class="g-title">
+    <span class="f9-f">{{'ABSENTEEISM COUNT' | translate}}</span>
+</div>
+<div class="se-input">
+    <div class="se-input-select">
+        <span class="f14-f di-attendance-times">{{'Times' | translate}}</span>
+    </div>
+    <input class="current-color" type="text" [(ngModel)]="absenteeismCount">
+</div>
+<p class="f33-f">{{'According to daily' | translate }}</p>
+

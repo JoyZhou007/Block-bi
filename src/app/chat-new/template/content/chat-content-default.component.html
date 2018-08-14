@@ -1,0 +1,31 @@
+<perfect-scrollbar class="ps-container chat-default-scroll">
+<div class="chat-welcome text-center">
+    <div class="clearfix g-default-prompt">
+        <div class="clearfix">
+            <img src="{{config.staticResourceDomain + 'assets/images/chat-default-icon1.jpg'}}">
+            <div class="g-default-prompt-right">
+                <h1 class="LatoRegular text-center">{{'You can create' | translate}}</h1>
+                <p class="LatoLight">
+                    {{'Whatever is' | translate}}
+                    <span>{{'click to create' | translate}}</span>
+                </p>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="chat-default-line">
+   <!-- <span class="date"><i class="icon-toggle close"></i></span>-->
+</div>
+<div class="chat-default-bigoku">
+    <img class="border-radius5" src="{{config.staticResourceDomain + 'assets/images/chat-default-icon2.png'}}">
+    <div class="chat-default-right">
+        <span class="chat-default-right-title f48-f">BIGOKU</span>
+        <span class="chat-default-right-desc f20-f">{{'BIGOKU DESC' | translate}}</span>
+    </div>
+    <ul class="clearfix">
+        <li><a href="javascript:;" class="v8-f" (click)="createNewGroup($event, 'private')">{{'Create friend chat group' | translate}}</a> </li>
+        <li><a href="javascript:;" class="v8-f ch-default-nomargin" (click)="createNewGroup($event, 'work')">{{'Create business chat group' | translate}}</a> </li>
+    </ul>
+</div>
+</perfect-scrollbar>

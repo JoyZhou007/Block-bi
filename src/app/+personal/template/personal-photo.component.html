@@ -1,0 +1,17 @@
+<div class="pull-right a-right">
+    <div class="a-photo"
+         uploadDirective [fileId]="avatarId" [fileType]="avatarType" [base64File]="fileData" [isUpload]="upload"
+         (showFile)="doShowAvatar($event)">
+        <img src="{{avatarUrl}}" />
+        <div class="but-photo-mask pull-left">
+            <div class="but-photo-mask-pos">
+                <span class="font-photo"></span>
+                <span class="f28-f">{{'UPLOAD YOUR PHOTO' | translate}}</span>
+            </div>
+            <input type="file" style="display: none; width: 100%;height: 100%;" #userInput>
+        </div>
+        <!--upload-photo start-->
+        <cropper (afterCropFile)="doCropEvent($event)" #cropperForm></cropper>
+        <!--upload-photo end-->
+    </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="contact-us-wrap contact-us-wrap-hide" [class.contact-us-wrap-hide]="!isShow">
+    <div class="about-main">
+        <div class="about-main-position">
+            <h2 [class.g-contact-color]="product">{{"Contact us" | translate}}</h2>
+            <p class="f22-f line-ht5 LatoLight" [class.g-contact-color]="product" [innerHTML]="'contact1' | translate">
+            </p>
+        </div>
+    </div>
+
+    <!--S contact -->
+    <div class="sign-up" (click)="stopPro($event)">
+        <div class="scroll-wrap">
+            <perfect-scrollbar class="ps-container clearfix sign-up-wrap">
+                <div class="sign-up-lf">
+                    <form name="login" #f="ngForm" (ngSubmit)="save(f.value, f.valid)">
+                        <div class="login-show">
+                            <div class="r-person-register-l clearfix">
+                                <div class="r-contact-us">
+                                    <div class="login-show-user">
+                                        <input id="name" type="text" value="" class="r-person-register-info f49-f normalThin"
+                                               [(ngModel)]="user.username"
+                                               #name="ngModel"
+                                               name="name"
+                                               required="required"
+                                               (focus)="inputMouseEnter($event,'u')"
+                                               (blur)="inputBlur($event,'u')"
+                                        >
+                                        <p [class.scale-p]="userIsScale" [class.f52-f]="!userIsScale"
+                                           [class.f9-f]="userIsScale">{{"NAME" | translate}}</p>
+                                        <!-- .scale-p 控制大小-->
+                                        <div class="alert-error absolute"
+                                             [hidden]="!name_error.isShow">
+                                            {{name_error.text | translate}}
+                                        </div>
+                                    </div>
+                                    <div class="login-show-pwd">
+                                        <input type="text" value="" class="r-person-register-info f49-f normalThin"
+                                               name="email"
+                                               [(ngModel)]="user.email"
+                                               #e="ngModel"
+                                               required="required"
+                                               (blur)="inputBlur($event,'e')"
+                                        >
+                                        <p [class.scale-p]="emailIsScale" [class.f52-f]="!emailIsScale"
+                                           [class.f9-f]="emailIsScale">
+                                            {{"EMAIL" | translate}}</p>
+                                        <div class="alert-error absolute"
+                                             [hidden]="!email_error.isShow">
+                                            {{email_error.text | translate}}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="login-show-message">
+                                <textarea class="f20-f" id="" cols="" rows=""
+                                          [(ngModel)]="user.msg"
+                                          #message="ngModel"
+                                          minlength="6"
+                                          maxlength="100"
+                                          name="msg"
+                                          (focus)="inputMouseEnter($event,'m')"
+                                          required="required"
+                                          (blur)="inputBlur($event,'m')">
+                                </textarea>
+                                    <p [class.textarea-title-top]="msgIsScale" [class.f52-f]="!msgIsScale"
+                                       [class.f9-f]="msgIsScale">{{"MESSAGE" | translate}}</p>
+
+                                    <div class="alert-error absolute"
+                                         [hidden]="!msg_error.isShow">
+                                        {{msg_error.text | translate}}
+                                    </div>
+
+
+                                    <!-- <span class="but but-send pull-right base g-clearStyle" type="button" value="{{'SEND' | translate}}"
+                                           (click)="formSubmit($event,f)"></span>-->
+                                    <div class="but but-send pull-right" #sendBtn (click)="formSubmit($event,f)">
+                                        <span class="base">{{'SEND' | translate}}</span>
+                                        <i class="font-selectbutton-select but-status"></i>
+                                        <i class="font-remove but-status"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="sign-up-rt">
+                    <div class="sign-up-info">
+                        <h2 class="f58-f main-c">{{"Speak your request or any question !!!" | translate}}</h2>
+                        <p class="f52-f">{{"contact2" | translate}}</p>
+                    </div>
+                    <div class="sign-up-info">
+                        <h2 class="f58-f main-c">{{"Call" | translate}}: +86 021 2838 8384</h2>
+                        <ul class="f52-f main-lst">
+                            <li>{{"add1" | translate}}</li>
+                            <li>{{"add2" | translate}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </perfect-scrollbar>
+        </div>
+    </div>
+    <!--E contact-->
+</div>

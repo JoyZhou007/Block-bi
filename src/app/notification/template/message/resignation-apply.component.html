@@ -1,0 +1,15 @@
+<div (click)="clickOpenDialog($event)">
+    <img src="{{groupCreatorProfile}}" alt="{{groupCreator}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{'RESIGNATION' | translate}}</h3>
+        <div class="n-con">
+            <p class="f20-f">{{reasonMsg}}</p>
+            <div class="n-time f20-f">
+                <span class="pull-left">{{date}}</span>
+            </div>
+        </div>
+        <span class="f32-f pull-left">{{groupCreator}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>
+

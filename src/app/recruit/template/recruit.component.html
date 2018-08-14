@@ -1,0 +1,147 @@
+<div class="meeting-width">
+    <!--header start-->
+    <header class="g-header">
+        <div class="pull-left m-header-title" style="width: 200px;">
+            <div class="clearfix">
+                <span class="icon1-folder"></span>
+                <span class="pull-left f18-f">{{'STAFF ADMIN' | translate}}</span>
+            </div>
+            <div class="pull-left m-header-select staff-header-select" style="width: 95px;" [class.m-header-selected]="!isShowSelected">
+                <span class="f5-f g-clearStyle" (click)="tabRecruitList(false)">{{'In system' | translate}}</span>
+            </div>
+            <div class="pull-left m-header-select staff-header-select" style="width: 95px;" [class.m-header-selected]="isShowSelected">
+                <span class="f5-f g-clearStyle" (click)="tabRecruitList(true)">{{'Not entry' | translate}}</span>
+            </div>
+        </div>
+        <div class="g-search-wrap-width">
+            <div class="pull-left g-search-wrap">
+                <span class="font-search-blue1"></span>
+                <span class="font-remove" (click)="onCloseSearch()" *ngIf="searchVal"></span>
+                <input class="f26-f g-font-normal f-color-dark" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchVal"
+                       (keyup)="searchRecruit()">
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <div class="pull-left g-header-icon">
+                <div class="pull-left">
+                    <span class="icon-title-structure g-header-icon-list"
+                          tooltip [tooltip]="{content: 'Jump in structure', position:'bottom'}"
+                          (click)="openStructure()"></span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list font-setting hide" tooltip [tooltip]="{content: 'setting', position:'bottom'}"></span>
+                </div>
+            </div>
+            <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+        </div>
+    </header>
+    <!--header end-->
+    <section class="clearfix">
+        <div class="meeting-right staff-content">
+            <div class="meeting-right-container">
+                <div class="meeting-right-title clearfix staff-list-title f33-f o-fun-title">
+                    <div class="g-text-left staff-list-title-staff">
+                        {{'Staff' | translate}}
+                    </div>
+                    <div class="staff-list-title-email" *ngIf="isShowSelected">
+                        {{'email' | translate}}
+                    </div>
+                    <div class="staff-list-title-phone" *ngIf="isShowSelected">
+                        {{'phone' | translate}}
+                    </div>
+                    <div class="staff-list-title-work-email" *ngIf="!isShowSelected">
+                        {{'Work email' | translate}}
+                    </div>
+                    <div class="staff-list-title-work-phone" *ngIf="!isShowSelected">
+                        {{'Work phone' | translate}}
+                    </div>
+                    <div class="staff-list-title-term" *ngIf="!isShowSelected">
+                        {{'Contract term' | translate}}
+                    </div>
+                    <div class="staff-list-title-status" [class.add-pointer]="!isShowSelected"
+                         [style.margin-left]="!isShowSelected ? '15px' : ''" toggleSelectGroup #toggleSelectBut>
+                        {{'Status' | translate}}
+                        <div class="staff-status-select" [class.hide]="isShowSelected">
+                            <span>
+                                <em class="font-selectbutton-soildclose"></em>
+                            </span>
+                            <div class="d-select f27-f" #toggleSelect style="min-width:210px;left: -100px;">
+                                <ul #toggleSelectContent>
+                                    <li
+                                            *ngFor="let list of jobStatusEntry; let i = index;"
+                                            (click)="tabRecruitStatusList(list)"
+                                            [class.current]="list.status === currentStatus" [class.hide]="i === 0">
+                                             {{(list.status === 0 ? '' : list.type) | translate}}
+                                        <span class="font-selectbutton-select" *ngIf="list.status !== 0"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <perfect-scrollbar class="ps-container meeting-right-list staff-content-ul-wrap text-center">
+
+               <!-- <div class="meeting-right-list staff-content-ul-wrap text-center">-->
+                    <ul class="staff-ul">
+                        <div class="f19-f text-center g-no-data-color margin-top20" *ngIf="recruitList.length === 0">No Data</div>
+                        <li class="clearfix meeting-right-list-item g-transition2 o-fun-style" *ngFor="let list of recruitList">
+                            <div class="f33-f meeting-right-title-staff">
+                                <div class="clearfix" style="margin-left: 30px;">
+                                    <profile-img class="pull-left g-display g-margin-top4" [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                                    <span class="f13-f" *ngIf="currentCompanyPsid === list.psid"> You</span>
+                                    <span class="f13-f" *ngIf="list.is_ceo===1"> CEO</span>
+                                </div>
+                            </div>
+                            <div class="f33-f staff-content-email" *ngIf="isShowSelected" title="{{list.email ? list.email : 'No Data' | translate}}">
+                                <span class="g-clearStyle">{{list.email ? list.email : 'No Data' | translate}}</span>
+                            </div>
+                            <div class="f33-f staff-content-phone" *ngIf="isShowSelected" title="{{list.phone ? list.phone : 'No Data' | translate}}">
+                                <span class="g-clearStyle">{{list.phone ? list.phone : 'No Data' | translate}}</span>
+                            </div>
+                            <div class="f33-f staff-content-work-email" *ngIf="!isShowSelected" title="{{list.work_email ? list.work_email : 'No Data' | translate}}">
+                                <span class="g-clearStyle"> {{list.work_email ? list.work_email : 'No Data' | translate}}</span>
+                            </div>
+                            <div class="f33-f staff-content-work-phone" *ngIf="!isShowSelected" title="{{list.work_phone ? list.work_phone : 'No Data' | translate}}">
+                                <span class="g-clearStyle">{{list.work_phone ? list.work_phone : 'No Data' | translate}}</span>
+                            </div>
+                            <div class="f33-f meeting-right-title-period" *ngIf="!isShowSelected">
+                                <em class="f5-f">{{list.commencementDate?
+                                    dateFormatService.formatWithTimezone(list.commencementDate, 'ddS mmm yyyy') :
+                                    'Not Set' | translate}}</em>
+                                <span class="g-float-none g-float-none icon1-Shape-2"></span>
+                                <em class="f5-f">{{list.terminationDate ?
+                                    dateFormatService.formatWithTimezone(list.terminationDate, 'ddS mmm yyyy') :
+                                    'Not Set' | translate}}</em>
+                            </div>
+                            <div class="f33-f staff-content-status meeting-ellipsis" title="{{(isShowSelected ?'not entry':currentJobStatusEntry(list.status)) | translate}}">
+                                {{(isShowSelected ?'not entry':currentJobStatusEntry(list.status)) | translate}}
+                            </div>
+                            <div class="f33-f g-transition2 o-fun-style-operation staff-content-oper">
+                                <span class="g-float-none bi-icon-edit" *ngIf="isShowSelected"
+                                      (click)="editOccupation($event, list)"></span>
+                                <span class="icon1-delete" *ngIf="isShowSelected" (click)="dismissNotEntry($event,list)"></span>
+                                <div *ngIf="!isShowSelected">
+                                    <span  class="icon1-delete"
+                                           *ngIf="(list.status === 1 || list.status === 2) && currentCompanyPsid !== list.psid && list.is_ceo!==1"
+                                           (click)="dismissStaff($event,list)"></span>
+                                    <span class="bi-icon-rectangle" *ngIf="list.status === 1 || list.status === 2 "
+                                          [class.hide] = "currentPsid == list.psid"
+                                          (click)="openChat(list)"></span>
+                                    <span class="bi-icon-edit" (click)="editOccupation($event, list)"></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                <!--</div>-->
+                </perfect-scrollbar>
+            </div>
+        </div>
+        <!--right end-->
+    </section>
+</div>
+
+<!--occupation dialog start-->
+<!--<occupation *ngIf="isShowOccupation" [currentUserObj]="currentUserObj" (outPutOccupation)="closeOccupation()"
+            (outPutUpdateList)="updateList($event)"></occupation>-->
+<!--occupation dialog end-->

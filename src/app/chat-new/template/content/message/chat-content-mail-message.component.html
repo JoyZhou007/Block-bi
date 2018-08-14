@@ -1,0 +1,26 @@
+<div *ngFor="let message of currentDisplayMessageList">
+    <div class="ch-msg-time" #title (click)="(title.isClose = !title.isClose);"
+         *ngIf="message.isFirstMessageByDay">
+        <div class="ch-msg-time-event"
+             [class.ch-msg-time-select]="message.isToggleShow"
+             (click)="toggleMessageByDay($event,message.date)">
+            <span class="c1-f">{{message.date}}</span>
+            <i class="font-selectbutton-line"></i>
+        </div>
+    </div>
+    <div class="ch-msg-list" [class.hide]="message.isToggleShow"
+         [class.ch-msg-self]="message.owner === userData?.user?.uuid">
+        <!--<img class="ch-msg-logo" *ngIf="(message.owner !== userData?.user?.uuid) && !message.isMerge "-->
+             <!--src="{{ memberInfo?.user_profile_path ? config.resourceFolderDomain + memberInfo?.user_profile_path : ''}}">-->
+        <!--<img class="ch-msg-logo" *ngIf="(message.owner === userData?.user?.uuid) && !message.isMerge "-->
+             <!--src="{{userData?.user?.user_profile_path? config.resourceDomain + userData?.user?.user_profile_path:''}}">-->
+        <profile-img class="ch-msg-logo ch-msg-img-margin" [userInfo]="userData?.user" *ngIf="(message.owner !== userData?.user?.uuid) && !message.isMerge " [settings]="{show_work_name: false}"></profile-img>
+        <profile-img class="ch-msg-logo ch-msg-img-margin" [userInfo]="userData?.user" *ngIf="(message.owner === userData?.user?.uuid) && !message.isMerge " [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+        <div class="clearfix ch-msg-header" *ngIf="!message.isMerge">
+            <span class="f19-f">{{ message.owner === userData?.user?.uuid ? userData?.user?.work_name: memberInfo?.work_name}}</span>
+            <span class="f5-f ch-msg-merge-time">{{message.showTime}}{{message.ap}}</span>
+        </div>
+        <div class="f20-f ch-msg-text" [innerHTML]="message.msg | emoji | sanitizeHtml"></div>
+    </div>
+</div>
+

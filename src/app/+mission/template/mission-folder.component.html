@@ -1,0 +1,128 @@
+<div class="g-style1 m-create-folder"
+     data-step="step_mission_18" id="step_mission_18"
+     onselectstart="return false">
+    <div class="clearfix">
+        <div class="pull-left m-create-title1">
+            <span>{{'MISSION FOLDER' | translate}}</span>
+            <span>{{'Stock related files about this mission' | translate}}</span>
+        </div>
+        <div class="pull-right m-create-folder-icon"
+             *ngIf="initSuccess && missionDetailData.mission_status !== missionConstant.MISSION_STATUS_STORAGE">
+            <span class="bi-icon-back"
+                  *ngIf="missionFolderId != currentFolderIn?.id"
+                  (click)="backUpperFolder($event)">
+            </span>
+            <input type="file" multiple (change)="inputChangeEvent(fileInput, $event)" #fileInput
+                   style="display: none">
+            <span class="bi-icon-upload" (click)="uploadMissionFolder($event,fileInput)"
+                  tooltip [tooltip]="{content:'upload', position:'top'}"></span>
+            <span class="bi-icon-import" (click)="importFileFormBi($event,fileInput)"
+                  tooltip [tooltip]="{content:'import form bi', position:'top'}"></span>
+            <span class="bi-icon-newfile" (click)="newMissionFolder($event)"
+                  tooltip [tooltip]="{content:'New Folder', position:'top'}"
+            ></span>
+        </div>
+    </div>
+    <!--<perfect-scrollbar class="">-->
+    <div class="import-file fo-type1-list"
+         style="position: relative"
+         #bigContent
+         DragDropDirective
+         (outDrop)="inputChangeEvent($event)"
+         (mousedown)="startChoose($event,ul,bigContent,selectBox)">
+        <div style="position: absolute;background:rgba(112, 120, 247, .1);z-index: 20;" #selectBox></div>
+        <div class="fo-no-data" *ngIf="fileList && fileList.length == 0">
+            <img src="{{config.staticResourceDomain + 'assets/images/file-empty.png'}}" style="width: 110px">
+            <p class="f41-f">{{'NO FILE OR FOLDER' | translate}}</p>
+        </div>
+        <ul class="clearfix file-thum-new" #ul onselectstart="return false">
+            <li *ngFor="let file of fileList"
+                [class.current]="file.isSelect"
+                style="margin-right: 30px"
+                #li1
+                (mouseenter)="mouseEnter(li1,ul,iconBtn,$event,file)"
+                (mouseleave)="mouseLeave(iconBtn,$event)"
+                (click)="enterMissionFolder($event,file)">
+                <div class="fo-icon" #iconBtn>
+                    <div class="fo-icon-bg" style="width: auto;padding-left:5px;padding-right:5px;">
+                        <span class="font-permission hide"></span>
+                        <span class="bi-icon-download" (click)="downloadTheFile($event,file)"
+                              tooltip [tooltip]="{content:'download', position:'top'}"></span>
+                        <span class="font-transfer hide"></span>
+                        <span class="font-share hide"></span>
+                        <span class="font-copy" (click)="copyTheFile($event,file)"
+                              tooltip [tooltip]="{content:'copy', position:'top'}"></span>
+                        <span class="bi-icon-move hide"></span>
+                        <span class="font-pin" [class.hide]="file.is_dir == 0"
+                              (click)="pinTheFile($event,file)"
+                              tooltip [tooltip]="{content:'pin', position:'top'}"></span>
+                        <span class="font-trash g-trash" (click)="deleteTheFile($event,file)"
+                              tooltip [tooltip]="{content:'delete', position:'top'}"></span>
+                    </div>
+                </div>
+
+                <div class="fo-type1-list-select " [class.fo-type1-list-pin]="file.is_starred == 1">
+                    <div class="fo-type1-list-checkbox">
+                        <i class="font-selectbutton-select g-checkbox" (click)="selectTheMissionFile($event,file)"></i>
+                    </div>
+                    <div>
+                           <span *ngIf="file.ext_type !='image'">
+                                <span *ngIf="file.is_dir == 0"
+                                      class="icon-file-new-thum selectBtn icon-file-new-thum-{{file.ext_type}}"></span>
+                                 <span *ngIf="file.chn== 0 && file.is_dir == 1"
+                                       class="icon-file-new-thum selectBtn icon-file-new-thum-folder"></span>
+                                <span *ngIf="file.chn==1 && file.is_dir ==1"
+                                      class="icon-file-new-thum icon-file-new-thum-share"></span>
+                                <span *ngIf="file.chn==2 && file.is_dir ==1"
+                                      class="icon-file-new-thum icon-file-new-thum-chat"></span>
+                                <span *ngIf="file.chn==3 && file.is_dir == 1"
+                                      class="icon-file-new-thum icon-file-new-thum-mission"></span>
+                             </span>
+                        <img *ngIf="file.ext_type =='image'" class="file-image selectBtn"
+                             src="{{file.thumb_l ? config.resourceFolderDomain + file.thumb_l : ''}}">
+                    </div>
+                    <div class="icon1-chat-pin" *ngIf="file.is_starred == 1"></div>
+                </div>
+                <h3 class="f5-f"
+                    style="max-height: 30px;max-width: 85px;overflow: hidden;text-overflow:ellipsis;white-space: nowrap;"
+                    title="{{file.name}}"
+                    (click)="modifyFileName(file,$event,renameInput)"
+                    [class.hide]="file.isShowInput"
+                >{{file.name}}{{file.ext ? '.': ''}}{{file.ext ? file.ext: ''}}</h3>
+                <input style="max-width: 60px"
+                       class="f5-f hide" type="text"
+                       [class.hide]="!file.isShowInput"
+                       [(ngModel)]="file.name"
+                       #renameInput
+                       (click)="stopPropagation($event)"
+                       (blur)="ensureReName(file,$event)"
+                >
+            </li>
+        </ul>
+    </div>
+    <!--</perfect-scrollbar>-->
+    <div class="m-create-folder-bottom">
+        <div class="pull-left m-create-folder-bottom-left"
+             *ngIf="initSuccess && missionDetailData?.mission_status !== missionConstant.MISSION_STATUS_STORAGE">
+            <span class="g-checkbox  font-selectbutton-select"
+                  (click)="selectAllFile(fileList,$event)"
+                  [class.g-checkbox-selected]="isAllSelected && selectInfoArr.length !== 0">
+            </span>
+            <span class="f29-f">{{'choose' | translate}} {{selectInfoArr.length}} {{'files h' | translate}}</span>
+        </div>
+        <div class="pull-right m-create-folder-icon" *ngIf="selectInfoArr.length > 1" [class.hide]="isHasPasteFile">
+            <span class="bi-icon-download" (click)="downLoadMultipleFile($event)"></span>
+            <span class="font-transfer hide"></span>
+            <span class="font-share hide"></span>
+            <span class="font-copy" (click)="copyMultipleTheFile($event)"></span>
+            <span class="bi-icon-move hide"></span>
+            <span class="font-pin" (click)="pinMultipleFile($event)"></span>
+            <span class="font-trash" (click)="deleteMutileFile($event)"></span>
+        </div>
+        <div class="pull-right m-create-folder-icon" [class.hide]="!isHasPasteFile">
+            <div class="pull-left" (click)="pasteTheFile($event)">
+                <span class=" g-header-icon-list font-paste"></span>
+            </div>
+        </div>
+    </div>
+</div>

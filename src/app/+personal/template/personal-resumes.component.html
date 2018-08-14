@@ -1,0 +1,56 @@
+
+<!--personal header-->
+<personal-header [btnFailData]="btnFail" (uploadInfo)="doUploadInfo($event)"></personal-header>
+<!--personal end-->
+
+<!--section start-->
+<section class="clearfix g-width a-section" #scrollElement>
+    <div class="pull-left a-left g-margin-bottom20 relative scroll-element">
+        <div class=" pull-left a-list" style="height:auto;">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'EDUCATION' | translate}}</h3>
+                <p class="f14-f">{{'EDUCATION DESC' | translate}}</p>
+            </div>
+            <educations-list #educationsElement
+                             *ngFor = "let educations of educationsListArr; let i = index;"
+                             (callBackData)="getCallBackData($event)"
+                             (outDate) = "getDateObj($event)"
+                             [educationsData] = "educations"
+                             [currentObj] = "i"
+                             [error]="errorObj.indexOf(educations) !== -1? educations:{}"></educations-list>
+            <div class="but but-add a-resume-but" (click) = "addEducations();">
+                <span class="base">{{'ADD MORE EDUCATION' | translate}}</span>
+            </div>
+        </div>
+        <div class="pull-right a-list" style="height:auto;">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'WORK EXPERIENCE' | translate}}</h3>
+                <p class="f14-f">{{'Add experience' | translate}}</p>
+            </div>
+            <experience-list #experienceElement
+                    *ngFor = "let experience of experiencesListArr; let i = index;"
+                    (callBackData)="getCallBackData($event)"
+                    (outDate) = "getDateObj($event)"
+                    [experienceData] = "experience"
+                    [error]="cerrorObj.indexOf(experience) != -1? experience:{}"
+                    [currentObj] = "i"
+                    (expCallBackData) = "getExpCallBackData($event)"></experience-list>
+            <div class="but but-add a-resume-but" (click) = "addExperiences();">
+                <span class="base">{{'ADD MORE EXPERIENCE' | translate}}</span>
+            </div>
+        </div>
+
+        <div class="absolute" #calendarProfile>
+            <bi-calendar-profile
+                    *ngIf="isShowCalendar"
+                    [multiselectOption]="multiCalendar"
+                    (outSelectData)="getSelectData($event)"
+                    (outDefault)="getOutDefault()"></bi-calendar-profile>
+        </div>
+    </div>
+
+    <!--photo start-->
+    <personal-photo></personal-photo>
+    <!--photo end-->
+</section>
+<!--section end-->

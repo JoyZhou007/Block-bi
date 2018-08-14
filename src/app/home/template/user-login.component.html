@@ -1,0 +1,114 @@
+<div class="login overflow-hidden" *ngIf="!isLogin && loginData">
+    <div class="transition2 login-bg-r{{randomNumber}}" [class.login-filter]="showMask"></div>
+    <div class="transition2 login-mask"></div>
+    <div class="login-wrap">
+        <home-header></home-header>
+        <main *ngIf="!isShowContactUs && !showRecoverPsd">
+            <div class="login-main-tit f40-f">
+                {{"hp1" | translate}}<br>
+                {{"hp2" | translate}}
+            </div>
+            <div class="btn-group login-shadow" [class.login-show-animated]="!showLoginBtn"> <!--showLoginBtn-->
+                <div class="but but-pro-small f7-f" *ngIf="isShowSignIn" (click)="showLoginForm($event)">
+                    <span class="base">{{"SIGN IN" | translate}}</span>
+                </div>
+                <div class="login-show login-position"
+                     [class.zIndex]="btnZIndex"
+                     (click)="($event.stopPropagation())">
+                    <div class="log-show-warp">
+                        <form name="login" #loginForm="ngForm">
+                            <div class="r-person-register-l clearfix">
+                                <div class="">
+                                    <input type="text" name="username" [(ngModel)]="loginData.username"
+                                           #user="ngModel"
+                                           #loginUser
+                                           class="r-person-register-info f49-f normalLight"
+                                           required="required"
+                                           pattern="^[a-zA-Z0-9.\-_$@*!]+$"
+                                           (focus)="inputFocus($event,'u')"
+                                           (blur)="inputBlur($event, 'u')"
+                                           (keyup)="inputMouseDown($event,loginForm.form.valid)">
+                                    <p [class.scale-p]="scalep" [class.f52-f]="!scalep" [class.f9-f]="scalep">
+                                        {{"PERSONAL EMAIL OR PHONE" | translate}}</p>
+                                    <div class="alert-error absolute"
+                                         [hidden]="!name_error.isShow">{{name_error.text | translate}}
+                                    </div>
+                                </div>
+                                <!--<p class="alert-error">{{emailE}}</p>-->
+                                <div class="login-show-pwd">
+                                    <input type="password" name="password" [(ngModel)]="loginData.password"
+                                           class="r-person-register-info f49-f normalLight"
+                                           (focus)="inputFocus($event,'p')"
+                                           (blur)="inputBlur($event, 'p')"
+                                           (keyup)="inputMouseDown($event,loginForm.form.valid,'psd')"
+                                           required="required"
+                                           minlength="8"
+                                           #psd="ngModel"
+                                           #loginPsd>
+                                    <p [class.scale-p]="scalep2" [class.f52-f]="!scalep2" [class.f9-f]="scalep2">
+                                        {{"PASSWORD" | translate}}</p>
+                                </div>
+                            </div>
+                            <div class="keep-me clearfix">
+                             <!--   <div class="keep-me-left pull-left" (click)="showKeep()">
+                                    <span class="g-checkbox" [class.font-selectbutton-select]="keepMe"
+                                          [class.g-checkbox-selected]="keepMe"></span>
+                                    <span class="cursor f9-f">{{"Keep me logged in" | translate}}</span>
+                                </div>-->
+                                <a (click)="clickShowRecoverPsd($event)" class="keep-me-right pull-right f9-f">{{"Forget password" | translate}}?</a>
+                            </div>
+                            <!--<p class="alert-error">{{emailE}}</p>-->
+                            <div class="alert-error absolute" *ngIf="password_error.isShow">
+                                {{password_error.text | translate}}
+                            </div>
+                            <p class="alert-error absolute">{{passE | translate}}</p>
+                            <div style="height:72px">
+                                <span class="pull-left but but-create login-create" #loginBtn
+                                      (click)="onSubmit($event)" >
+                                <em class="base">{{'LOGIN' | translate}}</em>
+                                <i class="font-selectbutton-select but-status"></i>
+                                    <i class="font-remove but-status"></i>
+                            </span>
+                            </div>
+
+                            <p class="third-login f9-f">{{'THIRD PARTY PLATFORM LOGIN' | translate}}</p>
+                            <ul class="third-login-group clearfix">
+                                <li>
+                                    <a href="javascript:;" class="icon1-linkedin"
+                                        (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN)"
+                                    ></a>
+                                </li>
+                                <li><a href="javascript:;" class="icon1-tiff"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="icon1-amazon"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="icon1-wechat"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="icon1-pin"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="icon1-facebook"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="bi-icon-gmail"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE)"
+                                ></a></li>
+                                <li><a href="javascript:;" class="bi-icon-qq"
+                                       (click)="clickRecordThirdAccount($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ)"
+                                ></a></li>
+                            </ul>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+        <user-contact #contactUs (OutCloseContact)="closeContactUs($event)"></user-contact>
+        <user-recover-psd *ngIf="showRecoverPsd"></user-recover-psd>
+        <user-footer [isShowContactUs]="isShowContactUs" (OutShowContact)="clickShowContactUs($event)"></user-footer>
+    </div>
+</div>
+

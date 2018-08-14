@@ -1,0 +1,362 @@
+<div class="product">
+    <div class="login " moveGroup>
+        <div class="login-filter"></div>
+        <div class="login-wrap">
+            <!--头部开始-->
+            <home-header></home-header>
+            <!--头部结束-->
+            <!--main start-->
+            <!--<perfect-scrollbar class="ps-container product-scroll">-->
+            <div class="content g-transition2" [class.login-filter]="!isShowContactUs" #content #moveElement>
+                <div class="product-btn" [style.top.px]="btnTop" [class.hide]="!isShowLeft" #moveRightBut
+                     [style.left.px]="isShowChat?btnRight+300:btnRight">
+                    <i>.</i><i>.</i><i>.</i>
+                    <span class="icon1-arrow2"></span>
+                </div>
+                <div class="product-btn product-btn-right" [style.top.px]="btnTop" [class.hide]="!isShowRight"
+                     #moveLeftBut
+                     [style.right.px]="btnRight">
+                    <i>.</i><i>.</i><i>.</i>
+                    <span class="icon1-arrow2"></span>
+                </div>
+                <div class="content-move" #contentMove [class.move-right]="isShowChat" style="left: 0">
+                    <div (click)="onClickCircle($event,productChat)" class="chat-circle circle-title"
+                         [class.current]="isShowChat">
+                        <div class="circle-title-name">{{'CHAT' | translate}}</div>
+                        <div class="circle-title-con normalLight">{{'Business&private' | translate}}</div>
+                        <div class="circle-title-bottom circle-title-chat"></div>
+                        <div class="circle-title-line"></div>
+                        <div [class.wave-current]='isShowChat' [class.wave]="!isShowChat" class="loading">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div (click)="onClickCircle($event,productFiles)" class="chat-circle circle-title"
+                         [class.current]="isShowFiles">
+                        <div class="circle-title-name">{{'FILES' | translate}}</div>
+                        <div class="circle-title-con normalLight">{{'Detailed permissions settings and share settings' |
+                            translate}}
+                        </div>
+                        <div class="circle-title-files circle-title-bottom"></div>
+                        <div class="circle-title-line"></div>
+                        <div [class.wave-current]="isShowFiles" [class.wave]="!isShowFiles" class="loading">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div (click)="onClickCircle($event,productMission)" class="chat-circle circle-title"
+                         [class.current]="isShowMission">
+                        <div class="circle-title-name">{{'MISSION' | translate}}</div>
+                        <div class="circle-title-con normalLight">{{'Multi-function' | translate}}</div>
+                        <div class="circle-title-mission circle-title-bottom"></div>
+                        <div class="circle-title-line"></div>
+                        <div [class.wave-current]="isShowMission" [class.wave]="!isShowMission" class="loading">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div (click)="onClickCircle($event,productBusiness)" class="chat-circle circle-title"
+                         [class.current]="isShowBusiness">
+                        <div class="circle-title-name">{{'BUSINESS' | translate}}</div>
+                        <div class="circle-title-con normalLight">{{'More economical, convenient management' |
+                            translate}}
+                        </div>
+                        <div class="circle-title-business circle-title-bottom"></div>
+                        <div class="circle-title-line"></div>
+                        <div [class.wave-current]="isShowBusiness" [class.wave]="!isShowBusiness" class="loading">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+                    <div (click)="onClickCircle($event,productPerson)" class="chat-circle circle-title"
+                         [class.current]="isShowPerson">
+                        <div class="circle-title-name">{{'PERSONAL1' | translate}}</div>
+                        <div class="circle-title-con normalLight">{{'The bigger stage is waiting for you!' | translate}}
+                        </div>
+                        <div class="circle-title-person circle-title-bottom"></div>
+                        <div class="circle-title-line"></div>
+                        <div [class.wave-current]="isShowPerson" [class.wave]="!isShowPerson" class="loading">
+                            <div></div>
+                            <div></div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    <!--backgrpund-->
+                    <div class="content-bg">
+                        <img src="{{config.staticResourceDomain + 'assets/images/pro1.jpg'}}" alt="" class="product-bg">
+                        <img src="{{config.staticResourceDomain + 'assets/images/pro2.jpg'}}" alt="" class="product-bg">
+                        <img src="{{config.staticResourceDomain + 'assets/images/pro3.jpg'}}" alt="" class="product-bg">
+                        <img src="{{config.staticResourceDomain + 'assets/images/pro4.jpg'}}" alt="" class="product-bg">
+                        <img src="{{config.staticResourceDomain + 'assets/images/pro5.jpg'}}" alt="" class="product-bg">
+                    </div>
+                    <!--小图标-->
+                    <div class="content-icon image-background" (click)="onClickIcon($event,productImage)"
+                         [class.icon-hide]="isShowImageBubble">
+                        <span class="icon1-tag"></span>
+                        <div class="content-icon-title bubble-shadow">{{'Picture Tags' | translate}}</div>
+                        <div class="content-icon-con bubble-shadow">{{'Mark what you want' | translate}}</div>
+                    </div>
+                    <div class="content-icon staff-background" (click)="onClickIcon($event,productStaff)"
+                         [class.icon-hide]="isShowStaffBubble">
+                        <span class="icon1-staff"></span>
+                        <div class="content-icon-title bubble-shadow">{{'Employee management' | translate}}</div>
+                        <div class="coConvenient and flexiblentent-icon-con bubble-shadow content-icon-con">
+                            {{'You can easily get more information' | translate}}
+                        </div>
+                    </div>
+                    <div class="content-icon attendance-background" (click)="onClickIcon($event,productAttendance)"
+                         [class.icon-hide]="isShowAttendanceBubble">
+                        <span class="icon1-attendance2"></span>
+                        <div class="content-icon-title bubble-shadow">{{'Attendance' | translate}}</div>
+                        <div class="content-icon-con bubble-shadow">{{'Convenient and flexible' | translate}}</div>
+                    </div>
+                    <div class="content-icon travel-background" (click)="onClickIcon($event,productTravel)"
+                         [class.icon-hide]="isShowTravelBubble">
+                        <span class="icon1-ravel"></span>
+                        <div class="content-icon-title bubble-shadow">{{'Travel on business' | translate}}</div>
+                        <div class="content-icon-con bubble-shadow">{{'Easy to apply' | translate}}</div>
+                    </div>
+                    <div class="content-icon track-background" (click)="onClickIcon($event,productTrack)"
+                         [class.icon-hide]="isShowTrackBubble">
+                        <span class="icon1-track-location"></span>
+                        <div class="content-icon-title bubble-shadow">{{'Track location' | translate}}</div>
+                        <div class="content-icon-con bubble-shadow">
+                            {{'Know where they are in real time' | translate}}
+                        </div>
+                    </div>
+
+                    <!--气泡-->
+                    <div class="chat-bubble bubble" [class.bubble-show]="isShowImageBubble"
+                         (click)="onClickIcon($event,productImage)">
+                        <img src="{{config.staticResourceDomain + 'assets/images/Shape1.png'}}" alt="">
+                       <!-- <img src="https://static.blockbi.com/img/Shape1.png" alt="">-->
+                        <p>{{'Picture Tags desc' | translate}}</p>
+                    </div>
+                    <div class="staff-bubble bubble" [class.bubble-show]="isShowStaffBubble"
+                         (click)="onClickIcon($event,productStaff)">
+                        <img src="{{config.staticResourceDomain + 'assets/images/Shape2.png'}}" alt="">
+                       <!-- <img src="https://static.blockbi.com/img/Shape2.png" alt="">-->
+                        <p>{{'Employee management desc' | translate}}</p>
+                    </div>
+                    <div class="attendance-bubble bubble" [class.bubble-show]="isShowAttendanceBubble"
+                         (click)="onClickIcon($event,productAttendance)">
+                        <img src="{{config.staticResourceDomain + 'assets/images/Shape3.png'}}" alt="">
+                        <!--<img src="https://static.blockbi.com/img/Shape3.png" alt="">-->
+                        <div class="attendance-bubble-content">
+                            <div>{{'Just one scan,' | translate}}</div>
+                            <div>{{'no more time card.' | translate}}</div>
+                        </div>
+                    </div>
+                    <div class="travel-bubble bubble" [class.bubble-show]="isShowTravelBubble"
+                         (click)="onClickIcon($event,productTravel)">
+                        <img src="{{config.staticResourceDomain + 'assets/images/Shape4.png'}}" alt="">
+                        <!--<img src="https://static.blockbi.com/img/Shape4.png" alt="">-->
+                        <div>
+                            <div class="travel-bubble-des">{{'Travel on business desc' | translate}}</div>
+                        </div>
+                    </div>
+                    <div class="track-bubble bubble" [class.bubble-show]="isShowTrackBubble"
+                         (click)="onClickIcon($event,productTrack)">
+                        <!--<img src="https://static.blockbi.com/img/Shape5.png" alt="">-->
+                        <img src="{{config.staticResourceDomain + 'assets/images/Shape5.png'}}" alt="">
+                        <div>
+                            {{'Woo…, now i can watch whether they work on site or not in worktime.' | translate}}
+                        </div>
+                    </div>
+
+                </div>
+                <!--sidebar chat   添加.chat-hide 隐藏-->
+                <perfect-scrollbar [class.chat-hide]="!isShowChat" class="sidebar-chat chat-hide" (click)="onClickSideBar($event)">
+                    <span class="font-remove pull-right sidebar-remove"
+                          (click)="onCloseSideBar($event,productChat)"></span>
+                    <img src="{{config.staticResourceDomain + 'assets/images/heads1.png'}}" class="sidebar-chat-logo" alt="">
+                    <div class="sidebar-chat-title">{{'Personal chat' | translate}}</div>
+                    <div class="sidebar-chat-content normalLight">
+                        {{'Personal chat desc' | translate}}
+                    </div>
+                    <div class="sidebar-chat-title">{{'Business chat' | translate}}</div>
+                    <div class="sidebar-chat-content normalLight">
+                        {{'Business chat desc' | translate}}
+                    </div>
+                    <div class="sidebar-chat-title">{{'Mission chat' | translate}}</div>
+                    <div class="sidebar-chat-content normalLight">
+                        {{'Mission chat desc' | translate}}
+                    </div>
+                </perfect-scrollbar>
+                <!--sidebar right   添加.right-hide 隐藏-->
+                <perfect-scrollbar class="sidebar-right" [style.right.px]="isShowPerson ? 0 : -scrollWidth" (click)="onClickSideBar($event)">
+                    <span class="font-remove pull-right sidebar-remove"
+                          (click)="onCloseSideBar($event,productPerson)"></span>
+                    <img src="{{config.staticResourceDomain + 'assets/images/heads2.png'}}" class="sidebar-chat-logo sidebar-right-logo" alt="">
+                    <div class="sidebar-chat-title">{{'Personal life' | translate}}</div>
+                    <div class="sidebar-chat-content sidebar-right-content normalLight">
+                        {{'Personal life desc' | translate}}
+                    </div>
+                    <div class="sidebar-chat-content sidebar-right-content normalLight">
+                        {{'Personal life desc1' | translate}}
+                    </div>
+                    <!--<div class="sidebar-chat-content sidebar-right-content">-->
+                    <!--Manage your daily life for keeping yourself organized-->
+                    <!--</div>-->
+                    <!--<div class="sidebar-chat-content sidebar-right-content">-->
+                    <!--Your ability and analysis help company or studio to realize who you are-->
+                    <!--</div>-->
+                </perfect-scrollbar>
+                <!--sidebar bottom   添加.sidebar-bottom-hide 隐藏-->
+                <perfect-scrollbar [style.bottom.px]="isShowMission ? 65 :-scrollHeight" class="sidebar-bottom" (click)="onClickSideBar($event)" >
+                    <span class="font-remove pull-right sidebar-remove"
+                          (click)="onCloseSideBar($event,productMission)"></span>
+                    <img src="{{config.staticResourceDomain + 'assets/images/heads4.png'}}" class="sidebar-chat-logo sidebar-right-logo" alt="">
+                    <div class="clearfix sidebar-bottom-list">
+                        <div class="pull-left sidebar-bottom-left">
+                            <div class="sidebar-chat-title">{{'Multi-task' | translate}}</div>
+                            <p>
+                                <span class="application-color">{{'Application' | translate}}:</span>
+                                {{'Application desc' | translate}}
+                            </p>
+                            <p>
+                                <span class="arrangement-color">{{'Assignment' | translate}}:</span>
+                                {{'Assignment desc' | translate}}
+                            </p>
+                            <p>
+                                <span class="meeting-color">{{'Meeting' | translate}}:</span>
+                                {{'Meeting desc' | translate}}
+                            </p>
+                            <P>
+                                <span class="task-color">{{'Task1' | translate}}:</span>
+                                {{'Task desc' | translate}}
+                            </P>
+                            <P>
+                                <span class="project-color">{{'Project' | translate}}:</span>
+                                {{'Project desc' | translate}}
+                            </P>
+                        </div>
+                        <div class="sidebar-bottom-right clearfix">
+                            <div class="pull-right">
+                                <div class="sidebar-chat-title">{{'Additional function' | translate}}</div>
+                                <p>
+                                    <span class="application-color">{{'Participant' | translate}}:</span>
+                                    {{'Participant desc' | translate}}
+                                </p>
+                                <p>
+                                    <span class="arrangement-color">{{'Track' | translate}}:</span>
+                                    {{'Track desc' | translate}}
+                                </p>
+                                <p>
+                                    <span class="meeting-color">{{'Bidding' | translate}}:</span>
+                                    {{'Bidding desc' | translate}}
+                                </p>
+                                <P>
+                                    <span class="task-color">{{'Target' | translate}}:</span>
+                                    {{'Target desc' | translate}}
+                                </P>
+                                <P>
+                                    <span class="project-color">{{'Memo' | translate}}:</span>
+                                    {{'Memo desc' | translate}}
+                                </P>
+                                <P>
+                                    <span class="priority-color">{{'Priority' | translate}}:</span>
+                                    {{'Priority desc' | translate}}
+                                </P>
+                            </div>
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+                <!--sidebar-files   添加.right-hide 隐藏-->
+                <perfect-scrollbar class="sidebar-files sidebar-files-hide" [class.sidebar-files-hide]="!isShowFiles"
+                         [class.max-width]="isMaxHeight" (click)="onClickSideBar($event)">
+                        <span class="font-remove pull-right sidebar-remove"
+                              (click)="onCloseSideBar($event,productFiles)"></span>
+                        <img src="{{config.staticResourceDomain + 'assets/images/heads3.png'}}" class="sidebar-chat-logo sidebar-right-logo" alt="">
+                        <div class="sidebar-chat-title">{{'Extensibility files' | translate}}</div>
+                        <p>
+                            <span class="application-color">{{'Personal & business folder:' | translate}}</span>
+                            {{'Personal & business folder desc:' | translate}}
+                        </p>
+                        <p>
+                            <span class="arrangement-color">{{'Share' | translate}} :</span>
+                            {{'Share desc' | translate}}
+                        </p>
+                        <p>
+                            <span class="priority-color">{{'Information' | translate}}:</span>
+                            {{'Information desc' | translate}}
+                        </p>
+                        <p>
+                            <span class="task-color">{{'Analysis' | translate}}:</span>
+                            {{'Analysis desc' | translate}}</p>
+                        <p>
+                            <span class="project-color">{{'Image' | translate}}:</span>
+                            {{'Image desc' | translate}}</p>
+                    </perfect-scrollbar>
+                <!--sidebar-business   添加.right-hide 隐藏-->
+                <perfect-scrollbar class="sidebar-files sidebar-business sidebar-files-hide"
+                         [class.sidebar-files-hide]="!isShowBusiness" (click)="onClickSideBar($event)">
+                    <span class="font-remove pull-right sidebar-remove"
+                          (click)="onCloseSideBar($event,productBusiness)"></span>
+                        <img src="{{config.staticResourceDomain + 'assets/images/heads5.png'}}" class="sidebar-chat-logo sidebar-right-logo" alt="">
+                        <div class="bussiness-list">
+                            <ul class="clearfix">
+                                <li>
+                                    <div class="sidebar-chat-title">{{'Organizational structure' | translate}}</div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Organizational structure desc' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Organizational structure desc1' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Organizational structure desc2' | translate}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-chat-title">{{'Workflow' | translate}}</div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Workflow desc' | translate}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-chat-title">{{'Team communication' | translate}}</div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Team communication desc' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Team communication desc1' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Team communication desc2' | translate}}
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="sidebar-chat-title">{{'Business files' | translate}}</div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Business files desc' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Business files desc1' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Business files desc2' | translate}}
+                                    </div>
+                                    <div class="sidebar-chat-content normalLight">
+                                        {{'Business files desc3' | translate}}
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+                </perfect-scrollbar>
+            </div>
+            <!--</perfect-scrollbar>-->
+            <!--main end-->
+            <user-footer [isShowContactUs]="isShowContactUs" (OutShowContact)="clickShowContactUs($event)"
+                         [joinUs]="true" [isProduct]="true"></user-footer>
+            <user-contact #contactUs (OutCloseContact)="clickShowContactUs()" [isProduct]="true"></user-contact>
+
+        </div>
+    </div>
+</div>

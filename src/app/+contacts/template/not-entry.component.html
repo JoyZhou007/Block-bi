@@ -1,0 +1,20 @@
+<div class="hire-not-entry" [class.hire-not-entry-an]="isShowNotEntry">
+    <div class="g-side-width g-overflow">
+        <search-list [setNeedWarp]="true" [searchParam]="searchParam"></search-list>
+        <current-user-info [setCouldInit]="currentUserInfo.showContactView || currentUserInfo.isOnContact"></current-user-info>
+        <div class="g-slide-button" (click)="hideNotEntryList()">
+            <span class="icon1-hire-list"
+                  tooltip [tooltip]="{content: 'address book', position:'bottom'}"
+            ></span>
+        </div>
+        <div class="h-contact-list">
+            <dl>
+                <dd *ngFor="let list of notEntryList;">
+                    <img class="pull-left g-margin-right10" src="{{list.profile ? config.resourceDomain + list.profile : ''}}" />
+                    <span class="f12-f">{{list.work_name}}</span>
+                    <i class="font-chat" (click)="showChat(2, list, $event)"></i>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,164 @@
+<perfect-scrollbar class="ps-container co-register-bg">
+    <header class="r-register-header">
+        <span class="r-create-company-icon icon-big-new"></span>
+        <span class="f52-f r-margin-top1">{{'Sign up' | translate}}</span>
+        <span class="f53-f r-margin-top1">{{'Your account' | translate}}</span>
+    </header>
+
+    <div class="r-register-head-picture-box">
+        <div class="r-register-head-picture" data-true="t" data-massage="Avatar size is 300*300">
+            <div *ngIf="!showThirdAccountImg">
+                <img src="{{avatarUrl}}" alt="" class="g-border4 head-pic">
+                <div class="but-photo-mask register-head-picture" uploadDirective [fileId]="avatarId"
+                     [fileType]="avatarType" [isUpload]="upload"
+                     (showFile)="doShowAvatar($event)" [base64File]="fileData" style="opacity:1;!important">
+                    <div class="but-photo-mask-pos">
+                        <span class="font-photo"></span>
+                        <span class="f28-f">{{'UPLOAD YOUR PHOTO' | translate}}</span>
+                    </div>
+                    <input type="file" style="display: none; width: 100%;height: 100%;" #userInput>
+                    <cropper (afterCropFile)="doCropEvent($event)" #cropperForm></cropper>
+                </div>
+            </div>
+
+            <div>
+                <img src="{{registerData.profile}}" alt="" class="g-border4 head-pic" *ngIf="showThirdAccountImg">
+            </div>
+        </div>
+
+    </div>
+
+    <form class="r-person-register-box clearfix" #registerForm="ngForm" onsubmit="onSubmit();">
+        <div class="r-person-register-box clearfix">
+            <div class="r-person-register clearfix">
+
+                <div class="r-person-list">
+                    <input type="text" name="work_name" value="" style="display:none;" />
+                    <input type="text" value="" class="r-person-register-info f49-f normalLight" tabindex="1"
+                           #inputName
+                           required
+                           [(ngModel)]="registerData.work_name"
+                           (focus)="(inputName.isFocus = true);"
+                           (blur)="(inputName.isFocus = false);nameBlur();"
+                           (keydown)="inputMouseDown($event)"
+                           name="work_name" #work_name="ngModel" autocomplete="off">
+                    <p class="f52-f" [class.person-register-active]="inputName.isFocus || inputName.value !== ''">
+                        {{'YOU WORK NAME' | translate}}
+                    </p>
+                    <em class="r-person-error" [class.r-person-hide]="!name_error.isShow">{{name_error.text | translate}}</em>
+                </div>
+                <div class=" r-person-list">
+                    <input type="text" name="password" value="" style="display:none;" />
+                    <input value="" class="r-person-register-info normalLight" type="password" tabindex="4"
+                           #inputPswd
+                           [(ngModel)]="registerData.password"
+                           (focus)="(inputPswd.isFocus = true);"
+                           (blur)="(inputPswd.isFocus = false);passWordBlur();"
+                           (keydown)="inputMouseDown($event)"
+                           name="password">
+                    <p class="f52-f" [class.person-register-active]="inputPswd.value !== '' || inputPswd.isFocus">{{'PASSWORD' | translate}}</p>
+                    <em class="r-person-error" [class.r-person-hide]="!pwd_error.isShow">{{pwd_error.text | translate}}</em>
+                </div>
+                <div class="r-person-list register-position-bottom">
+                    <input type="text" value="" class="r-person-register-info normalLight" tabindex="2"
+                           #inputPhone
+                           [(ngModel)]="registerData.phone"
+                           (focus)="(inputPhone.isFocus = true);"
+                           (blur)="(inputPhone.isFocus = false);phoneBlur();"
+                           (keydown)="inputMouseDown($event)"
+                           name="phone">
+                    <p class="f52-f" [class.person-register-active]="inputPhone.value !== '' || inputPhone.isFocus">
+                       {{'PERSONAL PHONE NUMBER' | translate}}
+                    </p>
+                    <div class="but but-send but-send-code" (click)="onClickAuthCode($event)">
+                        <span class="base" #phoneCode>{{'SEND AUTH CODE' | translate}}</span>
+                    </div>
+                    <em class="r-person-error" [class.r-person-hide]="!phone_error.isShow">{{phone_error.text | translate}}</em>
+                </div>
+                <div class="r-person-list register-position-top">
+                    <input type="password" value="" class="r-person-register-info normalLight" tabindex="5"
+                           #inputPswdRepeat
+                           [(ngModel)]="registerData.confirm_password"
+                           (focus)="(inputPswdRepeat.isFocus = true);"
+                           (blur)="(inputPswdRepeat.isFocus = false);passWordRepeatBlur();"
+                           (keydown)="inputMouseDown($event)"
+                           name="confirm_password">
+                    <p class="f52-f" [class.person-register-active]="inputPswdRepeat.value !== '' || inputPswdRepeat.isFocus">
+                        {{'PASSWORD AGAIN' | translate}}
+                    </p>
+                    <em class="r-person-error" [class.r-person-hide]="!pwd_repeat_error.isShow">{{pwd_repeat_error.text | translate}}</em>
+                </div>
+               <!-- <div class="r-person-list">
+                    <input type="text" value="8888" class="r-person-register-info f49-f normalThin" tabindex="4"
+                           #inputAuth
+                           [(ngModel)]="registerData.auth"
+                           (focus)="(inputAuth.isFocus = true);"
+                           (blur)="(inputAuth.isFocus = false);"
+                           (keydown)="inputMouseDown($event)"
+                           name="auth">
+                    <p class="f52-f" [class.person-register-active]="inputAuth.value !== '' || inputAuth.isFocus">AUTH CODE</p>
+                    <em class="r-person-error r-person-hide show">因短信模块需要与第三方接洽，故公测后接入.
+                    </em>
+                </div>-->
+                <div class="set-wrap r-person-list person-set-wrap">
+                    <!--<div class="auth-code">
+                        <input class="f49-f current" type="text" value="2" maxlength="1" tabindex="3">
+                        <input class="f49-f" type="text" value="2" maxlength="1">
+                        <input class="f49-f" type="text" value="2" maxlength="1">
+                        <input class="f49-f" type="text" value="2" maxlength="1">
+                        <input class="f49-f" type="text" value="2" maxlength="1">
+                        <input class="f49-f" type="text" value="2" maxlength="1">
+                    </div>-->
+                    <div class="auth-code">
+                        <form action="" #authCodeForm>
+                            <input *ngFor="let num of tplAuthCodeList; let i = index"
+                                   #codeInput
+                                   class="f49-f normalThin" type="text" value="" maxlength="1"
+                                   [class.current]="currentTab===i"
+                                   (keyup)="autoTab($event, i, codeInput)"
+                                   (focus)="currentTab=i">
+                        </form>
+
+                    </div>
+                    <em class="r-person-error" [class.r-person-hide]="!code_error.isShow">{{code_error.text | translate}}</em>
+                </div>
+                <div class="r-person-list">
+                    <input type="text" value="" class="r-person-register-info normalLight" tabindex="6"
+                           #inputEmail
+                           validateEmail
+                           [(ngModel)]="registerData.email"
+                           (focus)="(inputEmail.isFocus = true);"
+                           (blur)="(inputEmail.isFocus = false);emailBlur()"
+                           (keydown)="inputMouseDown($event)"
+                           name="email" #email="ngModel">
+                    <p class="f52-f" [class.person-register-active]="inputEmail.value !== '' || inputEmail.isFocus">
+                        {{'PERSONAL EMAIL' | translate}}
+                    </p>
+                    <em class="r-person-error" [class.r-person-hide]="!email_error.isShow">{{email_error.text | translate}}</em>
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <div class="r-register-footer">
+        <div class="but but-create r-register-create-button" (click)="onSubmit()" #loginBtn>
+            <em class="base">{{'CREATE' | translate}}</em>
+            <i class="font-selectbutton-select but-status"></i>
+            <i class="font-remove but-status"></i>
+        </div>
+        <span class="f14-f">{{'By click' | translate}}</span>
+        <span class="f46-f">{{'CREATE1' | translate}}</span>
+        <span class="f14-f">{{'I agree to' | translate}}</span>
+        <span class="f42-f r-person-service">{{'Terms of service' | translate}}</span>
+    </div>
+    <!--</form>-->
+    <a class="r-register-close font-page-esc" [routerLink]="['/home/login']"></a>
+    <div class="register-success clearfix" *ngIf="registerSuccess" (click)="onClickSuccess($event)">
+        <div class="register-success-word f35-f clearfix">
+            <em>{{'Congratulations to register' | translate}}</em>
+            <span class="success-loading">
+          <i>.</i><i>.</i><i>.</i><i>.</i>
+      </span>
+        </div>
+    </div>
+</perfect-scrollbar>

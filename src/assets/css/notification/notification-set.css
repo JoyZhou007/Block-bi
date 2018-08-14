@@ -1,0 +1,278 @@
+@charset "UTF-8";
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 自定义路径
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 字体大小
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 网络字体
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 公共颜色
+
+  注：L => link
+      H => hover
+      D => default
+      P => public
+      W => window
+      U => upload
+      C => contact
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 角度旋转
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 缩放
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 圆角
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 动画
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 背景渐变
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: position定位
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: padding
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: margin
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 宽高
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.25
+
+  Explain: Public Shadow type 1
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.04.6
+
+  Explain: Public Tree
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.04.21
+
+  Explain: 滚动条样式,color1滚动条颜色，color2滚动条背景色
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.14
+
+  Explain: 行间距 仅限 5 的倍数
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.16
+
+  Explain: 背景图片调用
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.21
+
+  Explain: 谷歌文字小于 12号 字体
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.21
+
+  Explain: 谷歌文字小于 12号 字体
+
+==============================================*/
+/*==========================
+
+	Time：2016.07.29
+
+	Explain：Notification
+
+===========================*/
+.index-notification {
+  width: 440px;
+  height: 100%;
+  position: fixed;
+  right: -450px;
+  top: 0;
+  z-index: 10;
+  background: rgba(243, 244, 244, 0.95);
+  box-shadow: 6px 0 14px 0 rgba(0, 0, 0, 0.75), -6px 0 14px 0 rgba(0, 0, 0, 0.5);
+  -webkit-transition: all 0.2s linear;
+  -moz-transition: all 0.2s linear;
+  -o-transition: all 0.2s linear;
+  -ms-transition: all 0.2s linear;
+  transition: all 0.2s linear; }
+
+.index-notification-top {
+  height: 60px;
+  margin-left: 20px;
+  margin-right: 25px;
+  line-height: 60px; }
+  .index-notification-top em {
+    display: block;
+    width: 6px;
+    height: 10px;
+    background-position: -308px -313px;
+    margin-top: 25px;
+    margin-right: 10px;
+    cursor: pointer; }
+  .index-notification-top span {
+    font-size: 22px;
+    color: #7a849b; }
+  .index-notification-top i {
+    display: block;
+    width: 10px;
+    height: 18px;
+    background-position: -430px -2px;
+    margin-top: 25px;
+    cursor: pointer; }
+
+.index-set-notification {
+  position: absolute;
+  bottom: 71px;
+  top: 60px;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #d0d4de;
+  padding-left: 30px;
+  padding-right: 25px; }
+  .index-set-notification .list {
+    min-height: 40px;
+    margin-top: 10px; }
+    .index-set-notification .list p {
+      width: 230px;
+      line-height: 1.2em; }
+      .index-set-notification .list p em {
+        color: #a2aabd;
+        display: block; }
+      .index-set-notification .list p i {
+        display: block;
+        font-size: 12px;
+        color: #57585b; }
+  .index-set-notification .drag-width {
+    width: 55px;
+    float: right; }
+  .index-set-notification .drag {
+    width: 100% !important;
+    margin-top: 10px !important;
+    margin-bottom: 16px;
+    position: relative; }
+    .index-set-notification .drag i {
+      display: block;
+      width: 20%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      z-index: 1;
+      text-indent: 2%;
+      line-height: 24px;
+      -webkit-transition: all 0.2s linear;
+      -moz-transition: all 0.2s linear;
+      -o-transition: all 0.2s linear;
+      -ms-transition: all 0.2s linear;
+      transition: all 0.2s linear;
+      color: #135a7b; }
+      .index-set-notification .drag i:nth-child(2) {
+        left: 20%;
+        text-indent: 5%; }
+      .index-set-notification .drag i:nth-child(3) {
+        left: 40%;
+        text-indent: 7%; }
+      .index-set-notification .drag i:nth-child(4) {
+        left: 60%;
+        text-indent: 11%; }
+      .index-set-notification .drag i:nth-child(5) {
+        left: 80%;
+        text-indent: 15%; }
+      .index-set-notification .drag i.current {
+        top: 24px;
+        color: #2094cb; }
+
+.index-notification-bottom {
+  width: 100%;
+  height: 70px;
+  background: #f0f2f8;
+  border-top: 1px solid #d0d4de;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  text-align: center; }
+  .index-notification-bottom a {
+    display: block;
+    line-height: 35px;
+    -webkit-transition: all 0.2s linear;
+    -moz-transition: all 0.2s linear;
+    -o-transition: all 0.2s linear;
+    -ms-transition: all 0.2s linear;
+    transition: all 0.2s linear; }
+    .index-notification-bottom a:hover {
+      color: #1f2532; }
+
+.index-notification-show {
+  right: 0 !important; }

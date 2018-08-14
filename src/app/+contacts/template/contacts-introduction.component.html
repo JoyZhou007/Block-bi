@@ -1,0 +1,119 @@
+<perfect-scrollbar class="ps-container pull-left ct-right-left">
+    <div class="a-list-top">
+        <h3 class="f7-f">{{'BASIC INFORMATION' | translate}}</h3>
+    </div>
+    <ul class="ct-right-general">
+        <li>
+            <div class="g-title">
+                <span class="f9-f">{{'BUSINESS NAME' | translate}}</span>
+            </div>
+            <p class="f19-f" [class.g-no-data-color]="!general.name">{{general.name?general.name:noData}}</p>
+        </li>
+        <li class="clearfix">
+            <div class="pull-left ct-right-general-left">
+                <div class="g-title">
+                    <span class="f9-f">{{'PROPERTIES' | translate}}</span>
+                </div>
+                <p class="f19-f">{{parentName ? parentName : noData}}</p>
+            </div>
+            <div class="pull-left ct-right-general-right">
+                <div class="g-title">
+                    <span class="f9-f">{{'INDUSTRY' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!industryName">{{industryName?industryName:noData}}</p>
+            </div>
+        </li>
+        <li>
+            <div class="g-title">
+                <span class="f9-f">{{'FOUND' | translate}}</span>
+            </div>
+            <p class="f19-f" [class.g-no-data-color]="!general.found_date">{{general.found_date?general.found_date:noData}}</p>
+        </li>
+        <li class="clearfix">
+            <div class="pull-left ct-right-general-left">
+                <div class="g-title">
+                    <span class="f9-f">{{'CURRENT STAFF AMOUNT' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!general.amount_employee">{{general.amount_employee?general.amount_employee:noData}}</p>
+            </div>
+            <div class="pull-left ct-right-general-right">
+                <div class="g-title">
+                    <span class="f9-f">{{'CURRENT DEPARTMENT AMOUNT' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!general.amount_dept">{{general.amount_dept?general.amount_dept:noData}}</p>
+            </div>
+        </li>
+        <li>
+            <div class="g-title">
+                <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+            </div>
+            <p class="v7-f" [class.g-no-data-color]="!general.description">{{general.description?general.description:noData}}</p>
+        </li>
+    </ul>
+    <div class="a-list-top">
+        <h3 class="f7-f">{{'PRIVACY INFORMATION' | translate}}</h3>
+        <p class="f14-f">{{'Sensitive information' | translate}}</p>
+    </div>
+    <ul class="ct-right-general">
+        <li class="clearfix">
+            <div class="pull-left ct-right-general-left">
+                <div class="g-title">
+                    <span class="f9-f">{{'OWNER' | translate}}</span>
+                </div>
+                <p class="f19-f g-no-data-color" *ngIf="(ownerData | dataLength) == 0">{{noData}}</p>
+                <div class="clearfix" *ngIf="(ownerData | dataLength) > 0">
+                    <div class="f19-f pull-left g-margin-right10" *ngFor="let list of ownerData">
+                        <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-left ct-right-general-right">
+                <div class="g-title">
+                    <span class="f9-f">{{'SHARE HOLDER' | translate}}</span>
+                </div>
+                <p class="f19-f g-no-data-color" *ngIf="(shareHolderData | dataLength) == 0">{{noData}}</p>
+                <div class="clearfix" *ngIf="(shareHolderData | dataLength) > 0">
+                    <div class="f19-f g-margin-right10 pull-left" *ngFor="let list of shareHolderData">
+                        <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="clearfix">
+            <div class="pull-left ct-right-general-left">
+                <div class="g-title">
+                    <span class="f9-f">{{'MAIN ADMIN' | translate}}</span>
+                </div>
+                <p class="f19-f g-no-data-color" *ngIf="(structureAdminData | dataLength) == 0">{{noData}}</p>
+                <div class="clearfix" *ngIf="(structureAdminData | dataLength) > 0">
+                    <div class="f19-f pull-left g-margin-right10" *ngFor="let list of structureAdminData">
+                        <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-left ct-right-general-right">
+                <div class="g-title">
+                    <span class="f9-f">{{'BUILDER' | translate}}</span>
+                </div>
+                <p class="f19-f g-no-data-color" *ngIf="(builderData | dataLength) == 0">{{noData}}</p>
+                <div class="clearfix" *ngIf="(builderData | dataLength) > 0">
+                    <div class="f19-f pull-left g-margin-right10" *ngFor="let list of builderData">
+                        <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li>
+            <div class="g-title">
+                <span class="f9-f">{{'BUSINESS ADDRESS' | translate}}</span>
+            </div>
+            <p class="f19-f" [class.g-no-data-color]="!currentCompanyInfo.address">{{currentCompanyInfo.address? currentCompanyInfo.address: noData}}</p>
+        </li>
+        <li>
+            <div class="g-title">
+                <span class="f9-f">{{'PARENT COMPANY' | translate}}</span>
+            </div>
+            <p class="f19-f" [class.g-no-data-color]="!parentName">{{parentName? parentName : noData}}</p>
+        </li>
+    </ul>
+</perfect-scrollbar>

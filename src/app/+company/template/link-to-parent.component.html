@@ -1,0 +1,46 @@
+<div class="g-title">
+    <span class="f9-f">{{'RELATION TYPE' | translate}}</span>
+    <em class="f14-f">{{'required' | translate}}</em>
+</div>
+<ul class="g-d-drag">
+    <li class="clearfix">
+        <div class="pull-left">
+            <p class="f10-f g-margin-top5">{{'Choose your business' | translate}}</p>
+        </div>
+        <div class="g-drag1-width1 g-drag1-bg">
+            <switch-button [initVal] = "personalInfo" (switchButEvent) = "getSwitchButEvent($event)"></switch-button>
+        </div>
+    </li>
+</ul>
+<div class="g-title g-padding-top0">
+    <span class="f9-f">{{'PARENT COMPANY' | translate}}</span>
+    <em class="f14-f">{{'required' | translate}}</em>
+</div>
+<div class="g-search-wrap g-input-box-shadow" (click)="selectFocus(searchInput)">
+    <span class="font-search-blue1"></span>
+    <span class="font-remove" (click)="onCloseSearch()" *ngIf="companyName"></span>
+    <div class="search-style1-warp">
+        <input class="pull-left s-last-input f26-f g-font-normal" type="text" placeholder="{{'Search' | translate}}"
+               #searchInput
+               [(ngModel)]="companyName"
+               (keyup)="searchCompanyList($event)">
+    </div>
+</div>
+<ul *ngIf="companyName && companyList && companyList.length!==0" class="di-search-list" [class.di-search-list-height]="diSearchListHeight">
+    <li *ngFor="let list of companyList" (click)="selectParentCompany(list)">
+        <img src="{{list.logo_path ? config?.resourceDomain + list.logo_path : ''}}">
+        <span class="f19-f">{{list.name}}</span>
+        <!--<span class="f5-f">Jacob Thomas</span>-->
+    </li>
+</ul>
+<div class="clearfix di1-checkbox" *ngIf="co_type !== 2">
+    <span class="g-checkbox g-checkbox-selected" [class.font-selectbutton-select]="selectButton" [class.g-checkbox-selected]="selectButton" (click)="doSelectButton()"></span>
+    <span class="f9-f">{{'Allow main admin' | translate}}</span>
+</div>
+<div class="g-title" style="padding-top:10px">
+    <span class="f9-f">{{'COMMENTS' | translate}}</span>
+</div>
+<div class="g-textArea-set">
+    <textarea textareaHeight class="g-textArea di-textArea" data-maxLength="50" [(ngModel)]="comments"></textarea>
+</div>
+<p class="f33-f g-textArea-marginTop5">{{'Maximum 50' | translate}}</p>

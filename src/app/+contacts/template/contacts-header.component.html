@@ -1,0 +1,72 @@
+<header class="g-header a-header">
+    <div class="pull-left">
+        <div class="clearfix">
+            <span class="icon-title-profile g-header-margin"></span>
+            <span class="pull-left f18-f">{{'PERSONAL PROFILE' | translate}}</span>
+        </div>
+        <ul class="clearfix f17-f g-header-column LatoRegular g-title-des">
+            <li *ngFor="let menu of menuArr; let i = index;"
+                [class.current]="currentType === menu.key"
+                (click)="routerLink(menu.key)">
+                {{menu.title}}
+            </li>
+        </ul>
+    </div>
+    <div class="pull-right">
+        <div class="pull-left g-header-but" [class.border-none]="!couldAddRelation">
+            <span class="pull-left but but-hire" *ngIf="couldHire" (click)="hirePerson()">
+                <i class="base">{{'HIRE' | translate}}</i>
+            </span>
+        </div>
+        <div class="pull-left g-header-icon">
+            <div class="pull-left" *ngIf="couldRemoveRelation">
+                <span class="g-header-icon-list font-trash"
+                      tooltip [tooltip]="{content: 'Remove him/her', position:'bottom'}"
+                      (click)="delPerson()">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list icon1-friend-relation"
+                      tooltip [tooltip]="{content: 'Connect', position:'bottom'}"
+                      (click)="addFriend()"
+                      *ngIf="couldAddRelation">
+                </span>
+            </div>
+            <div class="pull-left" *ngIf="showCommonFriend"
+                 toggleSelectGroup
+                 #toggleInput
+                 [currClass]="'header-alarm'"
+                 (callBackData)="initInCommon($event)">
+                <span class="g-header-icon-list font-in-common" #toggleSelectBut
+                      tooltip [tooltip]="{content: 'In common', position:'bottom'}">
+                </span>
+                <div class="di-warp m-map-dialog m-map-pro-list ct-common-di" #toggleSelect>
+                    <div class="di-vertical-align">
+                        <div class="di-warp-style">
+                            <h2>
+                                <span class="f11-f">{{'IN COMMON' | translate}}</span>
+                                <em class="font-page-esc-small" (click)="closeCommonList($event)"></em>
+                            </h2>
+                            <p class="f19-f text-center g-margin-top20 g-no-data-color" *ngIf="(inCommonList && inCommonList.length == 0) || !inCommonList">{{noData | translate}}</p>
+                            <ul class="m-map-pro-ul" style="margin-top: 15px;">
+                                <li *ngFor="let common of inCommonList">
+                                    <div class="g-vertical-img34">
+                                        <profile-img [userInfo]="common" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+                                    </div>
+                                    <i class="font-chat" (click)="friendShowChat($event, common)"></i>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pull-left" *ngIf="couldForward">
+                <span class="g-header-icon-list font-forward"
+                      tooltip [tooltip]="{content: 'Recommend', position:'bottom'}"
+                      (click)="forwardFriend()">
+                </span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="targetIndex()"></a>
+    </div>
+</header>

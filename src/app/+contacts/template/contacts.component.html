@@ -1,0 +1,25 @@
+<!--contacts general start-->
+<div class="g-width">
+    <!--contacts list start-->
+    <contacts-list #contactList [isOnContact]="true"></contacts-list>
+    <!--contacts list end-->
+
+    <div class="clearfix ct-right">
+
+        <!--header start-->
+        <contacts-header #contactsHeader (uploadInfo)="doUploadInfo($event)" [setCurrentUserInfo]="currentUserInfo"></contacts-header>
+        <!--header end-->
+
+        <contacts-general [class.hide]="type!=='general'" (hasInit)="hasInit()"></contacts-general>
+        <contacts-ability [class.hide]="type!=='ability'"  (hasInit)="hasInit()"></contacts-ability>
+        <contacts-introduction   [class.hide]="type!=='intro'"  (hasInit)="hasInit()"></contacts-introduction>
+        <contacts-resumes   [class.hide]="type!=='resume'"  (hasInit)="hasInit()"></contacts-resumes>
+        <contacts-company-ability   [class.hide]="type!=='company-analysis'"  (hasInit)="hasInit()"></contacts-company-ability>
+
+        <!--contacts member start-->
+        <contacts-member #contactsPhoto [setCurrentUserInfo]="currentUserInfo"></contacts-member>
+        <!--contacts member end-->
+
+    </div>
+</div>
+<!--contacts general end-->

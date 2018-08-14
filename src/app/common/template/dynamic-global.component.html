@@ -1,0 +1,4 @@
+<bi-dialog-new #biDialogNew></bi-dialog-new>
+<bi-calendar #biCalendar [showElement]="'1'" *ngIf="userDataService.checkUserLoginStatus()"></bi-calendar>
+<chat-mini-dialog #biMiniDialog *ngIf="userDataService.checkUserLoginStatus()"></chat-mini-dialog>
+<mission-chat-dialog #missionChatDialog *ngIf="userDataService.checkUserLoginStatus()"></mission-chat-dialog>

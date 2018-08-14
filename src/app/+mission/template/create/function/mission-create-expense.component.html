@@ -1,0 +1,312 @@
+<div class="g-style1" data-step="step_mission_17" id="step_mission_17">
+    <div class="m-r-c-tab">
+        <span class="font-switch"></span>
+        <ul class="clearfix m-r-c-tab-list">
+            <li class="pull-left f46-f" (click)="chooseExpenseType('Collection')" [class.current]="isCollection">
+                {{'COLLECTION' | translate}}
+            </li>
+            <li class="pull-right f46-f " (click)="chooseExpenseType('Payment')" [class.current]="isPayment">
+                {{'PAYMENT' | translate}}
+            </li>
+        </ul>
+        <div [class.hide]="!isPayment">
+            <div class="g-title">
+                <span class="f9-f">{{'PAYEE' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input">
+                <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                                 [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                                 [selectedOptions]="payeeArr"
+                ></dropdown-search>
+            </div>
+            <span class="g-show-error" *ngIf="expenseData.payee===''">{{'payee account is request' | translate}}</span>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'PAYEE ACCOUNT' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input" toggleSelectGroup [currClass]="'se-input-current'">
+            <div class="se-input-select" #toggleSelectBut>
+                <span class="f14-f">{{expenseData.bank_name}}</span>
+                <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+            </div>
+            <input class="g-input-box-shadow" type="text"
+                   placeholder="Number"
+                   [class.g-show-input-error]="expenseData.isShowAccountError"
+                   (keydown)="onKeyDown($event)"
+                   (blur)="validateFormData($event,expenseData)"
+                   [(ngModel)]="expenseData.payee_account">
+            <div class="d-select d-select-min-width" #toggleSelect>
+                <perfect-scrollbar class="ps-container g-height140">
+                    <ul class="g-max-height-inherit" #toggleSelectContent>
+                        <li *ngFor="let bank of bankList" (click)="selectTheBank(bank)">
+                            <span class="base">{{bank.short_name}}</span>
+                        </li>
+                    </ul>
+                </perfect-scrollbar>
+            </div>
+        </div>
+        <span class="g-show-error" *ngIf="expenseData.isShowAccountError">
+            {{'payee account is request' | translate}}
+        </span>
+        <div class="clearfix border-bottom m-r-c-add-list">
+            <div class="m-r-c-select-left">
+                <div class="g-title">
+                    <span class="f9-f">{{'CONTRACT/OFFER AMOUNT' | translate}}</span>
+                </div>
+                <div class="se-input" toggleSelectGroup [currClass]="'se-input-current'">
+                    <div class="se-input-select" #toggleSelectBut>
+                        <span class="f14-f">{{expenseData.contract_unit}}</span>
+                        <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+                    </div>
+                    <input class="g-input-box-shadow" type="text"
+                           [class.g-show-input-error]="expenseData.isShowAmountError"
+                           (keydown)="onKeyDown($event)"
+                           (focus)="getOriginal(expenseData.contract_amount)"
+                           (blur)="changeContractAmount($event,expenseData)"
+                           [(ngModel)]="expenseData.contract_amount">
+                    <div class="d-select d-select-min-width" #toggleSelect>
+                        <perfect-scrollbar class="ps-container g-height140">
+                            <ul class="g-max-height-inherit" #toggleSelectContent>
+                                <li *ngFor="let currency of currencyArray"
+                                    (click)="selectCurrency(currency.title)">
+                                    <span class="base">{{currency.key}} {{currency.title}}</span>
+                                </li>
+                            </ul>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+                <span class="g-show-error" *ngIf="expenseData.isShowAmountError">{{'Amount is request' | translate}}</span>
+            </div>
+            <div class="pull-right m-r-c-select-right">
+                <div class="g-title">
+                    <span class="f9-f">{{'PAYMENT TIMES' | translate}}</span>
+                </div>
+                <div class="se-input " [class.opacity30]="(expenseData.contract_amount === '')">
+                    <span class="font-min" [class.opacity30]="(expenseData.contract_times === '1')"
+                          (click)="changeContractTimes('reduce')"></span>
+                    <span class="font-add" [class.opacity30]="(expenseData.contract_times === '10')"
+                          (click)="changeContractTimes('add')"></span>
+                    <input class="g-input-box-shadow" type="text"
+                           (keyup)="keyExpenseTime($event,inputTime)"
+                           [(ngModel)]="expenseData.contract_times"
+                           #inputTime
+                           *ngIf="(expenseData.contract_amount !== '')">
+                    <input class="g-input-box-shadow" class="current" type="text"
+                           disabled
+                           [(ngModel)]="expenseData.contract_times"
+                           *ngIf="(expenseData.contract_amount === '')">
+                </div>
+            </div>
+        </div>
+        <!---------------具体付款------------->
+        <div class="border-bottom" *ngIf="expenseArr.length>0">
+            <div class="clearfix m-r-c-add-list" *ngFor="let expenseTime of expenseArr;let i = index;">
+                <div class="m-r-c-select-left">
+                    <div class="g-title">
+                        <span class="f9-f">{{getStepTitle(i+1) | translate}}{{(isPayment ? 'PAYMENT' : 'COLLECTION') | translate}}</span>
+                    </div>
+                    <div class="se-input">
+                        <div class="se-input-select">
+                            <span class="f14-f">{{expenseData.contract_unit}}</span>
+                            <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+                        </div>
+                        <input class="g-input-box-shadow" type="text"
+                               [disabled]="!expenseTime.isEdit"
+                               (keydown)="onKeyDown($event)"
+                               [(ngModel)]="expenseTime.payment_condition"
+                               (blur)="calculateMoney($event,expenseTime,'condition')"
+                               [class.g-show-input-error]="expenseTime.isShowPayCountError">
+                        <span class="g-show-error" *ngIf="expenseTime.isShowPayCountError">
+                            {{'Payment amount is request' | translate}}
+                        </span>
+                    </div>
+                </div>
+                <div class="pull-right m-r-c-select-right">
+                    <div class="g-title">
+                        <span class="f9-f">{{'PERCENT' | translate}}</span>
+                    </div>
+                    <div class="m-r-c-select-percent se-input-hover g-input-box-shadow g-transition2">
+                        <div class="m-r-c-select-percent-pos">
+                            <input class="f20-f" type="text"
+                                   [disabled]="!expenseTime.isEdit"
+                                   (keydown)="onKeyDown($event)"
+                                   (blur)="calculateMoney($event,expenseTime,'percentage')"
+                                   [(ngModel)]="expenseTime.payment_percentage">
+                            <span class="f20-f">%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="g-title">
+                    <span class="f9-f">{{'PAY TERM' | translate}}</span>
+                </div>
+                <div class="clearfix m-r-c-claim">
+                    <div class="pull-left m-claim m-r-c-claim-left" (click)="switchPayWay(expenseTime,$event)">
+                        <span class="f4-f">{{expenseTime.expense_claim_type}}</span>
+                        <em></em>
+                    </div>
+                    <!-----------Date Claim---------->
+                    <div class="pull-left m-r-c-claim-input se-input">
+                        <div class="pull-left s-style1 g-input-box-shadow" style="overflow: inherit;"
+                             *ngIf="expenseTime.payment_to_type=='2'">
+                            <input type="text" class="mission-create-expense"
+                                   (click)="showDateControl(expenseTime,$event)"
+                                   readonly
+                                   [(ngModel)]="expenseTime.found_date"/>
+                            <div class="se-input-select" toggleSelectGroup #toggleSelectBut>
+                                <span class="pull-left f14-f" [class.hide]="!expenseTime.isShowStatus">
+                                    {{expenseTime.expense_status | translate}}
+                                </span>
+                                <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+                                <div class="d-select m-r-c-claim-select-right" #toggleSelect>
+                                    <ul #toggleSelectContent>
+                                        <li (click)="selectStatus(expenseTime,'Before')"><span class="base">{{'Before' | translate}}</span></li>
+                                        <li (click)="selectStatus(expenseTime,'After')"><span class="base">{{'After' | translate}}</span></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <!--------------日历---------------->
+                        <div style="position:absolute;top:30px;"
+                             *ngIf="expenseTime.payment_to_type==='2'"
+                             [class.hide]="!expenseTime.isShowCalendar">
+                            <bi-calendar [setOption]="expenseTime.calendarOption"
+                                         (doSelectDate)="selectDate(expenseTime,$event)"></bi-calendar>
+                        </div>
+                        <!----------Mission Claim--------------->
+                        <div class="pull-left s-style1 g-input-box-shadow" style="overflow: inherit;"
+                             *ngIf="expenseTime.payment_to_type==='1'" toggleSelectGroup #toggleSelectBut>
+                            <div class="clearfix search-style1-warp">
+                                <div class="search-style1-list g-transition2 g-border4" *ngIf="expenseTime.payment_mission_name !== ''">
+                                    <span class="search-key f4-f"><i class="base">{{expenseTime.payment_mission_name}}</i></span>
+                                    <span class="remove-but" (click)="deleteTheMission(expenseTime,$event)"><i class="font-remove"></i></span>
+                                </div>
+                            </div>
+                            <div class="d-select m-r-c-claim-select-left" #toggleSelect>
+                                <perfect-scrollbar class="ps-container g-height140">
+                                    <ul class="g-max-height-inherit" #toggleSelectContent>
+                                        <li *ngFor="let mission of missionList"
+                                            (click)="selectTheMission(expenseTime,mission)">
+                                            <span class="base">{{mission.name}}</span>
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <span class="g-show-error pull-right"
+                      *ngIf="expenseTime.payment_mission_name === '' && expenseTime.payment_to_type==='1'">
+                   {{'Pay way is request' | translate}}
+                </span>
+                <span class="g-show-error pull-right"
+                      *ngIf="expenseTime.found_date === '' && expenseTime.payment_to_type==='2'">
+                    {{'Pay way is request' | translate}}
+                </span>
+            </div>
+        </div>
+
+        <!----------添加一个新的vo----------->
+
+             <div class="border-bottom" *ngIf="variationOffer.length>0">
+                 <div class="m-r-c-add-list-hover" *ngFor="let newContract of variationOffer;let i = index;">
+                     <span class="font-delete add-pointer" (click)="onDelete(i)"></span>
+                    <div class="clearfix m-r-c-add-list">
+                     <div class="m-r-c-select-left" style="margin-right: 0px">
+                         <div class="g-title">
+                             <span class="f9-f">{{'NEW CONTRACT' | translate}}</span>
+                         </div>
+                         <div class="se-input">
+                             <div class="se-input-select">
+                                 <span class="f14-f">{{expenseData.contract_unit}}</span>
+                                 <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+                             </div>
+                             <input class="g-input-box-shadow" type="text"
+                                    (keydown)="onKeyDown($event)"
+                                    [(ngModel)]="newContract.payment_condition"
+                                    *ngIf="newContract.isEdit"
+                                    (blur)="calculateMoney($event,newContract)"
+                                    [class.g-show-input-error]="newContract.isShowPayCountError">
+                             <input class="g-input-box-shadow" type="text"
+                                    disabled
+                                    (keydown)="onKeyDown($event)"
+                                    [(ngModel)]="newContract.payment_condition"
+                                    *ngIf="!newContract.isEdit"
+                                    [class.g-show-input-error]="newContract.isShowPayCountError">
+                             <span class="g-show-error" *ngIf="newContract.isShowPayCountError">
+                           {{'Payment amount is request' | translate}}
+                        </span>
+                         </div>
+                     </div>
+                     <div class="g-title">
+                         <span class="f9-f">{{'PAY TERM' | translate}}</span>
+                     </div>
+                     <div class="clearfix m-r-c-claim">
+                         <div class="pull-left m-claim m-r-c-claim-left" (click)="switchPayWay(newContract,$event)">
+                             <span class="f4-f">{{newContract.expense_claim_type}}</span>
+                             <em></em>
+                         </div>
+                         <!-----------Date Claim---------->
+                         <div class="pull-left m-r-c-claim-input se-input">
+                             <div class="pull-left s-style1 g-input-box-shadow" style="overflow: inherit;"
+                                  *ngIf="newContract.payment_to_type=='2'">
+                                 <input type="text" class="mission-create-expense"
+                                        readonly
+                                        (click)="showDateControl(newContract,$event)"
+                                        [(ngModel)]="newContract.found_date"/>
+                                 <div class="se-input-select" style="overflow: inherit;" toggleSelectGroup #toggleSelectBut>
+                                <span class="pull-left f14-f" [class.hide]="!newContract.isShowStatus">
+                                    {{newContract.expense_status | translate}}
+                                </span>
+                                     <span class="font-selectbutton-soildclose ie-font-selectbutton-soildclose mission-arrow-offset"></span>
+                                     <div class="d-select m-r-c-claim-select-right" #toggleSelect>
+                                         <ul #toggleSelectContent>
+                                             <li (click)="selectStatus(newContract,'Before')"><span class="base">{{'Before' | translate}}</span></li>
+                                             <li (click)="selectStatus(newContract,'After')"><span class="base">{{'After' | translate}}</span></li>
+                                         </ul>
+                                     </div>
+                                 </div>
+                             </div>
+                             <!--------------日历---------------->
+                             <div style="position:absolute;top:30px;"
+                                  *ngIf="newContract.payment_to_type==='2'"
+                                  [class.hide]="!newContract.isShowCalendar">
+                                 <bi-calendar [setOption]="newContract.calendarOption"
+                                              (doSelectDate)="selectDate(newContract,$event)"></bi-calendar>
+                             </div>
+                             <!----------Mission Claim--------------->
+                             <div class="pull-left s-style1 g-input-box-shadow" style="overflow: inherit;"
+                                  *ngIf="newContract.payment_to_type==='1'" toggleSelectGroup #toggleSelectBut>
+                                 <div class="clearfix search-style1-warp">
+                                     <div class="search-style1-list" *ngIf="newContract.payment_to_value !== ''">
+                                         <span class="search-key f4-f">{{newContract.payment_mission_name}}</span>
+                                         <span class="font-remove" (click)="deleteTheMission(newContract,$event)"></span>
+                                     </div>
+                                 </div>
+                                 <div class="d-select m-r-c-claim-select-left" #toggleSelect>
+                                     <perfect-scrollbar class="ps-container g-height140">
+                                         <ul class="g-max-height-inherit" #toggleSelectContent>
+                                             <li *ngFor="let mission of missionList"
+                                                 (click)="selectTheMission(newContract,mission)">
+                                                 <span class="base">{{mission.name}}</span>
+                                             </li>
+                                         </ul>
+                                     </perfect-scrollbar>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                     <span class="g-show-error pull-right"
+                           *ngIf="newContract.payment_mission_name === '' && newContract.payment_to_type==='1'">{{'Pay way is request' | translate}}</span>
+                     <span class="g-show-error pull-right"
+                           *ngIf="newContract.found_date === '' && newContract.payment_to_type==='2'">{{'Pay way is request' | translate}}</span>
+                 </div>
+                 </div>
+             </div>
+
+        <div class="but but-add" (click)="addOtherContract()">
+            <em class="base">{{'ADD MORE EXPENSE' | translate}}</em>
+        </div>
+    </div>
+</div>

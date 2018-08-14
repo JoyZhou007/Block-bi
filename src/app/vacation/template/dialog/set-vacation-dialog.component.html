@@ -1,0 +1,39 @@
+
+    <div class="g-title">
+        <span class="f9-f">{{'LEAVE EXPIRATION DATE' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <input class="current-color" type="text" value="{{showSelectDate}}" readonly="true"
+               (blur)="onBlurEvent($event)" (click)="onClickSelectInput($event)">
+        <p class="g-show-error-color" *ngIf="showError">{{'Can not be empty' | translate}}</p>
+       <bi-calendar-select [setOption]="selectCalendarData" (outSelectInfo)="getSelectData($event)"></bi-calendar-select>
+    </div>
+    <ul class="g-d-drag di-pass-setting">
+        <li class="clearfix">
+            <div class="pull-left">
+                <div class="g-title" style="padding-top: 5px;padding-bottom: 5px;">
+                    <span class="f9-f">{{'REST OF VACATION IN LAST YEAR' | translate}}</span>
+                </div>
+                <p class="f10-f">{{'Switch on for extrapolated, or if return to zero' | translate}}</p>
+            </div>
+            <div class="g-drag1-width1 g-margin-top20">
+                <!--superimposed-->
+                <switch-button [initVal] = "superimposedPerm" (switchButEvent) = "setSuperimposedPerm($event)"></switch-button>
+            </div>
+        </li>
+        <li class="clearfix">
+            <div class="pull-left">
+                <!--probation-->
+                <div class="g-title g-padding-top0" style="padding-bottom:5px">
+                    <span class="f9-f">{{'PROBATION' | translate}}</span>
+                </div>
+                <p class="f10-f">{{'Accept staff to use annual leave in probation or not' | translate}}</p>
+            </div>
+            <div class="g-drag1-width1 g-margin-top20">
+                <switch-button [initVal] = "probationPerm" (switchButEvent) = "setProbationPerm($event)"></switch-button>
+            </div>
+        </li>
+    </ul>

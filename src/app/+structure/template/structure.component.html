@@ -1,0 +1,126 @@
+<!--左侧开始-->
+<structure-list #structureList
+                *ngIf="hasInit"
+                [currentCid]="companyId"
+                [currentDid]="departmentId"
+                [deptKeyArr]="deptKeyArr"
+                [staffList]="staffList"
+                [editPosition]="editPositionInfo"
+                [staffByDeptList]="staffByDeptList"
+                [departmentList]="departmentListSet"
+                (outClickPosition)="dealPosition($event)"
+                (outEditDepartment)="dealEditDepartment($event)"
+                (outEditPositionLevel)="newPositionLevel($event)"
+                (outCurrentDid)="newCurrentDid($event)"
+                (outRefreshList)="refreshList($event)">
+</structure-list>
+
+<!--左侧结束-->
+<!-- 编辑职位 -->
+<structure-form-edit-position
+          *ngIf="editPositionInfo && _companyInfo"
+          #structureFormEditPosition
+          [setNewStructureId]="newStructureId"
+          [staffList]="staffList"
+          [departmentList]="departmentListSet"
+          [editPosition]="editPositionInfo"
+          [allStructure]="allStructure"
+          [setStructureUser]='_structure'
+          [companyInfoArr]="_companyInfo"
+          [setAdminUser]='_allCompanyStructureInfo'
+          [setCompanyId]="companyId"
+          [setDepartmentId]="departmentId"
+          [setPositionName]='_positionTitleInfo'
+          [setPositionLevel]='_positionInfo'
+          (outDrawStructure)='drawStructureByFrom($event)'
+          (outOpenForm)="openForm($event)"
+          (outEditPosition)="savePosition($event)"
+          (outDeletePosition)="removePosition($event)"
+          (outAddId)="dealOutAddId($event)"
+          (outNewLevel)="newLevel($event)">
+</structure-form-edit-position>
+
+<!-- 编辑部门 -->
+<structure-form-edit-department #structureFormEditDepartment
+                                *ngIf="editDepartmentInfo"
+                                [setDepartmentInfo]='editDepartmentInfo'
+                                [setStructureUser]='allStructure'
+                                [setCompanyId]="companyId"
+                                [setDepartmentId]="departmentId"
+                                (outOpenForm)="openForm($event)"
+                                (outEditDepartment)='outSaveDepartment($event)'>
+</structure-form-edit-department>
+
+<!-- 编辑职务名、等级、职位名 -->
+<structure-form-edit-position-level #structureFormEditPositionLevel
+                                    *ngIf="_positionInfo"
+                                    [setPositionLevel]='_positionInfo'
+                                    [setCompanyId]="companyId"
+                                    [setDepartmentId]="departmentId"
+                                    [setStructureInfo]="_structure"
+                                    (outDrawStructure)='drawStructureByFrom($event)'
+                                    (outOpenForm)="openForm($event)"
+                                    [makeLevel]="makeLevel">
+</structure-form-edit-position-level>
+
+<!--中间部分开始-->
+
+<!--这里 去掉/添加 s-edit-position-left 动画-->
+<!--右侧开始-->
+<div class="p-flex-box s-edit-position-left">
+    <div class="pull-left s-entirety">
+        <header class="g-width g-header fo-header">
+            <div class="pull-left" id="step_str_1" data-step="step_str_1">
+
+                <div class="clearfix">
+                    <span class="icon-title-structure g-header-margin"></span>
+                    <span class="pull-left f18-f">{{'STRUCTURE' | translate}}</span>
+                </div>
+                <div class="clearfix">
+                    <span class="f17-f">{{'共有' + (deptKeyArr?.length? deptKeyArr?.length - 1 : 1) + '个部门'}}</span>
+                    <span class="wo-head-line f17-f" style="padding-left:3px;">|</span>
+                    <span class="f17-f">{{'共有' + staffList?.length + '位员工'}}</span>
+                </div>
+                <ul class="clearfix f17-f g-header-column LatoRegular g-title-des">
+                    <li [class.current]="!departmentId || departmentId == '0'" routerLink="{{'/structure/' + companyId}}">
+                        {{'Entirety structure' | translate}}
+                    </li>
+                    <li [class.current]="departmentId && departmentId != '0'" *ngIf="depName">{{depName}}</li>
+                </ul>
+            </div>
+            <div class="pull-right">
+                <div class="pull-left g-header-but">
+                    <span (click)="uploadStructureInfo()" class="but but-done">
+                        <i class="base">{{'UPLOAD' | translate}}</i>
+                    </span>
+                </div>
+                <div class="pull-left g-header-icon" help (click)="showStructureHelp($event)">
+                    <div class="pull-left">
+                        <span class="g-header-icon-list font-help"></span>
+                    </div>
+                </div>
+                <a href="javascript:;" class="pull-left font-page-esc" (click)="quitStructure()"></a>
+            </div>
+        </header>
+        <structure-entirety #structureEntirety *ngIf="structureInfo"
+                            [setCompanyId]="companyId"
+                            [setMarginLeft]="marginLeft"
+                            [setDepartmentId]="departmentId"
+                            [setStructureInfo]='structureInfo'
+                            (outEditDepartment)="dealEditDepartment($event)"
+                            (outEditStructure)='editStructure($event)'>
+        </structure-entirety>
+    </div>
+</div>
+<!--右侧结束-->
+
+<!--同步-->
+<div class="s-synchronization" *ngIf="concurrencyUserArr.length > 0">
+    <div class="s-synchronization-title"  tooltip [tooltip]="{content: 'user editing', position:'left'}">
+        <span class="icon1-synchronization" style="font-size: 12px; color: #ABABAB; margin: 0 0 0 12px;"></span>
+    </div>
+    <ul class="s-synchronization-list">
+        <li *ngFor="let user of concurrencyUserArr">
+            <profile-img [userInfo]="user" [settings]="{img_size: 30, show_work_name: false}"></profile-img>
+    </ul>
+</div>

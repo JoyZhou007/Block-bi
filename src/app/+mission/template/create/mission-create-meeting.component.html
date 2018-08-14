@@ -1,0 +1,17 @@
+<div class="g-style1 g-padding20 m-a-type" data-step="step_mission_20" id="step_mission_20">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'ATTENDEE' | translate}}</span>
+    </div>
+    <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                     [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                     [selectedOptions]="confereeArr"
+    ></dropdown-search>
+    <p class="f33-f">{{'Choose people to attend this meeting' | translate}}</p>
+    <div class="g-title">
+        <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea style="margin-bottom:0;" textareaHeight class="g-textArea" data-maxLength="100" [(ngModel)]="createMeetingData.missionDescription"></textarea>
+    </div>
+    <p class="f33-f">{{'Maximum 100' | translate}}</p>
+</div>

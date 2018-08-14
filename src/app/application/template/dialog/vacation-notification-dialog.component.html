@@ -1,0 +1,44 @@
+<div class="di-con">
+    <div class="clearfix di-people">
+        <profile-img [userInfo]="senderInfo" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">TYPE</span>
+    </div>
+    <div>
+        <p>{{vacationType}}</p>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">PERIOD</span>
+    </div>
+    <div class="clearfix di-attendance">
+        <span class="pull-left f19-f">{{startTime}}</span>
+        <span class="pull-left icon1-Shape-2"></span>
+        <span class="pull-left f19-f">{{endTime}}</span>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">REST OF VACATION</span>
+    </div>
+    <div>
+        <p>{{rest}}</p>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">MESSAGE</span>
+    </div>
+    <div>
+        <p class="f10-f">{{msg}}</p>
+    </div>
+
+</div>
+<div class="di-n-message di-n-success" [class.di-n-message-opacity]="diNSuccess">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-selectbutton-select"></span>
+        <p class="f55-f">{{'ACCEPTED' | translate}}</p>
+    </div>
+</div>
+<div class="di-n-message di-n-error" [class.di-n-message-opacity]="diNError">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-page-esc-small"></span>
+        <p class="f55-f">{{'REFUSE' | translate}}</p>
+    </div>
+</div>

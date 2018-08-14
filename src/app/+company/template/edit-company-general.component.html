@@ -1,0 +1,214 @@
+<!--section start-->
+<section class="clearfix g-width a-section">
+    <div class="pull-left a-left">
+        <div class="pull-left a-list">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'BASIC INFORMATION' | translate}}</h3>
+            </div>
+            <ul>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{(isCompany? 'BUSINESS NAME' : 'STUDIO NAME') | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <div inputBlur="">
+                        <div class="se-input">
+                            <input class="g-input-box-shadow" type="text" name="name" [(ngModel)]="currentCompanyInfo.name" #inputContent>
+                        </div>
+                        <p class="hide" #inputError>{{emptyError}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'INDUSTRY' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                  <!--  <div class="se-input" toggleSelectGroup [currClass]="'se-input-selected'">
+                        <div class="se-input-select">
+                            <span class="font-selectbutton-soildclose"></span>
+                        </div>
+                        <input class="g-input-box-shadow" type="text" value="Retail" readonly name="companyIndustryName"
+                               [(ngModel)] = "companyIndustryName" #toggleSelectBut>
+                        <div class="d-select" #toggleSelect>
+                            <perfect-scrollbar class="ps-container g-height140">
+                                <ul class="g-max-height-inherit" #toggleSelectContent>
+                                    <li *ngFor="let industry of companyIndustryNameList"
+                                        (click)="selectIndustryValue(industry.id, toggleSelect)">
+                                        <i class="base">{{isZhLan? industry.name_zh : industry.name}}</i>
+                                    </li>
+                                </ul>
+                            </perfect-scrollbar>
+                        </div>
+                    </div>-->
+                    <select-filter [selectOption]="industryData" (outPutCurrentValue)="getCurrentValue($event)"></select-filter>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'FOUND' | translate}}</span>
+                    </div>
+                    <div class="se-input">
+                        <input class="g-input-box-shadow" type="text" name="found_date" (blur)="onBirthBlur()"
+                               [(ngModel)]="currentCompanyInfo.found_date" readonly selectDate #selectTime [setDateOption]="dateOption">
+                        <p [class.hide]="!isShowBirthdayError" [class.g-show-error]="isShowBirthdayError">{{dateError}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+                    </div>
+                    <div class="g-textArea-set">
+                        <textarea textareaHeight class="g-textArea" data-maxLength="500" [(ngModel)]="currentCompanyInfo.description"></textarea>
+                        <p class="f33-f">{{'Maximum 500' | translate}}</p>
+                    </div>
+                </li>
+            </ul>
+            <div class="g-margin-bottom10 g-padding-bottom20" *ngIf="isCompany">
+                <div class="a-list-top a-company-top">
+                    <h3 class="f7-f">{{'LICENSE INFORMATION' | translate}}</h3>
+                </div>
+                <div class="g-title" *ngIf="isCompany">
+                    <span class="f9-f">{{'BUSINESS LICENSE' | translate}}</span>
+                    <em class="f14-f">{{'required' | translate}}</em>
+                </div>
+                <div class="clearfix a-company-license-author">
+                    <profile-img [userInfo]="accountLicense" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                    <div class="a-company-name">
+                        <span class="f19-f">{{accountLicense.work_name}}</span>
+                        <span class="f5-f">{{accountLicense.created}}</span>
+                    </div>
+                    <div>
+                        <span class="v7-f">Upload</span>
+                        <span class="v8-f">{{accountLicenseName}}</span>
+                    </div>
+                </div>
+                <div class="a-company-license-img">
+                    <a [attr.href]="licenceUrl" target="_blank"><img [attr.src]="licenceUrl"/></a>
+                    <div (click)="clickOnLicense($event, licenseInput)">
+                        <div class="a-company-license-pos">
+                            <span class="font-update g-icon"></span>
+                        </div>
+                        <input type="file" #licenseInput style="display: none" (change)="uploadLicense(licenseInput)">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pull-right a-list a-company-but" *ngIf="isCompany">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'PRIVACY INFORMATION' | translate}}</h3>
+            </div>
+            <ul>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'OWNER' | translate}}</span>
+                    </div>
+                    <div class="clearfix a-company-people-list">
+                        <div class="pull-left a-company-people-list-info" *ngFor="let list of companyOwner">
+                            <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'BUILDER' | translate}}</span>
+                    </div>
+                    <div class="clearfix a-company-people-list">
+                        <div class="pull-left a-company-people-list-info" *ngFor="let list of companyBuilder">
+                            <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'MAIN ADMIN' | translate}}</span>
+                    </div>
+                    <div class="clearfix a-company-people-list">
+                        <div class="pull-left a-company-people-list-info" *ngFor="let list of companyAdmin">
+                            <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SHARE HOLDER' | translate}}</span>
+                    </div>
+                    <div class="clearfix a-company-people-list">
+                        <div class="pull-left a-company-people-list-info" *ngFor="let list of companyHolder">
+                            <profile-img [userInfo]="list" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="but but-deep-color" (click)="editCoreOrg()">
+                <span class="base">{{'EDIT CORE ORGANIZATION' | translate}}</span>
+            </div>
+            <div class="a-company-line"></div>
+            <div *ngIf="isUpdate">
+                <ul class="a-company-list a-company-list-status">
+                    <li class="clearfix" *ngFor="let company of addCompanyGroupBranch; let i = index">
+                        <span class="font-delete"></span>
+                        <div class="g-title" *ngIf="i === 0">
+                            <span class="f9-f">{{'BRANCH' | translate}}</span>
+                        </div>
+                        <div class="clearfix a-company-people-list">
+                            <div class="pull-left a-company-people-list-info">
+                                <div class="g-vertical-img24">
+                                    <img class="pull-left g-img24" src="{{ company.business_licence_path? config.resourceDomain + company.business_licence_path : ''}}" />
+                                    <span class="f19-f base">{{company.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" *ngFor="let company of addCompanyGroupSub; let i = index">
+                        <span class="font-delete"></span>
+                        <div class="g-title" *ngIf="i === 0">
+                            <span class="f9-f">SUBSIDIARY</span>
+                        </div>
+                        <div class="clearfix a-company-people-list">
+                            <div class="pull-left a-company-people-list-info">
+                                <div class="g-vertical-img24">
+                                    <img class="pull-left g-img24" src="{{company.business_licence_path ?config.resourceDomain + company.business_licence_path : ''}}" />
+                                    <span class="f19-f base">{{company.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="clearfix" *ngFor="let company of getCompanyGroupParent; let i = index">
+                        <span class="font-delete"></span>
+                        <div class="g-title" *ngIf="i === 0">
+                            <span class="f9-f">{{'PARENT' | translate}}</span>
+                        </div>
+                        <div class="clearfix a-company-people-list">
+                            <div class="pull-left a-company-people-list-info">
+                                <div class="g-vertical-img24">
+                                    <img class="pull-left g-img24" src="{{company.business_licence_path ? config.resourceDomain + company.business_licence_path : ''}}" />
+                                    <span class="f19-f base">{{company.name}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="clearfix a-company-checkbox">
+                    <span class="font-selectbutton-select g-checkbox g-checkbox-white" [class.g-checkbox-selected]="showCheckboxAllow" (click)="checkboxAllow()"></span>
+                    <span class="f9-f">{{'Allow main admin' | translate}}</span>
+                </div>
+                <div class="but but-deep-color" (click)="doLinkParent()">
+                    <span class="base">{{'LINK TO PARENT' | translate}}</span>
+                </div>
+            </div>
+            <div class="g-title">
+                <span class="f9-f">{{'BUSINESS ADDRESS' | translate}}</span>
+            </div>
+            <div class="g-textArea-set">
+                <textarea textareaHeight class="g-textArea" data-maxLength="100" [(ngModel)]="currentCompanyInfo.address"></textarea>
+            </div>
+        </div>
+    </div>
+
+    <!--photo start-->
+    <company-show [logoPath]="logoPath" *ngIf="couldEdit" [uploadPic] ='upload'></company-show>
+    <!--photo end-->
+    <div *ngIf="!couldEdit">
+        <img src="{{config.resourceDomain + logoPath}}" class="logo-pic" alt="">
+    </div>
+</section>
+<!--section end-->

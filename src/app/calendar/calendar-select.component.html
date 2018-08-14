@@ -1,0 +1,48 @@
+<div class="d-select d-select-people" style="z-index: 11;" [class.hide]="isHideCalendar">
+    <div class="date-h-m clearfix">
+        <div class="date-hour clearfix">
+            <!--Month start-->
+            <div class="date-h-m-title f13-f">{{titleTop}}</div>
+            <div class="date-h-m-content clearfix" elementRolling>
+                <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut></a>
+                <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour">
+                    <ul class="date-list clearfix date-list-new" #rollContent>
+                        <li *ngFor="let month of monthList,let i = index"
+                            (click)="onClickEvent($event,i,monthList,topKeyName)"
+                            [class.selected]="month.selected" style="width: 30px!important;height: 30px!important;"
+                        >
+                            <span>{{month.number}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut></a>
+            </div>
+            <!--Month end-->
+            <div class="date-line"></div>
+            <!--day start-->
+            <div [class.date-minute]="isHourMinute" style="height: 0;">
+                <div class="date-h-m-title f13-f">{{titleBottom}}</div>
+                <div class="date-h-m-content clearfix" elementRolling>
+                    <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut
+                       [class.hide]="isHourMinute "></a>
+                    <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour">
+                        <ul class="date-list clearfix date-list-new" #rollContent>
+                            <li *ngFor="let day of dayList,let i = index"
+                                (click)="onClickEvent($event,i,dayList,bottomKeyName)"
+                                [class.selected]="day.selected" style="width: 30px!important;height: 30px!important;"
+                            >
+                                <span>{{day.number}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                    <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut
+                       [class.hide]="isHourMinute "></a>
+                </div>
+            </div>
+            <!--day end-->
+        </div>
+    </div>
+    <div class="but but-select-done" (click)="onClickDone($event)">
+        <span class="base g-clearStyle">{{'DONE' | translate}}</span>
+    </div>
+</div>

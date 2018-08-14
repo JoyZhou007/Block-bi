@@ -1,0 +1,154 @@
+<div class="g-side-width">
+    <search-list [setNeedWarp]='false' [searchParam]="searchParam"></search-list>
+    <current-user-info [setCouldInit]="chatIsOpen"></current-user-info>
+    <!--聊天历史 开始-->
+    <!--<span class="chat-view-history icon1-view-history"-->
+          <!--tooltip [tooltip]="{content: 'History chat', position: 'bottom'}"-->
+          <!--(click)="viewChatHistory($event)"></span>-->
+    <!--聊天历史 结束-->
+    <perfect-scrollbar class="ps-container ch-list-wrap">
+        <!--<div class="ch-list-wrap">-->
+            <div class="ch-list-item g-margin-top0" [class.ch-list-item-hide]="starList.length === 0 || chatMenuStatus['star']">
+                <p class="ch-list-title clearfix" (click)="toggleMenuStatus('star')">
+                    <span class="icon1-collection2 ch-list-type pull-left star"></span>
+                    <span class="f11-f pull-left chat-menu-type">{{'STARRED' | translate}}</span>
+                    <em class="pull-left">({{starList.length ? starList.length : 0}})</em>
+                    <span class="font-selectbutton-line pull-left" [class.ch-list-item-hide]="starList.length === 0 || chatMenuStatus['star']"></span>
+                </p>
+                <ul class="ch-list-content">
+                    <li *ngFor="let starGroup of starList;let i=index;" (click)="switchChat(starGroup)">
+                        <p class="wo-supplier v4-f clearfix"
+                           [class.chat-list-current]="currentGroup && starGroup && currentGroup.identity === starGroup.identity">
+                            <span class="wo-line pull-left"
+                                  tooltip [tooltip]="{content: 'Exit channel', position: 'right'}"
+                                  *ngIf="!starGroup.isFriend && starGroup.is_mission != '1'"><span class="font-remove" (click)="dealDeleteOrQuitGroup($event, starGroup)">
+                            </span></span>
+                            <span class="v4-f pull-left chat-list-name chat-menu-font" title="{{starGroup.isFriend ?  starGroup.work_name : starGroup.name}}">
+                                <i class="base g-clearStyle add-ellipsis">{{starGroup.isFriend ?  starGroup.work_name : starGroup.name}}</i>
+                            </span>
+                            <span class="ch-list-tag {{starGroup.clsName}} pull-left"></span>
+                            <span class="ch-list-number pull-right" *ngIf="checkHasNoRead(starGroup.identity)">
+                                <i class="base">{{noReadCountInfo[starGroup.identity]}}</i>
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="ch-list-item ch-list-item-mission" [class.ch-list-item-hide]="missionList.length === 0 || chatMenuStatus['mission']">
+                <p class="ch-list-title clearfix" (click)="toggleMenuStatus('mission')">
+                    <span class="font-chat-mission1 pull-left ch-list-type"></span>
+                    <span class="f11-f pull-left chat-menu-type">{{'MISSION' |translate}}</span>
+                    <em class="pull-left">({{missionList.length ? missionList.length : 0}})</em>
+                    <span class="font-selectbutton-line pull-left" [class.ch-list-item-hide]="missionList.length === 0 || chatMenuStatus['mission']"></span>
+                </p>
+                <ul class="ch-list-content">
+                    <li *ngFor="let missionGroup of missionList; let i=index;" (click)="switchChat(missionGroup)">
+                        <p class="wo-supplier v4-f clearfix"
+                           [class.chat-list-current]="currentGroup && missionGroup && currentGroup.identity === missionGroup.identity">
+                            <span class="v4-f pull-left chat-list-name chat-menu-font" title="{{missionGroup.name}}">
+                                <i class="base g-clearStyle add-ellipsis">{{missionGroup.name}}</i>
+                            </span>
+                            <span class="ch-list-number pull-right" *ngIf="checkHasNoRead(missionGroup.identity)">
+                                <i class="base">{{noReadCountInfo[missionGroup.identity]}}</i>
+                            </span>
+                            <!--<span class="ch-list-tag font-chat-business pull-left"></span>-->
+                        </p>
+                    </li>
+                    <li class="hide"><!--添加.ch-item-list-hide隐藏二级列表-->
+                        <p class="wo-supplier clearfix">
+                            <span class="wo-line pull-left"><span class="font-remove"></span></span>
+                            <span class="v4-f pull-left add-ellipsis">supplier wang</span>
+                            <span class="font-selectbutton-line pull-left ch-list-hide"></span>
+                        </p>
+                        <dl class="clearfix ch-list-item-list">
+                            <dd class="v4-f add-ellipsis">Kate zhang</dd>
+                            <dd class="v4-f add-ellipsis">Kate zhang</dd>
+                        </dl>
+                    </li>
+                </ul>
+            </div>
+            <div class="ch-list-item ch-list-item-bussiness" [class.ch-list-item-hide]="workList.length === 0 || chatMenuStatus['work']" >
+                <p class="ch-list-title clearfix" (click)="toggleMenuStatus('work')">
+                    <span class="font-chat-business  pull-left ch-list-type"></span>
+                    <span class="f11-f pull-left chat-menu-type">{{'BUSINESS' | translate}}</span>
+                    <em class="pull-left">({{workList.length ? workList.length : 0}})</em>
+                    <span class="font-selectbutton-line pull-left" [class.ch-list-item-hide]="workList.length === 0 || chatMenuStatus['work']"></span>
+                    <span class="font-add pull-right" (click)="createNewGroup($event, 'work')"></span>
+                </p>
+                <ul class="ch-list-content">
+                    <li *ngFor="let workGroup of workList; let i=index;" (click)="switchChat(workGroup)">
+                        <p class="wo-supplier v4-f clearfix"
+                           [class.chat-list-current]="currentGroup && workGroup && currentGroup.identity === workGroup.identity">
+                            <span class="wo-line pull-left"
+                                  tooltip [tooltip]="{content: 'Exit channel', position: 'right'}"
+                            ><span class="font-remove" (click)="dealDeleteOrQuitGroup($event, workGroup)"></span></span>
+                            <span class="v4-f pull-left chat-list-name chat-menu-font" title="{{workGroup.name}}">
+                                <i class="base g-clearStyle add-ellipsis">{{workGroup.name}}</i></span>
+                            <span class="ch-list-number pull-right" *ngIf="checkHasNoRead(workGroup.identity)">
+                                <i class="base">{{noReadCountInfo[workGroup.identity]}}</i>
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="ch-list-item ch-list-item-private" [class.ch-list-item-hide]="privateList.length === 0 || chatMenuStatus['private']">
+                <p class="ch-list-title clearfix" (click)="toggleMenuStatus('private')">
+                    <span class="font-chat-private pull-left ch-list-type"></span>
+                    <span class="f11-f pull-left chat-menu-type">{{'IN PRIVATE' | translate}}</span>
+                    <em class="pull-left">({{privateList.length? privateList.length : 0}})</em>
+                    <span class="font-selectbutton-line pull-left" [class.ch-list-item-hide]="privateList.length === 0 || chatMenuStatus['private']"></span>
+                    <span class="font-add pull-right" (click)="createNewGroup($event, 'private')"></span>
+                </p>
+                <ul class="ch-list-content">
+                    <li *ngFor="let privateGroup of privateList; let i = index;" (click)="switchChat(privateGroup)">
+                        <p class="wo-supplier v4-f clearfix"
+                           [class.chat-list-current]="currentGroup && privateGroup && currentGroup.identity === privateGroup.identity">
+                            <span class="wo-line pull-left"
+                                  tooltip [tooltip]="{content: 'Exit channel', position: 'right'}"
+                            ><span class="font-remove"  (click)="dealDeleteOrQuitGroup($event, privateGroup)"></span></span>
+                            <span class="v4-f pull-left chat-list-name chat-menu-font" title="{{privateGroup.name}}">
+                                <i class="base g-clearStyle add-ellipsis">{{privateGroup.name}}</i></span>
+                            <span class="ch-list-number pull-right" *ngIf="checkHasNoRead(privateGroup.identity)">
+                                <i class="base">{{noReadCountInfo[privateGroup.identity]}}</i>
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="ch-list-item ch-list-item-recent" [class.ch-list-item-hide]="recentList.length === 0 || chatMenuStatus['recent']">
+                <p class="ch-list-title clearfix" (click)="toggleMenuStatus('recent')">
+                    <span class="pull-left ch-list-type"></span>
+                    <span class="f11-f pull-left chat-menu-type">{{'RECENT' | translate}}</span>
+                    <em class="pull-left">({{recentList.length? recentList.length : 0}})</em>
+                    <span class="font-selectbutton-line pull-left" [class.ch-list-item-hide]="recentList.length === 0 || chatMenuStatus['recent']"></span>
+                </p>
+                <ul class="ch-list-content">
+                    <li *ngFor="let recentGroup of recentList; let i = index;"
+                        (click)="switchChat(recentGroup)">
+                        <p class="wo-supplier v4-f clearfix"
+                           [class.chat-list-current]="currentGroup && recentGroup && currentGroup.identity === recentGroup.identity">
+                            <span class="wo-line pull-left" *ngIf="!recentGroup.isFriend && recentGroup.is_mission !== '1'">
+                                <span class="font-remove"
+                                      tooltip [tooltip]="{content: 'Exit channel', position: 'right'}"
+                                      (click)="dealDeleteOrQuitGroup($event, recentGroup)"></span>
+                            </span>
+                            <span class="v4-f pull-left chat-list-name chat-menu-font"
+                                  title="{{recentGroup.isFriend? recentGroup.work_name : recentGroup.name}}">
+                                <i class="base g-clearStyle add-ellipsis">{{recentGroup.isFriend? recentGroup.work_name : recentGroup.name}}</i></span>
+                            <span *ngIf="true" class="ch-list-tag {{recentGroup.clsName}} pull-left"></span>
+                            <span class="ch-list-number pull-right" *ngIf="checkHasNoRead(recentGroup.identity)">
+                                <i class="base">{{noReadCountInfo[recentGroup.identity]}}</i>
+                            </span>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+        <!--</div>-->
+    </perfect-scrollbar>
+    <!--new post-->
+    <div class="wo-new-post f6-f" (click)="createChatPost($event)">
+        <span class="base">{{'NEW POST' | translate}}</span>
+    </div>
+</div>
+

@@ -1,0 +1,84 @@
+<main class="login-main recover" (click)="stopPro($event)">
+    <div class="recover-title text-center f40-f">{{'Recover your password' | translate}}<br>
+    </div>
+    <p class="text-center f22-f LatoLight g-margin-top10 recover-text">
+        {{'Send link to personal email or text message to your personal phone' | translate}}</p>
+
+
+    <!--登陆框-->
+    <div class="login-show login-shadow recover-show">
+        <div class="r-person-register-l clearfix">
+            <form #recoverForm="ngForm">
+                <div class="">
+                    <input type="text" value="" class="r-person-register-info f49-f normalThin"
+                           required
+                           name="email"
+                           [(ngModel)]="user.email"
+                           #email="ngModel"
+                           (blur)="inputBlur($event,'e')">
+                    <p [class.f52-f]="!showEmail" [class.f9-f]="showEmail" [class.scale-p]="showEmail">{{'PERSONAL EMAIL' | translate}}</p>
+                    <div class="alert-error absolute" [hidden]="!email_error.isShow">{{email_error.text | translate}}
+                    </div>
+                </div>
+                <div class="but but-email login-create" (click)="formSubmit($event,'e')" #emailBtn>
+                    <em class="base">{{'SEND A EMAIL' | translate}}</em>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+            </form>
+            <div class="hr">
+                <div class="circle f23-f">{{'OR' | translate}}</div>
+            </div>
+            <form #f2="ngForm" (ngSubmit)="save(f2.value, f2.valid)">
+                <div class="login-show-pwd l-reset-psd-form">
+                    <input type="number" class="r-person-register-info f49-f normalThin"
+                           name="phone"
+                           #phone="ngModel"
+                           required
+                           [(ngModel)]="user.phone"
+                           (blur)="inputBlur($event,'phone')"
+                    >
+                    <p [class.f52-f]="!showPhone" [class.f9-f]="showPhone" [class.scale-p]="showPhone">
+                        {{'PERSONAL PHONE NUMBER' | translate}}</p>
+                    <div *ngIf="phone_error.isShow"
+                         class="absolute alert-error">
+                        {{phone_error.text | translate}}
+                    </div>
+                    <div class="but but-send but-send-code" (click)="formSubmit($event,'phone')">
+                        <span class="base" #phoneCode>{{(showTimer ?codeSendTime +' s' : 'SEND AUTH CODE') | translate}}</span>
+                    </div>
+                </div>
+
+
+                <div class="set-wrap" style="padding-top: 0;">
+
+                    <div class="auth-code">
+                        <form action="" #authCodeForm>
+                            <input *ngFor="let num of tplAuthCodeList; let i = index"
+                                   #codeInput
+                                   class="f49-f normalLight" type="text" value="" maxlength="1"
+                                   [class.current]="currentTab===i"
+                                   (keyup)="autoTab($event, i, codeInput)"
+                                   (focus)="currentTab=i">
+                        </form>
+                    </div>
+                </div>
+
+                <div class="absolute alert-error"
+                     *ngIf="authCodeError.show">{{authCodeError.text | translate}}
+                </div>
+
+
+                <div class="but but-reset-pass" (click)="formSubmit($event,'code')" #resetBtn>
+                    <!--{{!(f2.form.valid && codeFit) ? 'opacity30' : ''}}-->
+                    <em class="base">{{'RESET PASSWORD' | translate}}</em>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+</main>
+

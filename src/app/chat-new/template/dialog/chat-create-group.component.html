@@ -1,0 +1,37 @@
+
+<div class="g-title">
+    <span class="f9-f">{{'CHANNEL NAME' | translate}}</span>
+    <em class="f14-f">{{'required' | translate}}</em>
+</div>
+<div class="se-input">
+    <label>
+        <input maxlength="50" class="current-color g-input-box-shadow" type="text" [(ngModel)]="chatTitle" (blur)="checkTitleValue()">
+    </label>
+</div>
+<p class="f33-f g-margin-top4">{{'Maximum 50' | translate}}</p>
+<p class="g-show-error-color g-margin-top5" *ngIf="titleError.isShow">{{titleError.text | translate}}</p>
+<div class="g-title">
+    <span class="f9-f">{{'INVITEES' | translate}}</span>
+    <em class="f14-f">{{'required' | translate}}</em>
+</div>
+<div class="se-input">
+   <dropdown-search
+           [dropdownOptions]="inviteList"
+           [dropdownSettings]="inviteSettings"
+           [selectedOptions]="selectedOptions"
+           (optionModelArrChange)="setSelectedOption($event)"
+   ></dropdown-search>
+</div>
+<p class="g-show-error-color g-margin-top5" *ngIf="userError.isShow">{{userError.text | translate}}</p>
+<div class="g-title">
+    <span class="f9-f">{{'TOPIC' | translate}}</span>
+    <em class="f14-f">{{'optional' | translate}}</em>
+</div>
+<label>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea di-textArea" data-maxLength="50" [class.current]="chatTopic.length > 0"
+                  [(ngModel)]="chatTopic" (blur)="checkTopicValue()"></textarea>
+    </div>
+</label>
+<p class="f33-f g-margin-top4">{{'Maximum 50' | translate}}</p>
+<p class="g-show-error-color g-margin-top5" *ngIf="topicError.isShow">{{topicError.text | translate}}</p>

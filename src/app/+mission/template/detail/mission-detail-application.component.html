@@ -1,0 +1,116 @@
+<div *ngIf="!isEditModel">
+    <div class="m-right-part g-style1" *ngIf="missionObj">
+        <span class="pull-right f13-f g-margin-right10 margin-top20">{{userRoleIntro}}</span>
+        <div class="m-right-part-desc">
+            <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+            <div class="clearfix m-right-part-desc-people g-margin-top10">
+                <div class="pull-left g-margin-right10">
+                    <profile-img [userInfo]="missionObj.creator_info?.user_info" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+                </div>
+                <div class="m-right-part-desc-info">
+                    <span class="f5-f">{{createFormatDate.hour}}:{{createFormatDate.minute}} {{createFormatDate.days}}
+                        {{createFormatDate.month}} {{createFormatDate.year}}</span>
+                    <em class="v9-f" *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_DONE)
+                                        && (missionObj.mission_status !== missionConstant.MISSION_STATUS_STORAGE)"
+                    >doing {{getStepTitle(missionObjDetail.current_step_info)}} step</em>
+                    <em class="v9-f" *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_DONE)
+                                        || (missionObj.mission_status === missionConstant.MISSION_STATUS_STORAGE)">This application is done</em>
+                </div>
+            </div>
+            <p class="v7-f m-right-part-con">
+                {{missionObjDetail.workflow_desc}}
+            </p>
+            <span class="f9-f g-margin-top20 g-display">{{'DESCRIPTION' | translate}}</span>
+            <p class="f13-f m-right-part-con1 g-margin-top10">
+                {{missionObj.description}}
+            </p>
+        </div>
+        <div class="clearfix date-time g-border-bottom-none g-padding20">
+            <div class="clearfix">
+                <div class="pull-left date-curr-time"  *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_TODO
+                   && missionObj.mission_status !== missionConstant.MISSION_STATUS_PENDING)">
+                    <span class="f13-f">{{'Start' | translate}}</span>
+                    <span class="pull-left f49-f">{{realStartFormatDate.day}}</span>
+                    <div class="date-t">
+                        <span class="f32-f">{{realStartFormatDate.month}} {{realStartFormatDate.year}}</span>
+                        <span class="f27-f">{{realStartFormatDate.hour}}:{{realStartFormatDate.minute}} {{realStartFormatDate.week}}</span>
+                    </div>
+                </div>
+                <div class="pull-left date-curr-time" *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_TODO
+                   || missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING)">
+                    <span class="f13-f">{{'Start' | translate}}</span>
+                    <span  class="pull-left f49-f g-margin-top4">{{'PENDING' | translate}}</span>
+                </div>
+                <div class="pull-right date-curr-time" *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_DONE
+                   || missionObj.mission_status === missionConstant.MISSION_STATUS_STORAGE)">
+                    <span class="f13-f">{{'End' | translate}}</span>
+                    <span class="pull-left f49-f">{{realEndFormatDate.day}}</span>
+                    <div class="date-t">
+                        <span class="f32-f">{{realEndFormatDate.month}} {{realEndFormatDate.year}}</span>
+                        <span class="f27-f">{{realEndFormatDate.hour}}:{{realEndFormatDate.minute}} {{realEndFormatDate.week}}</span>
+                    </div>
+                </div>
+                <div class="pull-right date-curr-time" *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_DONE
+                   && missionObj.mission_status !== missionConstant.MISSION_STATUS_STORAGE)">
+                    <span class="f13-f">{{'End' | translate}}</span>
+                    <span  class="pull-left f49-f g-margin-top4">{{'PENDING' | translate}}</span>
+                </div>
+            </div>
+            <i class="icon1-Shape-2 g-margin-top4"></i>
+            <div class="date-curr-time-est v9-f hide">
+                <span class="pull-left"  *ngIf="(missionObj.mission_status !== missionConstant.MISSION_STATUS_TODO
+                   && missionObj.mission_status !== missionConstant.MISSION_STATUS_PENDING)">
+                    <span class="f13-f">Act</span>
+                    <em>-1 days</em>
+                </span>
+                <span class="pull-right">
+                    <span class="f13-f">Act</span> <em>+23 hours</em>
+                </span>
+            </div>
+        </div>
+        <mission-detail-person [missionObj]="missionObj"></mission-detail-person>
+    </div>
+</div>
+
+<div *ngIf="isEditModel">
+    <div class="g-style1 g-padding20 m-a-type">
+        <div class="g-title g-padding-top0">
+            <span class="f9-f">{{'APPLICATION TYPE' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="se-input">
+            <div class="s-style1 g-input-box-shadow">
+                <div class="search-style1-warp">
+                    <div class="search-style1-list g-transition2 g-border4" *ngIf="applicationDetailData.chosenWorkflow.name">
+                        <span class="search-key f4-f"><i class="base">{{applicationDetailData.chosenWorkflow?.name}}</i></span>
+                        <span class="remove-but"  (click)="deleteTheWorkflow($event)"><i class="font-remove"></i></span>
+                    </div>
+                </div>
+            </div>
+            <div class="d-select" [class.hide]="!isShowSelectList" (click)="doSelectBox($event)">
+                <ul>
+                    <li class="se-title"><span>{{'INTERNAL' | translate}}</span></li>
+                    <li *ngFor="let internal of internalList" (click)="selectWorkflow(internal,$event)">
+                        {{internal?.name}}
+                    </li>
+                    <li class="se-title d-title-margin"><span>{{'COOPERATOR' | translate}}</span></li>
+                    <li *ngFor="let cooperator of cooperatorList" (click)="selectWorkflow(cooperator,$event)">
+                        {{cooperator?.name}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="g-title">
+            <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="100"
+                      [(ngModel)]="missionObj.description"></textarea>
+        </div>
+        <p class="f33-f">{{'Maximum 100' | translate}}</p>
+        <div class="g-title m-a-specification">
+            <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        </div>
+        <p class="f13-f m-a-specification-con">{{missionObjDetail.workflow_desc}}</p>
+    </div>
+</div>

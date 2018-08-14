@@ -1,0 +1,62 @@
+<body>
+<div class="login-reset-psd">
+    <header class="reset-psd-header">
+        <div class="pull-right">
+            <a href="javascript:;" [routerLink]="['/home/login']" class="pull-left font-page-esc font-page-esc2 psd-esc-color"></a>
+        </div>
+    </header>
+    <div class="login-show">
+        <div class="login-show-hd">
+            <h1><i class="icon1-color-big-password"></i><span class="f52-f">{{'Reset' | translate}}</span>
+                <span class="f53-f">{{'Your password' | translate}}</span>
+            </h1>
+            <!--<p><span class="f40-f">{{'Select' | translate}}</span><span-->
+                    <!--class="f54-f">{{'subsidiary' | translate}}</span><span-->
+                    <!--class="f40-f">{{'to build group' | translate}}</span></p>-->
+        </div>
+
+        <form action="" #f="ngForm" (ngSubmit)="save(f.value, f.valid)">
+            <div class="r-person-register-l clearfix">
+                <i class="line"></i>
+                <div class="login-show-user psd-wrap-width">
+                    <input type="password" class="r-person-register-info f49-f" style="background: none"
+                           (blur)="inputBlur($event,'p')"
+                           required
+                           minlength="8"
+                           name="password"
+                           #password="ngModel"
+                           reverse="true"
+                           (keydown)="formSubmit($event)"
+                           validateEqual="confirmPassword"
+                           [(ngModel)]="user.password"
+                    >
+                    <p [class.f52-f]="!showPsd" [class.f9-f]="showPsd" [class.scale-p]="showPsd" style="line-height: 50px;">
+                        {{'NEW PASSWORD' | translate}}
+                    </p>
+                    <div class="alert-error absolute" [hidden]="!password_error.isShow">{{password_error.text | translate}}</div>
+                </div>
+                <div class="login-show-pwd psd-wrap-width">
+                    <input type="password" value="" class="r-person-register-info f49-f" style="background:none"
+                           (blur)="inputBlur($event,'pc')"
+                           required
+                           minlength="8"
+                           name="confirmPassword"
+                           validateEqual="password"
+                           #confirmPassword="ngModel"
+                           [(ngModel)]="user.confirmPassword"
+                           (keydown)="formSubmit($event)"
+                    >
+                    <p [class.f52-f]="!showPsdConfirm" [class.f9-f]="showPsdConfirm" [class.scale-p]="showPsdConfirm" style="line-height: 50px;">{{'PASSWORD AGAIN' | translate}}</p>
+                    <div class="alert-error absolute" [hidden]="!confirmPassword_error.isShow">{{confirmPassword_error.text | translate}}</div>
+                </div>
+                <p class="g-show-error-color g-margin-top5" style="padding-left:20px;">{{errorText}}</p>
+                <div class="but but-create psd-login-btn"
+                   (click)="formSubmit($event)" #resetBtn>
+                    <em class="base">{{'RESET PASSWORD' | translate}}</em>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

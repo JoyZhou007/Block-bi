@@ -1,0 +1,40 @@
+
+<!--header start-->
+<company-header (parentSaveData)="doSaveData()" [setCouldEdit]="false"></company-header>
+<!--header end-->
+
+<!--section start-->
+<section class="clearfix g-width a-section">
+    <div class="pull-left a-analysis" style="width:100%;">
+        <div class="a-list-top">
+            <h3 class="f7-f">{{'COMPREHENSIVE CAPACITY' | translate}}</h3>
+        </div>
+        <div class="text-left"><img src="{{config.staticResourceDomain + 'assets/images/personal-analysis-img.jpg'}}"></div>
+        <div class="a-analysis-agree">
+            <span class="font-color-good"></span>
+            <em></em>
+            <span class="font-color-good"></span>
+        </div>
+        <ul class="a-analysis-list ct-analysis">
+            <li class="clearfix">
+                <span class="f9-f"><em class="base">{{'TOTAL INTERNAL MISSION' | translate}}</em></span>
+                <span class="f19-f"><em class="base">4</em></span>
+                <span class="v7-f"><em class="base">{{'Below' | translate}}</em></span>
+                <span class="f12-f"><em class="base">23.9%</em></span>
+            </li>
+            <li class="clearfix">
+                <span class="f9-f"><em class="base">{{'TOTAL EXTERNAL MISSION' | translate}}</em></span>
+                <span class="f19-f"><em class="base">222</em></span>
+                <span class="v7-f"><em class="base">{{'More than' | translate}}</em></span>
+                <span class="f12-f"><em class="base">99.9%</em></span>
+            </li>
+            <li class="clearfix">
+                <span class="f9-f"><em class="base">{{'BI average' | translate}}</em></span>
+                <span class="f19-f"><em class="base">3.4</em></span>
+                <span class="v7-f"><em class="base">{{'More than' | translate}}</em></span>
+                <span class="f12-f"><em class="base">99.9%</em></span>
+            </li>
+        </ul>
+    </div>
+</section>
+<!--section end-->

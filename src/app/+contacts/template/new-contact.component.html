@@ -1,0 +1,21 @@
+<div class="di-con">
+    <div class="clearfix di-people">
+        <profile-img [userInfo]="userInfo" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'RELATION' | translate}}</span>
+    </div>
+    <div class="">
+        <div class="f19-f" style="margin-top: -4px;">{{defaultVal | translate}}</div>
+        <div class="f19-f g-contact-company" *ngIf="isToAddCompanyFriend">{{userInfo.company_name}}</div>
+    </div>
+    <div class="clearfix di-new-contact">
+        <div class="g-title">
+            <span class="f9-f">{{'DIALOG MESSAGE' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="50" [(ngModel)]="friendRemarks"></textarea>
+        </div>
+        <p class="f33-f">{{'Maximum 50' | translate}}</p>
+    </div>
+</div>

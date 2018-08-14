@@ -1,0 +1,204 @@
+<!--侧边-->
+<section class="clearfix mission-warp calendar relative">
+    <!-- todo 引入日历控件 -->
+    <div class="pull-left m-left mission-left"
+         data-step="step_mission_list_2" id="step_mission_list_2"
+    >
+        <!--<bi-calendar [setOption]="{}" (doSelectDate)="changeFilterDate($event)"></bi-calendar>-->
+        <div class="m-pause-title">
+            <span class="icon1-pause"></span>
+            <span class="f16-f base">{{"Pause" | translate}}</span>
+        </div>
+        <perfect-scrollbar class="ps-container m-left-storage-list">
+            <ul class="m-left-pause-list">
+                <li class="clearfix m-left-hover" *ngFor="let pauseObj of tplPageDataPause">
+                    <div class="mission-left-task-list">
+                        <h2 class="f21-f" title="{{pauseObj.name}}">{{pauseObj.name}}</h2>
+                        <p class="clearfix"><span class="icon-board-{{pauseObj.typeClass}}"></span><span class="f5-f">
+                        {{pauseObj.typeTitle | translate}} {{pauseObj.last_update_locale_time}}
+                    </span>
+                        </p>
+                        <div class="m-left-storage-people"
+                             *ngIf="pauseObj.last_update_info.hasOwnProperty('user_info')">
+                            <span class="icon1-Shape-3"></span>
+                            <profile-img [userInfo]="pauseObj.last_update_info.user_info"
+                                         [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                    <div class="m-left-pause-pos">
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             *ngIf="pauseObj.type != missionConstant.MISSION_TYPE_APPLICATION && !pauseObj.is_observer"
+                             (click)="openMissionChatDialog($event,pauseObj)"
+                        >
+                            <span class="bi-icon-rectangle g-transition2 g-icon-center">
+                            </span>
+                        </div>
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             (click)="redirectToDetail($event, pauseObj)">
+                            <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                        </div>
+                    </div>
+                </li>
+                <div class="fo-no-data fo-no-data-calendar" *ngIf="!tplPageDataPause.length">
+                    <img src="{{config.staticResourceDomain + 'assets/images/Pause.png'}}">
+                    <p class="f41-f">{{'No Mission' | translate}}</p>
+                </div>
+
+            </ul>
+        </perfect-scrollbar>
+        <div class="m-storage-title">
+            <span class="font-storage"></span>
+            <span class="f16-f base">{{'Storage' | translate}}</span>
+        </div>
+        <perfect-scrollbar class="ps-container m-left-storage-list">
+            <ul class="">
+                <li class="clearfix m-left-hover" *ngFor="let storageObj of tplPageDataStorage">
+                    <div class="mission-left-task-list">
+                        <h2 class="f21-f" title="{{storageObj.name}}">{{storageObj.name}}</h2>
+                        <p class="clearfix"><span class="icon-board-{{storageObj.typeClass}}"></span><span class="f5-f">
+                        {{storageObj.typeTitle | translate}} {{storageObj.last_update_locale_time}}
+                    </span>
+                        </p>
+                        <div class="m-left-storage-people"
+                             *ngIf="storageObj.last_update_info.hasOwnProperty('user_info')">
+                            <span class="icon1-Shape-3"></span>
+                            <profile-img [userInfo]="storageObj.last_update_info.user_info"
+                                         [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                    <div class="m-left-storage-pos">
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             *ngIf="storageObj.type != missionConstant.MISSION_TYPE_APPLICATION  && !storageObj.is_observer"
+                             (click)="openMissionChatDialog($event,storageObj)"
+                        >
+                            <span class="bi-icon-rectangle g-transition2 g-icon-center"
+                            ></span>
+                        </div>
+                        <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             (click)="redirectToDetail($event, storageObj)">
+                        <span class="bi-icon-open g-transition2 g-icon-center" tooltip
+                              [tooltip]="{content: 'open', position:'top'}"></span>
+                        </div>
+                    </div>
+                </li>
+                <div class="fo-no-data fo-no-data-calendar" *ngIf="!tplPageDataStorage.length">
+                    <img src="{{config.staticResourceDomain + 'assets/images/storage.png'}}">
+                    <p class="f41-f">{{'No Mission' | translate}}</p>
+                </div>
+            </ul>
+        </perfect-scrollbar>
+        <!--<mission-link (showLink)="showMissionLink($event)" [showLinkTitle]="showLinkTitle"-->
+        <!--[class.hide]="!isShowMissionLink" #missionLink></mission-link>-->
+
+    </div>
+    <div class="m-right" #scrollToBottom>
+        <div class="m-task-status-list" *ngFor="let missionDataList of tplShownDataList; let i = index">
+            <div class="m-calendar-{{missionDataList.key}}-title f28-f">
+                <em class="base">{{missionDataList.title | translate}}</em>
+                <span class="f6-f">{{missionDataList.data.length}}</span>
+            </div>
+
+            <div class="fo-no-data mission-fo-no-data" *ngIf="!missionDataList.data.length">
+                <img src="{{config.staticResourceDomain}}assets/images/{{(i === 2) ? 'mission-empty-done' : (i === 0) ? 'mission-empty-todo' : 'mission-empty-doing'}}.png"/>
+                <!--3 women1-->
+                <p class="f41-f">{{'No Mission' | translate}}</p>
+            </div>
+            <!--<perfect-scrollbar class="ps-container m-calendar-right">-->
+                <ul class="m-calendar-right" [attr.p-type]="missionDataList.pageType">
+                    <li class="clearfix m-calendar-done-hover g-transition2 g-border4 cursor"
+                        *ngFor="let missionObj of missionDataList.data; let i = index;"
+                        (click)="redirectToDetail($event, missionObj)"
+                    >
+                        <div class="clearfix mission-left-task-list">
+                            <h2 class="f21-f" title="{{missionObj.name}}">
+                                {{missionObj.name}}</h2>
+                            <p class="clearfix"><span class="icon-board-{{missionObj.typeClass}}"></span>
+                                <span class="f5-f">{{missionObj.typeTitle | translate}} {{missionObj.last_update_locale_time}}
+                            </span>
+                            </p>
+                            <profile-img [userInfo]="missionObj.last_update_info.user_info"
+                                         [settings]="{show_work_name: true}"
+                                         *ngIf="missionObj.last_update_info.hasOwnProperty('user_info')"></profile-img>
+                        </div>
+                        <!-- 默认只显示description描述 -->
+                        <!--<div class="m-calendar-doing-warp" *ngIf="!missionObj.hasInited || missionObj.isLoadingDetail">-->
+                        <!--<span class="f9-f">{{'SPECIFICATION' | translate}}</span>-->
+                        <!--<p class="f13-f">-->
+                        <!--{{missionObj.description}}-->
+                        <!--</p>-->
+                        <!--</div>-->
+                        <!-- 获取详情后加载所有 -->
+                        <div>
+                            <mission-progress [eleData]="missionObj" [mode]="mode"></mission-progress>
+                            <div class="clearfix date-time">
+                                <div class="pull-left date-curr-time">
+                                    <span class="f13-f">{{'Start' | translate}}</span>
+                                    <div *ngIf="missionObj.startIsLink">
+                                        <span class="v8-f date-curr-conf">{{missionObj.startLinkInfo.name}}</span>
+                                    </div>
+                                    <div *ngIf="!missionObj.startIsLink">
+                                        <span class="pull-left f49-f">{{missionObj.startTimeInfo.day}}</span>
+                                        <div class="date-t">
+                                            <span class="f32-f">{{missionObj.startTimeInfo.month}} {{missionObj.startTimeInfo.year}}</span>
+                                            <span class="f27-f">{{missionObj.startTimeInfo.hour}}:{{missionObj.startTimeInfo.minute}} {{missionObj.startTimeInfo.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right date-curr-time">
+                                    <span class="f13-f">{{'End' | translate}}</span>
+                                    <div *ngIf="missionObj.endIsPending">
+                                        <span class="pull-left f49-f">{{'PENDING' | translate}}</span>
+                                    </div>
+                                    <div *ngIf="!missionObj.endIsPending">
+                                        <span class="pull-left f49-f">{{missionObj.endTimeInfo.day}}</span>
+                                        <div class="date-t">
+                                            <span class="f32-f">{{missionObj.endTimeInfo.month}} {{missionObj.endTimeInfo.year}}</span>
+                                            <span class="f27-f">{{missionObj.endTimeInfo.hour}}:{{missionObj.endTimeInfo.minute}} {{missionObj.endTimeInfo.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <i class="icon1-Shape-2"></i>
+                            </div>
+                            <i *ngIf="missionObj.delay && missionDataList.key === 'doing'"
+                               class="m-calendar-doing-line m-calendar-doing-line-color2"></i>
+                            <i *ngIf="!missionObj.delay && missionDataList.key === 'doing'"
+                               class="m-calendar-doing-line m-calendar-doing-line-color1"></i>
+                        </div>
+                        <div class="m-left-storage-pos">
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                                 *ngIf="missionDataList.key==='done' && missionObj?.creator_info?.user_info?.psid==userCurrentPsid">
+                              <span class="font-archive g-transition2 g-icon-center" tooltip
+                                    [tooltip]="{content: 'Storage', position:'top'}">
+                             </span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                                 *ngIf="!missionObj.is_observer && missionObj.type != missionConstant.MISSION_TYPE_APPLICATION"
+                                 (click)="openMissionChatDialog($event,missionObj)">
+                                <span class="bi-icon-rectangle g-transition2 g-icon-center" tooltip
+                                  [tooltip]="{content: 'chat', position:'top'}"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                                 (click)="redirectToDetail($event, missionObj)">
+                            <span class="bi-icon-open g-transition2 g-icon-center" tooltip
+                                  [tooltip]="{content: 'open', position:'top'}"></span>
+                            </div>
+
+                        </div>
+                        <div [class.hide]="!missionObj.isLoadingDetail">
+                            <loaders-css [loader]="'pacman'" [loaderClass]="'my-mission-loader'">
+                                <div class="loader-inner ball-pulse"></div>
+                            </loaders-css>
+                        </div>
+                    </li>
+                </ul>
+            <!--</perfect-scrollbar>-->
+            <div class="page-loader"
+                 [class.hide]="!(isLoading && isLoadingType !== '' && isLoadingType == missionDataList.pageType)"
+                 style="position: relative;">
+                <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                    <div class="loader-inner ball-pulse"></div>
+                </loaders-css>
+            </div>
+        </div>
+    </div>
+</section>

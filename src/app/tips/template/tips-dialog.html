@@ -1,0 +1,22 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="g-textArea-set" inputBlur>
+        <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="tipsSpecificationValue" #inputContent></textarea>
+        <p class="f33-f padding-top10">{{'Maximum 200' | translate}}</p>
+        <p class="hide" #inputError [class.g-show-error]="isShowContentError">{{'Content cannot be empty.' | translate}}</p>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+    </div>
+    <div >
+        <dropdown-search
+                [dropdownOptions]="shareList"
+                [dropdownSettings]="shareSettings"
+                [selectedOptions]="selectedOptions"
+                (optionModelArrChange)="setSelectedOption($event)"
+        ></dropdown-search>
+    </div>
+</div>

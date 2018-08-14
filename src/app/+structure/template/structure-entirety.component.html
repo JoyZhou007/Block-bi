@@ -1,0 +1,22 @@
+<div class="s-enirety-main clearfix" moveGroup [dataDiff]="300" [dataSteps]="5">
+  <div class="pull-left">
+    <!--绘图开始-->
+    <div  class="s-enirety-structure" id="drawing-wrap" [ngStyle]="{'margin-left': marginLeft}" #moveElement>
+      <div id="drawing" #drawingH>
+      </div>
+    </div>
+  </div>
+  <div class="s-enirety-left-button pull-left" #moveRightBut>
+    <!--<div class="but-page-prev icon1-Shape-3"></div>-->
+    <div class="but-page pull-left">
+      <span class="but-page-prev icon1-Shape-3"></span>
+    </div>
+  </div>
+  <div class="s-enirety-right-button pull-right" #moveLeftBut>
+    <!--<div class="but-page-next icon1-Shape-3"></div>-->
+    <div class="but-page pull-right">
+      <span class="but-page-next icon1-Shape-3"></span>
+    </div>
+  </div>
+</div>
+

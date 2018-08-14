@@ -1,0 +1,261 @@
+<div class="g-side-eject-width pull-left wo-center" *ngIf="workflowData">
+    <perfect-scrollbar class="ps-container wo-center-wrap" id="workflow-create-box">
+        <div style="height: 100%;" data-step="step_wk_3" id="step_wk_3">
+            <div class="wo-center-header f7-f" id="step-detail-0">{{(editType === isNewType ? 'CREATE' : 'MODIFY') | translate}}</div>
+            <div class="wo-center-tab">
+                <ul class="f46-f g-tab-radio normalLight" [class.g-tab-radio-an]="isConnect">
+                    <li [class.current]="!isConnect" (click)="toggleConnectOrNot()"><span class="base">{{'NO CONNECT' | translate}}</span><span></span>
+                    </li>
+                    <li [class.current]="isConnect" (click)="toggleConnectOrNot()"><span class="base">{{'CONNECT' | translate}}<span></span></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="wo-center-new clearfix">
+            <!-- Connect 下拉菜单 -->
+            <div data-step="step_wk_4" id="step_wk_4">
+                <div class="form-item" *ngIf="isConnect">
+                    <div class="g-title">
+                        <span class="f9-f">{{'CONNECT' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <dropdown-search *ngIf="connectDropdownOptions"
+                                     [dropdownOptions]="connectDropdownOptions"
+                                     [selectedOptions]="connectSelectedOptions"
+                                     [dropdownSettings]="connectDropdownSettings"
+                                     (optionModelArrChange)="setConnectExist($event)">
+                    </dropdown-search>
+                </div>
+                <div class="form-item" *ngIf="isConnect && connectSelectedOptions.length">
+                    <div class="g-title">
+                        <span class="f9-f">{{'CONNECTOR' | translate}}</span>
+                        <em class="f14-f">{{'required' |translate}}</em>
+                    </div>
+                    <dropdown-search *ngIf="externalConnecterDropdownOptions"
+                                     [dropdownOptions]="externalConnecterDropdownOptions"
+                                     [selectedOptions]="externalConnecterSelectedOptions"
+                                     [dropdownSettings]="externalConnecterDropdownSettings"
+                                     (optionModelArrChange)="setConnectExist($event, true)">
+                    </dropdown-search>
+                </div>
+                <div class="form-item">
+                    <div class="g-title">
+                        <span class="f9-f">{{'WORKFLOW NAME' | translate}}</span>
+                        <em class="f14-f">{{'required' |translate}}</em>
+                    </div>
+                    <div class="se-input">
+                        <input type="text" placeholder="{{'Payment application' | translate}}" class="g-input-box-shadow input-padding work-input-width"
+                               [(ngModel)]="workflowData.workflowName"
+                               (input)="setWorkflowName()"/>
+                    </div>
+                </div>
+                <div class="form-item" *ngIf="!isConnect">
+                    <div class="g-title">
+                        <span class="f9-f">{{'APPLICANT' | translate}}</span>
+                        <em class="f14-f">{{'required' | translate}}</em>
+                    </div>
+                    <dropdown-search *ngIf="applDropdownOptions"
+                                     [dropdownOptions]="applDropdownOptions"
+                                     [selectedOptions]="applSelectedOptions"
+                                     [dropdownSettings]="applDropdownSettings"
+                                     (optionModelArrChange)="setApplicantList($event)"></dropdown-search>
+                </div>
+                <div class="form-item">
+                    <div class="g-title">
+                        <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+                    </div>
+                    <div class="g-textArea-set">
+                        <textarea textareaHeight
+                                  class="g-textArea g-input-box-shadow input-padding"
+                                  data-maxLength="200"
+                                  placeholder="{{'Specification' | translate}}"
+                                  [class.current]="workflowData.workflowDescription"
+                                  [(ngModel)]="workflowData.workflowDescription"></textarea>
+                    </div>
+                    <div class="f33-f wo-start-one">
+                        {{'Maximum 200' | translate}}
+                        <p></p>
+                    </div>
+                </div>
+
+            </div>
+            <div class="wo-step-block"
+                 data-step="step_wk_5"
+                 *ngFor="let stepData of workflowData?.stepDataArr | slice:1; let stepCount=index;"
+                 id="{{'step-detail-' + (stepCount + 1)}}">
+                <div class="wo-block-title f11-f clearfix" [class.wo-block-title-hide]="title.isHide" toggleSelectGroup><!--添加wo-block-title-hide收起-->
+                    <span #title (click)="(title.isHide = !title.isHide);">
+                        <em class="pull-left">{{stepData.stepTitle}} step</em>
+                        <span class="font-selectbutton-line pull-left"></span>
+                    </span>
+                    <i class="wo-edit pull-right" #toggleSelectBut><!--(click)="toggleAddStep($event, stepCount + 1)"-->
+                        <span class="base">{{'edit' | translate}}</span><span class="font-edit wo-edit-icon"></span>
+                    </i>
+                    <div class="d-select d-select-add wo-edit-hide"   data-step="step_wk_6"  id="d-select-add" #toggleSelect>
+                        <ul #toggleSelectContent>
+                            <li (click)="addStep($event, stepCount+1, 0)"><span class="icon1-Shape-1"></span>
+                                <em class="base">{{'Add up step' | translate}}</em>
+                            </li>
+                            <li (click)="addStep($event, stepCount+1, 1)"><span class="icon1-Shape-1"></span>
+                                <em class="base">{{'Add down step' | translate}}</em>
+                            </li>
+                            <li class="d-select-remove {{((stepCount + 1) === 1) ? 'no-hide g-no-selected' : ''}}" (click)="deleteStep($event, stepCount + 1)">
+                                <div><span class="font-trash"></span><em class="base">{{'Remove this step' | translate}}</em></div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!--给wo-block-content添加.hide隐藏-->
+                <div class="wo-block-content" [class.hide]="title.isHide">
+                    <div class="form-item">
+                        <div class="g-title step-first-title">
+                            <span class="f9-f">{{'EXECUTOR' | translate}}</span>
+                            <em class="f14-f">{{'required' | translate}}</em>
+                        </div>
+                        <div class="g-transition2 wo-executor"
+                             *ngFor="let subStepDataExecutors of stepData.executors; let subStepCount = index;">
+                            <div class="externalFlow clearfix g-input-box-shadow">
+                                <!--添加.externalFlow-left-active展开-->
+                                <div class="externalFlow-left"
+                                     [class.externalFlow-left-active]="subStepDataExecutors.isExternal"
+                                     (click)="toggleStepIsExternal($event, subStepDataExecutors, executors, dropdownSearch);">
+                                    <div class="externalFlow-left-move externalFlow-left-move-active"></div>
+                                    <div class="externalFlow-left-des externalFlow-left-des-active">
+                                        {{(subStepDataExecutors.isExternal ? 'External flow': 'Internal flow') |
+                                        translate}}
+                                    </div>
+                                </div>
+                                <div class="externalFlow-right" *ngIf="subStepDataExecutors.isExternal">
+                                    <dropdown-search *ngIf="subStepDataExecutors.internalConnecter"
+                                                     [calcWindowHeight]="80"
+                                                     [dropdownSettings]="internalConnecterDropdownSettings"
+                                                     [dropdownOptions]="subStepDataExecutors.internalConnecter ? subStepDataExecutors.internalConnecter : []"
+                                                     [selectedOptions]="subStepDataExecutors.selectedConnecter"
+                                                     (optionModelArrChange)="clickStepExecutorConnecterList($event, subStepDataExecutors)"
+                                    ></dropdown-search>
+                                </div>
+                            </div>
+                            <div #executors class="g-transition2" [class.render-complete]="subStepDataExecutors.executorsOptions.length > 0"
+                                 [class.render-start]="subStepDataExecutors.executorsOptions.length == 0">
+                                <div #dropdownSearch>
+                                    <dropdown-search class="wo-executor-dropdown"
+                                     [class.hide]="!(subStepDataExecutors.executorsOptions && subStepDataExecutors.executorsOptions.length)"
+                                     [calcWindowHeight]="80"
+                                     [dropdownSettings]="subStepDataExecutors.executorsSettings"
+                                     [dropdownOptions]="subStepDataExecutors.executorsOptions ? subStepDataExecutors.executorsOptions : []"
+                                     [selectedOptions]="subStepDataExecutors.selectedExecutorsOptions"
+                                     (optionModelArrChange)="setStepExecutorList($event, stepCount + 1, subStepCount)"></dropdown-search>
+                                </div>
+                            </div>
+                            <div class="wo-executor-delete g-transition2"
+                                 (click)="deleteSubStep($event, stepCount + 1, subStepCount)"><!--取消hide显示删除按钮-->
+                                <span class="font-delete g-transition2" tooltip
+                                      [tooltip]="{content: 'Remove', position:'top'}"></span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="but but-add" (click)="addSubStep($event, stepCount + 1)"><span class="base">{{'ADD MORE EXECUTORS' | translate}}</span>
+                    </div>
+                    <div class="wo-refuse clearfix">
+                        <div class="form-item clearfix">
+                            <div class="wo-refuse-left pull-left">
+                                <div class="g-title">
+                                    <span class="f9-f">{{'REFUSE TO' | translate}}</span>
+                                </div>
+                                <div class="se-input" toggleSelectGroup [minusHeight]="80">
+                                    <div #toggleSelectBut>
+                                        <div class="se-input-select">
+                                            <span class="font-selectbutton-soildclose"></span>
+                                        </div>
+                                        <input type="text" placeholder="{{'Which step' | translate}}" readonly="true" class="g-input-box-shadow"
+                                               value="{{stepData.refuseGoToTitle | translate}}">
+                                        <!--[class.current]="stepData.refuseGoTo !== ''"-->
+                                    </div>
+                                    <div class="d-select" #toggleSelect>
+                                        <ul #toggleSelectContent>
+                                            <li *ngFor="let allStepData of workflowData?.stepDataArr | slice:0:stepCount + 1; let refuseStep = index;"
+                                                class="group-content"
+                                                [class.current]="stepData.refuseGoTo === refuseStep"
+                                                (click)="setStepRefuseGoTo($event, stepCount + 1, refuseStep)">
+                                                <span class="base">{{allStepData.stepTitle | translate}}</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="wo-refuse-right pull-right">
+                                <div class="g-title">
+                                    <span class="f9-f">{{'AUTOMATED RESPONSE' | translate}}</span>
+                                    <em class="f14-f">{{'required' | translate}}</em>
+                                </div>
+                                <!--去掉.m-r-c-claim-noactive展开-->
+                                <div class="clearfix m-r-c-claim g-input-box-shadow"
+                                     [class.m-r-c-claim-noactive]="!stepData.isAutoResponse">
+                                    <div class="pull-left m-claim m-r-c-claim-left"
+                                         (click)="setStepAutoMatedInfo($event, stepCount + 1)">
+                                        <em></em>
+                                    </div>
+                                    <div class="pull-left se-input m-r-c-claim-input relative" toggleSelectGroup [minusHeight]="80">
+                                    <div class="se-input-select" #toggleSelectBut>
+                                        <span class="f14-f pull-left">{{getAutoMateUnitTitle(stepCount + 1) | translate}}</span>
+                                        <span class="font-selectbutton-soildclose"></span>
+                                    </div>
+                                    <input class="current-color" type="text"
+                                           [(ngModel)]="stepData.autoResponseSettingUnitValue">
+                                        <div class="d-select" #toggleSelect>
+                                            <ul #toggleSelectContent>
+                                                <li (click)="setStepAutoMateUnit($event, stepCount + 1, 4)">
+                                                    <span  class="base">{{'Months' | translate}}</span></li>
+                                                <li (click)="setStepAutoMateUnit($event, stepCount + 1, 3)">
+                                                    <span  class="base">{{'Days' | translate}}</span></li>
+                                                <li (click)="setStepAutoMateUnit($event, stepCount + 1, 2)">
+                                                    <span  class="base">{{'Hours' | translate}}</span></li>
+                                                   <li (click)="setStepAutoMateUnit($event, stepCount + 1, 1)">
+                                                    <span class="base">{{'Minutes' | translate}}</span>
+                                                  </li>
+                                            </ul>
+                                        </div>
+
+                                    </div>
+                                    <div class="pull-left se-input m-r-c-claim-input relative se-input-right select-day"
+                                         toggleSelectGroup [minusHeight]="80">
+                                        <div #toggleSelectBut>
+                                            <div class="se-input-select">
+                                                <span class="font-selectbutton-soildclose"></span>
+                                            </div>
+                                            <input class="current-color" type="text" readonly="true">
+                                            <div class="wo-days">{{getAutoMateOperatorTitle(stepCount + 1) | translate}}</div>
+                                        </div>
+                                        <div class="d-select" #toggleSelect>
+                                            <ul #toggleSelectContent>
+                                                <li (click)="setStepAutoMateOperator($event, stepCount + 1, 1)"><span
+                                                        class="base">{{"To approve" | translate}}</span></li>
+                                                <li (click)="setStepAutoMateOperator($event, stepCount + 1, 0)"><span
+                                                        class="base">{{"To refuse" | translate}}</span></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
+
+    <div class="wo-btns clearfix">
+        <i class="g-btn-error" style="margin-left:20px;" title="{{btnFail | translate}}">{{btnFail | translate}}</i>
+        <div class="but but-done pull-right wo-btn-upload" saveDataGroup #saveDataElement (outSaveData)="uploadWorkflow(saveDataElement)"
+        >
+            <span class="base">{{"UPLOAD" | translate}}</span>
+            <i class="font-selectbutton-select but-status"></i>
+            <i class="font-remove but-status"></i>
+        </div>
+        <div class="but but-cancel pull-right" (click)="cancelForm()"><span class="base">{{"CANCEL" | translate}}</span>
+        </div>
+    </div>
+</div>

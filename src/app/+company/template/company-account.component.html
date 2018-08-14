@@ -1,0 +1,98 @@
+<div id="company-account-box" class="public-box">
+    <div class="account-profile-width">
+        <!--title start-->
+        <company-tabs></company-tabs>
+        <!--title end-->
+
+        <!--update start-->
+        <form name="currentCompanyInfo" #companyForm="ngForm">
+            <div class="account-warp">
+                <div class="personal-profile-mask"></div>
+                <div id="company-account">
+                    <div class="pull-left personal-company-left all-scroll-y" contentHeightDirective>
+                        <h5 class="public-title-h5 clearfix"><span class="pull-left">Licence Information</span></h5>
+                        <p class="company-permission-line"><span>That information is  invisable by all user, if you want to someone to view, you need to set permission</span></p>
+                        <h6 class="public-title-h6">BUSINESS LICENCE</h6>
+                        <strong class="company-cell"><a href="javascript:" (click) = "clickShowCert();">{{companyCreatorInfo.business_licence_path}}</a></strong>
+                        <div class="company-cert border-radius5">
+                            <img src="{{licensePath ? config.resourceDomain + licensePath : ''}}" (click) = "clickShowCert();" />
+                            <a class="public-icon" href="javascript:"></a>
+                        </div>
+                        <div class="dialog-bg-center {{showCompanyCer ? 'fadeIn show' : 'fadeOut hide'}}"></div>
+                        <div class="company-cert-fixed dialog-box-center hide transition2 {{showCompanyCer ? 'show zoomIn' : 'hide zoomOut'}}">
+                            <div class="company-cert-con transition2">
+                                <div class="public-close" (click) = "closeCompanyCert();"><a class="transition2" href="javascript:"></a></div>
+                                <img src="{{licensePath ? config.resourceDomain + licensePath : ''}}" />
+                                <div class="company-cert-bottom">
+                                    <img class="pull-left border-radius5" src="{{userPath ? config.resourceDomain + userPath : ''}}" />
+                                    <div class="pull-left">
+                                        <strong>{{companyCreatorInfo.work_name}}</strong>
+                                        <em>{{companyCreatorInfo.created}}</em>
+                                        <p>{{companyCreatorInfo.business_licence_path}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <h6 class="public-title-h6">TAX ID</h6>
+                        <input class="tax-id border-radius5 transition2" type="text" name="tax_id" [(ngModel)]="companyAccount.tax_id"/>
+                    </div>
+                    <div class="pull-right personal-company-right all-scroll-y" contentHeightDirective>
+                        <h5 class="public-title-h5 clearfix">
+                            <span class="pull-left">Bank Information</span>
+                            <a href="javascript:" class="pull-right" (click) = "addCompanyBank($event)">Add</a>
+                        </h5>
+                        <p class="company-permission-line"><span>Only finance staff and relation people can be visable those information</span></p>
+                        <div class="company-bank-list margin-bottom15 transition2">
+                            <h6 class="public-title-h6">BASIC ACCOUNT NUMBER<span>optional</span></h6>
+                            <a class="company-bank-del public-icon" href="javascript:"></a>
+                            <a class="company-bank-edit public-icon" href="javascript:"></a>
+                            <div class="account-number">
+                                <input class="border-radius5 account-number-input transition2" type="text" readonly value="3848 8483 8384 8384 342">
+                                <span>ICBC Bank</span>
+                            </div>
+                        </div>
+                        <div class="company-bank-list margin-bottom15 transition2">
+                            <h6 class="public-title-h6">BASIC ACCOUNT NUMBER<span>optional</span></h6>
+                            <a class="company-bank-del public-icon" href="javascript:"></a>
+                            <a class="company-bank-edit public-icon" href="javascript:"></a>
+                            <div class="account-number">
+                                <input class="border-radius5 account-number-input transition2" type="text" readonly value="3848 8483 8384 8384 342">
+                                <span>ICBC Bank</span>
+                            </div>
+                        </div>
+                        <div class="company-general-add margin-top40 hide" [class.show] = "companyAccountToggle">
+                            <h6 class="public-title-h6">ACCOUNT NAME</h6>
+                            <div class="company-general-border">
+                                <input type="text" class="border-radius4 transition2" value="">
+                            </div>
+                            <h6 class="public-title-h6">ACCOUNT NUMBER</h6>
+                            <div class="account-number margin-bottom20 company-account-bank-type">
+                                <input class="border-radius5 account-number-input transition2" type="teext" placeholder="3848 8483 8384 8384 342">
+                                <span (click) = "bankListToggle($event)">{{bankVal}} Bank</span>
+                                <ul class="public-select-style1 public-scroll-y hide" [class.show] = "bankListShow">
+                                    <li *ngFor = "let val of bankList; let i=index;" (click) = "selectBank(val.short_name, i)">{{val.name}}</li>
+                                </ul>
+                            </div>
+                            <div class="company-general-but text-right">
+                                <a class="border-radius4 company-general-cancel" href="javascript:" (click) = "companyAccountCancel()">Cancel</a>
+                                <a class="border-radius4 company-general-save transition2" href="javascript:" (click) = "saveBank()">Save</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--company-but start-->
+                    <div class="clearfix"></div>
+                    <div class="company-but">
+                        <a href="javascript:" class="pull-right border-radius5 transition2" (click) = "onSubmit()">Upload</a>
+                    </div>
+                    <!--company-but end-->
+                </div>
+            </div>
+        </form>
+        <!--update end-->
+
+        <!--photo start-->
+        <company-show></company-show>
+        <!--photo end-->
+    </div>
+</div>

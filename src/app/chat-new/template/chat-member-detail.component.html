@@ -1,0 +1,117 @@
+<div class="chat-popup chat-member" [class.chat-popup-hide]="showOrHide">
+    <div class="chat-popup-title chat-search-title clearfix">
+        <span class="pull-left f24-f chat-popup-title-name">{{'Member' | translate}}</span>
+        <span class="font-remove pull-right" (click)="closeDetail($event)"></span>
+    </div>
+    <div class="chat-popup-scroll">
+        <div class="chat-member-photo">
+            <img src="{{memberInfo ? memberInfo.user_profile_path : ''}}" alt="{{memberInfo.name}}">
+            <div class="chat-member-name">
+                <span class="chat-member-name-circle {{memberInfo.onlineStatusCls}}"></span>
+                <span class="f19-f"><em class="base">{{memberInfo.work_name}}</em></span>
+                <span class="g-float-none icon1-business-travel"
+                      *ngIf="showStates && memberInfo.state===userConstant.USER_SHOW_STATE_BUSINESS_TRAVEL"
+                >
+                    <em class="path1"></em>
+                    <em class="path2"></em>
+                    <em class="path3"></em>
+                    <em class="path4"></em>
+                    <em class="path5"></em>
+                    <em class="path6"></em>
+                    <em class="path7"></em>
+                    <em class="path8"></em>
+                    <em class="path9"></em>
+                    <em class="path10"></em>
+                    <em class="path11"></em>
+            </span>
+                <span class="g-float-none icon1-in-work"
+                      *ngIf="showStates && memberInfo.state===userConstant.USER_SHOW_STATE_IN_WORKING"
+                >
+                <em class="path1"></em>
+                <em class="path2"></em>
+                <em class="path3"></em>
+                <em class="path4"></em>
+                <em class="path5"></em>
+                <em class="path6"></em>
+                <em class="path7"></em>
+                <em class="path8"></em>
+                <em class="path9"></em>
+                <em class="path10"></em>
+                <em class="path11"></em>
+                <em class="path12"></em>
+                <em class="path13"></em>
+                <em class="path14"></em>
+                <em class="path15"></em>
+                <em class="path16"></em>
+                <em class="path17"></em>
+                <em class="path18"></em>
+                <em class="path19"></em>
+            </span>
+                <span class="g-float-none icon1-in-meeting"
+                      *ngIf="showStates && memberInfo.state===userConstant.USER_SHOW_STATE_IN_MEETING"
+                >
+                <em class="path1"></em>
+                <em class="path2"></em>
+                <em class="path3"></em>
+                <em class="path4"></em>
+                <em class="path5"></em>
+                <em class="path6"></em>
+                <em class="path7"></em>
+                <em class="path8"></em>
+                <em class="path9"></em>
+                <em class="path10"></em>
+                <em class="path11"></em>
+                <em class="path12"></em>
+                <em class="path13"></em>
+                <em class="path14"></em>
+                <em class="path15"></em>
+                <em class="path16"></em>
+                <em class="path17"></em>
+                <em class="path18"></em>
+                <em class="path19"></em>
+                <em class="path20"></em>
+                <em class="path21"></em>
+                <em class="path22"></em>
+            </span>
+                <span class="g-float-none icon1-vacation2"
+                      *ngIf="showStates && memberInfo.state===userConstant.USER_SHOW_STATE_VACATION"
+                >
+                <em class="path1"></em>
+                <em class="path2"></em>
+                <em class="path3"></em>
+                <em class="path4"></em>
+                <em class="path5"></em>
+                <em class="path6"></em>
+                <em class="path7"></em>
+                <em class="path8"></em>
+            </span>
+            </div>
+        </div>
+        <div class="chat-member-place clearfix">
+            <span class="font-calendar-location pull-left"></span>
+            <span class="pull-left chat-member-place-placename f5-f">{{memberInfo.location}}</span>
+            <span class="pull-left chat-member-place-time f5-f">+2:00</span>
+            <span class="bi-icon-rectangle pull-right" *ngIf="isFriendRelation" (click)="switchToChat($event)"></span>
+            <span class="chat-member-place-view pull-right f4-f" (click)="viewProfile($event)"><em class="base">{{'VIEW PROFILE' | translate}}</em></span>
+        </div>
+        <div class="ch-member-position">
+            <p class="clearfix" *ngIf="memberInfo.form === 2">
+                <em class="pull-left f9-f">{{'COMPANY NAME' | translate}}</em>
+                <span class="pull-left f19-f" title="{{memberInfo.position}}"><em class="base">{{memberInfo.company_name}}</em></span>
+            </p>
+            <p class="clearfix" *ngIf="memberInfo.form === 2">
+                <em class="pull-left f9-f">{{'POSITION' | translate}}</em>
+                <span class="pull-left f19-f" title="{{memberInfo.position}}"><em class="base">{{memberInfo.position}}</em></span>
+            </p>
+            <p class="clearfix">
+                <em class="pull-left f9-f">{{(memberInfo.form === 1 ? 'PERSONAL' : 'WORK') | translate}} {{'EMAIL' | translate}}</em>
+                <span class="pull-left f19-f" title="{{memberInfo.email}}"><em class="base">{{memberInfo.email}}</em></span>
+            </p>
+            <p class="clearfix">
+                <em class="pull-left f9-f">{{(memberInfo.form === 1 ? 'PERSONAL' : 'WORK') | translate}} {{'PHONE' | translate}}</em>
+                <span class="pull-left f19-f" title="{{memberInfo.phone}}"><em class="base">{{memberInfo.phone}}</em></span>
+            </p>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,65 @@
+<div class="ch-msg-send" [class.ch-msg-send-current]="isChMsgSendCurrent" #textareaWarp DragDropDirective
+  (outDrop)="inputChangeEvent($event)">
+    <div class="ch-at" [class.hide]="forbiddenAT || (!forbiddenAT && !showAtList)">
+        <h3 class="f7-f">@ TO</h3>
+        <ul #atUserListElement>
+            <li *ngFor="let atUser of atUserList; let i = index;"
+                class="clearfix"
+                [class.hide]="atUser.filtered"
+                [class.current]="i == activeAtUserIdx"
+                (click)="clickSetAtUser($event, i, input)">
+                <figure class="pull-left">
+                    <img class="pull-left"
+                         src="{{atUser.user_profile_path ? appConfig.resourceDomain + atUser.user_profile_path : ''}}">
+                    <figcaption class="pull-left f32-f">{{atUser.work_name}}</figcaption>
+                </figure>
+                <em class="pull-right {{atUser.onlineStatusCls}}"></em>
+            </li>
+        </ul>
+    </div>
+    <!--<div contenteditable="true" id="tar_box" class="textAreaWrap" (click)="focusToTextArea($event)">-->
+         <textarea #input [attr.rows]="textAreaRows" (input)="messageData" [value]="messageData" style="resize: none;"
+                   (paste)="pasteEvent($event,input)"
+                   (keydown)="detectKeyDownChange($event, input)"
+                   (focus)="textAreaEvent('focus')"
+                   (blur)="textAreaEvent('blur')"
+                   (keypress)="detectKeyPressChange($event, input)"
+                   (keyup)="detectKeyUpChange($event, input)"
+                   (input)="textAreaInput($event)">
+        </textarea>
+    <span class="icon1-emoji1"></span>
+    <span class="icon1-emoji2"
+          [(emojiPickerIf)]="emojiPanelInit && openEmoji"
+          (emojiPickerSelect)="handleEmojiSelection($event)"
+          [class.current]="ele.showEmoji" tooltip [tooltip]="{content: 'emoji', position:'top'}"
+          (click)="showEmoji($event)"
+          (mouseout)="(ele.showEmoji = !ele.showEmoji)"
+          (mouseover)="(ele.showEmoji = !ele.showEmoji)" #ele>
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                        <em class="path3"></em>
+                        <em class="path4"></em>
+                        <em class="path4"></em>
+                        <em class="path5"></em>
+                        <em class="path6"></em>
+                    </span>
+    <div *ngIf="isNotInMail" toggleSelectGroup [currClass]="'send-msg-current'">
+        <span class="font-chatinput" #toggleSelectBut></span>
+        <div class="d-select d-chat-select" #toggleSelect>
+            <ul #toggleSelectContent>
+                <!-- 视频会议 -->
+                <li class="hide"><span class="icon1-Group"></span><em class="base">{{'Conference' | translate}}</em></li>
+                <li (click)="createChatPost($event)"><span class="icon-title-post"></span><em class="base">{{'Post' | translate}}</em></li>
+                <li (click)="importFileFromBi($event)"><span class="bi-icon-import"></span><em class="base">{{'Import files from BI' | translate}}</em></li>
+                <li (click)="uploadChatFile($event,fileInput)"><span class="bi-icon-upload"></span><em class="base">{{'Upload files' | translate}}</em></li>
+                <li><span class="icon1-Shape"></span><em class="base">{{'Clear message' | translate}}</em></li>
+            </ul>
+            <input type="file" class="hide" (change)="inputChangeEvent(fileInput, $event)" #fileInput>
+        </div>
+    </div>
+
+</div>
+<div class="chat-tips f33-f padding-top10 pull-right">
+    <span *ngIf="errorMsg">{{errorMsg | translate}}</span>
+    <span *ngIf="!errorMsg">{{'Maximum 600' | translate}}</span>
+</div>

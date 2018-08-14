@@ -1,0 +1,303 @@
+<div class="ch-image-warp" *ngIf="messageData">
+    <!--头部开始-->
+    <header class="g-header">
+        <div class="pull-left">
+            <div class="ch-h-i-like">
+                <span class="font-like" tooltip [tooltip]="{content: 'Like', position:'bottom'}"
+                      *ngIf="!isLiked"
+                      (click)="doLikeTheImage($event)"></span>
+                <span class="font-like font-like-selected" tooltip [tooltip]="{content: 'Like', position:'bottom'}"
+                      *ngIf="isLiked" tooltip [tooltip]="{content: 'unlike', position:'bottom'}"
+                      (click)="doLikeTheImage($event)"></span>
+                <span class="f27-f ch-h-i-like-num">
+                    {{likeCount > 999 ? 999 :likeCount}}
+                    <span
+                            *ngIf="likeCount > 999">+</span> <em>{{'Like' | translate}}</em></span>
+            </div>
+            <div class="ch-h-i-personal pull-left">
+                <profile-img [userInfo]="imageOwner" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                <div class="clearfix ch-h-i-personal-info">
+                    <span class="f19-f">{{imageOwner?.work_name}}</span>
+                    <span class="f5-f"> {{messageData.hour}}:{{messageData.minute}}{{messageData.ap}} {{messageData.day}} {{messageData.month}}</span>
+                    <span class="font-pin1 cursor" *ngIf="!messageData.hasPin" (click)="pinTheImage($event)"></span>
+                    <span class="icon1-chat-pin ch-msg-icon cursor"
+                          style="color: #EF428D"
+                          *ngIf="messageData.hasPin"
+                          (click)="pinTheImage($event)"></span>
+                </div>
+                <div class="clearfix ch-h-i-personal-info">
+                    <span class="v7-f">{{'Upload' | translate}}</span>
+                    <span class="f19-f ch-h-i-personal-name">{{imageInfo.file_name}}</span>
+                    <span class="bi-icon-edit hide"></span>
+                </div>
+                <div class="edit-type hide">
+                    <input type="text" value="Type your post name in here">
+                    <span>{{'Enter to submit, ESC to cancel' | translate}}</span>
+                </div>
+            </div>
+            <div class="ch-h-i-dep ch-h-i-dep-icon pull-left" style="margin-top: 30px;">
+                <span class="f19-f">{{currentItem.isFriend ? currentItem.work_name : currentItem.name}}
+                <span *ngIf="!currentItem.isFriend">
+                    <span class="ch-h-icon font-chat-business chat-image-icon-margin"
+                          *ngIf="currentItem.is_mission !='1' && currentItem.form == 2 ">
+                    </span>
+                    <span class="ch-h-icon font-chat-mission1 chat-image-icon-margin"
+                          *ngIf="currentItem.is_mission =='1'">
+                    </span>
+                    <span class="ch-h-icon font-chat-private chat-image-icon-margin"
+                          *ngIf="currentItem.is_mission !='1' && currentItem.form == 1 ">
+                    </span>
+                </span>
+                    </span>
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="pull-left g-header-icon">
+                <div class="pull-left">
+                    <span class="g-header-icon-list font-trash g-trash"
+                          tooltip [tooltip]="{content: 'delete file', position:'bottom'}"
+                          (click)="deleteTheMessage($event)">
+                    </span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list font-archive"
+                          tooltip [tooltip]="{content:'archive', position:'bottom'}"
+                          (click)="archiveToFolder($event)"
+                          >
+                    </span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list bi-icon-download"
+                          tooltip [tooltip]="{content: 'download', position:'bottom'}"
+                          (click)="downloadTheImage($event)"
+                          >
+                    </span>
+                </div>
+                <div class="pull-left" [class.header-alarm]="isChangeCursor">
+                    <span class="g-header-icon-list font-tag"
+                          tooltip [tooltip]="{content: 'Tag', position:'bottom'}" (click)="startTag($event)">
+                    </span>
+                </div>
+                <div class="pull-left" (click)="forwardTheMessage($event,messageData)">
+                    <span class="g-header-icon-list font-forward"
+                          tooltip [tooltip]="{content: 'forward', position:'bottom'}"
+                    ></span>
+                </div>
+                <div class="pull-left" [class.header-alarm]="isShowCommentList">
+               <span class="g-header-icon-list g-icon-width24 g-icon-position-1"
+                     tooltip [tooltip]="{content: 'comments', position:'bottom'}"
+                     (click)="showImgComment($event)">
+                    <i class="g-transition2 font-comments-1">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                        <em class="path3"></em>
+                    </i>
+               </span>
+                </div>
+            </div>
+            <a href="javascript:;" class="pull-left font-page-esc" (click)="closeImageDialog()"></a>
+        </div>
+    </header>
+    <!--头部结束-->
+    <!--主要内容开始-->
+    <div class="ch-post-main" [class.ch-post-main-width]="!isShowCommentList">
+        <!--左侧-->
+        <div class="ch-post-left pull-left">
+            <div class="but-page pull-left"
+                 [class.disable-but]="!isHasPrevData || (!hasBeforeData && currentIdx===0)"
+            >
+                <span class="but-page-prev icon1-Shape-3"
+                      (click)="clickSwitchToBefore($event)"
+                ></span>
+            </div>
+            <div class="pull-left ch-image relative" style="max-height: 100%;max-width: 100%;" #imageForm>
+                <div class="ch-image-warp" [class.g-opacity0]="!isShowImage" [class.hide]="isLoadImg">
+                    <div style="position: relative;max-width: 90%;margin: 76px 0" #imgForm>
+                        <img src="{{imageInfo.file_path ? appConfig.resourceDomain + imageInfo.file_path : ''}}"
+                             style="max-width: 100%"
+                             (click)="showTagEditBox($event)"
+                             (mousedown)="showShortCut($event)"
+                             (mouseup)="cancelShortCut($event)"
+                             [class.cursor-icon]="isChangeCursor"
+                             draggable="false"
+                             #showImg
+                        >
+                        <!---------tags------------>
+                        <div *ngFor="let tagInfo of tagArr;let i=index" (click)="stopPropagation($event)">
+                            <div class="ch-image-pin"
+                                 [ngStyle]="{'top': tagInfo.height+'%', 'left': tagInfo.width+'%'}"
+                                 style="margin-left: 15px;"
+                            >
+                            <span class="ch-image-pin-arrow
+                             ch-image-pin-arrow-color3"
+                                  [ngStyle]="{'background-color': tagInfo.color}"
+                            ></span>
+                                <div class="ch-image-pin-default "
+                                     [class.hide]="tagInfo.isShowTagDetail"
+                                     (click)="showTagDetail($event,tagInfo,i)">
+                                    <div class="f36-f ch-image-pin-bg">
+                                    <span class="ch-image-pin-text">
+                                        <em class="base">{{tagInfo.spec}}</em>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="clearfix ch-image-pin-show"
+                                     style="z-index: 2"
+                                     (click)="stopPropagation($event)"
+                                     [class.hide]="!tagInfo.isShowTagDetail">
+                                    <span class="f36-f ch-image-pin-show-spe">{{tagInfo.spec}}</span>
+                                    <span class="f47-f ch-image-pin-show-website">
+                                    <a (click)="openTagHref($event,tagInfo.url)"
+                                       style="color: #5E66D1;cursor: pointer">{{tagInfo.url}}
+                                    </a>
+                                </span>
+                                    <img class="pull-left"
+                                         src="{{tagInfo?.user_profile_path ? appConfig.resourceDomain + tagInfo?.user_profile_path : ''}}"/>
+                                    <span class="pull-left f5-f ch-image-pin-show-time">
+                                    {{tagInfo.hour}}:{{tagInfo.minute}}{{tagInfo.ap}} {{tagInfo.day}} {{tagInfo.month}}
+                                </span>
+                                    <span class="bi-icon-edit" (click)="editTheTag($event,tagInfo)"></span>
+                                    <span class="font-delete" (click)="deleteTheTag($event,tagInfo)"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="di-warp m-map-dialog"
+                         #EditTab
+                         style="margin-left: 0"
+                         [class.hide]="!isTabShow">
+                        <div class="di-vertical-align">
+                            <div class="di-warp-style">
+                                <h2>
+                                    <span class="f11-f">{{'TAG' | translate}}</span>
+                                    <em class="font-page-esc-small add-pointer"
+                                        (click)="closeTagTab($event)">
+                                    </em>
+                                </h2>
+                                <div class="di-con">
+                                    <div class="g-title g-padding-top0">
+                                        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+                                    </div>
+                                    <div class="g-textArea-set">
+                                        <textarea textareaHeight class="g-textArea" data-maxLength="30"
+                                                  [(ngModel)]="imgTagSpec"></textarea>
+                                    </div>
+                                    <p class="f33-f">{{'Maximum 30' | translate}}</p>
+                                    <div class="g-title">
+                                        <span class="f9-f">{{'URL' | translate}}</span>
+                                    </div>
+                                    <div class="clearfix se-input">
+                                        <input type="text" placeholder="http://" [(ngModel)]="imgTagUrl"
+                                               (focus)="focusInput($event)">
+                                    </div>
+                                    <p class="f33-f">{{'url begin with' | translate}}</p>
+                                </div>
+                                <div class="di-but">
+                                    <div class="but but-cancel" (click)="closeTagTab($event)"><em
+                                            class="base">{{'CANCEL' | translate}}</em></div>
+                                    <div class="but but-send" (click)="createImgTag($event)"><em
+                                            class="base">{{'UPLOAD' | translate}}</em></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ch-image-warp g-chat-img-loading"
+                     [class.image-toggle-wrap]="!isLoadImg"
+
+                >
+                    <div class="loader-wrap" style="height: 100vh" *ngIf="isLoadImg">
+                        <div class="loader" style="top: 50%; margin-top: -50px;">
+                            <loaders-css [loader]="'ball-scale-ripple-multiple'" [loaderClass]="'my-loader-tips'">
+                                <div class="loader-inner ball-pulse"></div>
+                            </loaders-css>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="but-page pull-right "
+                 [class.disable-but]="!isHasNextData || (!hasAfterData && currentIdx===imgDataList.length - 1)"
+            >
+                <span class="icon1-Shape-3 but-page-next"
+                      (click)="clickSwitchToAfter($event)"
+                ></span>
+            </div>
+        </div>
+        <!--右侧-->
+        <div class="ch-post-right pull-right"><!--添加.隐藏-->
+            <!--comments-->
+            <div class="ch-post-comments">
+                <div class="ch-post-title f24-f">
+                    {{'Comments' | translate}}
+                    <span class="font-remove" (click)="closeImageComment($event)"></span>
+                </div>
+                <div class="ch-post-content" #commentScroll>
+                    <div class="mini-dialog-loading" [class.hide]="!isLoading">
+                        <div class="loader">
+                            <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                                <div class="loader-inner ball-pulse"></div>
+                            </loaders-css>
+                        </div>
+                    </div>
+                    <div class="ch-message " *ngIf="loadEnd && commentLists.length !== 0">
+                        <div class="ch-msg-time">
+                            <div class="ch-msg-time-event">
+                                <span class="c1-f">{{'No More Message' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ch-post-comments-wrap">
+                        <!--comments list-->
+                        <div class="ch-post-comments-empty" *ngIf="commentLists.length === 0"><!--添加.hide隐藏-->
+                            <img src="{{appConfig.staticResourceDomain + 'assets/images/comments.png'}}">
+                        </div>
+                        <div class="ch-post-comments-list" *ngIf="commentLists.length !== 0">
+                            <dl class="clearfix" *ngFor="let comment of commentLists">
+                                <dt>
+                                    <profile-img [userInfo]="comment?.userInfo"
+                                                 [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                                </dt>
+                                <dd>
+                                    <div class="comments-username" toggleSelectGroup [currClass]="'current'">
+                                        <span class="f19-f">{{comment?.userInfo?.work_name}}</span>
+                                        <em class="f5-f">{{comment.hour}}:{{comment.minute}}{{comment.ap}}
+                                            {{comment.day}} {{comment.month}}</em>
+                                        <em class="font-more" #toggleSelectBut></em>
+                                        <div class="d-select" #toggleSelect>
+                                            <ul #toggleSelectContent>
+                                                <li><em class="base">{{'Forward' | translate}}</em></li>
+                                                <li><em class="base">{{'@' | translate}}</em></li>
+                                                <li><em class="base">{{'Pin it' | translate}}</em></li>
+                                                <li><em class="base">{{'Remind you' | translate}}</em></li>
+                                                <li class="d-select-remove"
+                                                    *ngIf="comment.owner === userData?.user.uuid || comment.owner === userData?.locationCompany.psid"
+                                                    (click)="deleteTheImageComment($event,comment)"
+                                                ><em class="base">{{'Remove this message' | translate}}</em>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <p class="f20-f comments-usercomment" [innerHTML]="comment.content"></p>
+                                </dd>
+                            </dl>
+                        </div>
+                        <!--fixed input-->
+                    </div>
+                    <div class="ch-post-comments-input">
+                        <div class="pull-right s-style1 search-border">
+                            <input class="f26-f"
+                                   type="text"
+                                   (focus)="focusCommentInput()"
+                                   (blur)="blurCommentInput()"
+                                   [(ngModel)]="sendCommentTxt"
+                                   placeholder="{{'Comments' | translate}}">
+                            <span class="icon-input-return" (click)="sendImageComment()"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--主要内容结束-->
+</div>
+

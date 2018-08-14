@@ -1,0 +1,119 @@
+<div class="date multiDate fixCalendar" #dateForm (click)="onClickEmpty($event)">
+    <div class="clearfix date-top" (click)="onClickDateTop($event)">
+        <a class="date-top-but date-top-prev font-page-next-small add-pointer"
+           (click)="setShowDate(1, $event)"
+           (mousedown)="onHourMouseDown('left',$event)"></a>
+        <div class="pull-left date-top-warp">
+            <div class="data-top-month" #dataMonth>
+                <em (click)="showSelectMonth($event)">{{dateWord.month[showDateIn.month]}}</em>
+                <!--month-->
+                <div class="d-select date-month single-date-month month-position">
+                    <ul class="hide d-select date-month" #selectMonth>
+                        <li *ngFor="let month of dateWord.month; let i = index" (click)="setShowMonth(i)"
+                            [class.calendar-year-active]='month ===dateWord.month[showDateIn.month]'
+                        >
+                            <span class="base">{{month}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="data-top-year" #dataYear>
+                <em (click)="showSelectYear($event)">{{showDateIn.year}}</em>
+                <!--year-->
+                <div class="d-select date-year single-date-year year-position">
+                    <ul class="hide" #selectYear>
+                        <li *ngFor="let year of showSelectYearArr" (click)="setShowYear(year)"
+                            [class.calendar-year-active]='year === showDateIn.year'
+                        >
+                            <span class="base">{{year}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <a class="date-top-but date-top-next font-page-next-small add-pointer"
+           (click)="setShowDate(2, $event)"
+           (mousedown)="onHourMouseDown('right',$event)"></a>
+    </div>
+    <ul class="clearfix f5-f date-week">
+        <li>su</li>
+        <li>mo</li>
+        <li>tu</li>
+        <li>we</li>
+        <li>th</li>
+        <li>fr</li>
+        <li>sa</li>
+    </ul>
+    <ul class="clearfix f39-f date-list">
+        <li *ngFor="let date of showDate,let i=index"
+            [class.hide]="date.isHide"
+            [class.date-list-gray]="(date.before || date.after) && (!date.isBeforeToday || todayBefore)"
+            [class.hasdone]="date.done"
+            [class.todo]="date.todo"
+            [class.date-list-left]="date.selectedStart || i%7 == 0 || (date.leftRadius && !date.done && !date.todo && (!date.isBeforeToday || resignation) )"
+            [class.date-list-right]="date.selectedEnd || i%7 == 6 || date.lastBeforeToday || (date.rightRadius  && !date.done && !date.todo && (!date.isBeforeToday || resignation))"
+            [class.current]="date.isToday"
+            [class.enddate]="date.selectedEnd"
+            [class.selected]="date.selected"
+            [class.add-margin]="date.hasMargin"
+            [class.beforeToday]="date.isBeforeToday && !resignation"
+            [class.no-background]="date.noBackground"
+            (click)="onClickEvent(date, i, $event)"
+        >
+            <span
+            [class.done-background]="date.spanDoneBg"
+            [class.todo-background]="date.spanTodoBg"
+            [class.gray-background]="date.spanGrayBg"
+            [class.gone-background]="date.spanGoneBg && !resignation"
+            > {{date.selectedCurrent ? '' : date.monthDay}}</span>
+            <em></em>
+            <p class="date-left" [class.done-background]="date.leftDoneBg"
+               [class.todo-background]="date.leftTodoBg"
+               [class.gray-background]="date.leftGrayBg"
+               [class.gone-background]="date.leftGoneBg && !resignation"></p>
+            <p class="date-right" [class.done-background]="date.rightDoneBg"
+               [class.todo-background]="date.rightTodoBg"
+               [class.gray-background]="date.rightGrayBg"
+               [class.gone-background]="date.rightGoneBg && !resignation"></p>
+        </li>
+    </ul>
+    <div class="but but-select-done" (click)="selectDone($event)">
+        <span class="base g-clearStyle">{{'DONE' | translate}}</span>
+    </div>
+    <div class="but but-select-done" *ngIf="!resignation" (click)="cancelAlarm($event)" [class.g-no-access]="!hasAlarm">
+        <span class="base g-clearStyle">{{'REMOVE' | translate}}</span>
+    </div>
+    <div class="date-h-m" [style.left.px]="showHourLeft" [style.top.px]="showHourTop" [class.hide]="!isShowHour">
+        <div class="date-hour clearfix">
+            <div class="date-h-m-title f13-f">{{'Hour' | translate}}</div>
+            <div class="date-h-m-content clearfix" elementRolling [offsetLength]="hourOffset">
+                <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut></a>
+                <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour">
+                    <ul class="date-list clearfix date-list-new" #rollContent>
+                        <li *ngFor="let hour of hourList,let i = index" (click)="onHourClick($event,i)"
+                            [class.selected]="hour.selected"
+                        >
+                            <span>{{hour.hour}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut></a>
+            </div>
+        </div>
+        <div class="date-minute date-hour clearfix">
+            <div class="date-minute-line"></div>
+            <div class="date-h-m-title f13-f">{{'Minute' | translate}}</div>
+            <div class="date-h-m-content clearfix">
+                <div class="date-h-m-content-nums pull-left">
+                    <ul class="date-list clearfix date-list-new">
+                        <li *ngFor=" let minute of minuteList,let i=index"
+                            [class.selected]="minute.selected"
+                            (click)="onClickMinute($event,i)">
+                            <span>{{minute.minute}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

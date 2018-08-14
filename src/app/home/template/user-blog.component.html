@@ -1,0 +1,20 @@
+<div class="product price">
+    <div class="login">
+        <div class="login-filter"></div>
+        <div class="login-wrap">
+            <!--头部开始-->
+            <home-header></home-header>
+            <!--头部结束-->
+            <!--main start-->
+            <div class="blog g-transition2" [class.login-filter]="!isShowContactUs">
+                <img src="{{config.staticResourceDomain + 'assets/images/blog.png'}}" alt="">
+            </div>
+            <user-footer [isShowContactUs]="isShowContactUs" (OutShowContact)="clickShowContactUs($event)"
+                         [joinUs]="true" [isProduct]="true"></user-footer>
+            <!--S contact-us-->
+            <user-contact #contactUs (OutCloseContact)="clickShowContactUs()" [isProduct]="true"></user-contact>
+            <!--E contact-us-->
+        </div>
+    </div>
+
+</div>

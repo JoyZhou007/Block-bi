@@ -1,0 +1,166 @@
+<!--header start-->
+<header class="g-header at-header">
+    <div class="pull-left m-header-title" style="min-width: 265px;">
+        <div class="clearfix">
+            <span class="icon1-title-attendance"></span>
+            <span class="pull-left f18-f">{{'ATTENDANCE' | translate}}</span>
+        </div>
+        <p class="f17-f g-title-des">Last update 20:00am 20th Jul</p>
+    </div>
+    <div class="g-search-wrap-width">
+        <div class="pull-left g-search-wrap">
+            <span class="font-search-blue1"></span>
+            <span class="font-remove" *ngIf="searchText" (click)="onCloseSearch($event)"></span>
+            <input class="f26-f g-font-normal f-color-dark" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchText">
+        </div>
+    </div>
+
+    <div class="pull-right">
+        <div class="pull-left g-header-icon">
+            <div class="pull-left">
+                <span class="g-header-icon-list icon1-but-QR2" tooltip [tooltip]="{content:'QR code', position:'bottom'}"></span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-setting" (click)="setWorkTime($event)"
+                      tooltip [tooltip]="{content:'set work time', position:'bottom'}"
+                ></span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-help" tooltip [tooltip]="{content:'help', position:'bottom'}"></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+    </div>
+</header>
+<!--header end-->
+
+<!--section start-->
+<main class="at-section">
+
+        <div class="pull-left at-left relative scroll-element">
+            <div class="absolute" #calendarProfile>
+                <bi-calendar-profile
+                        [multiselectOption]="multiCalendar"
+                        (outSelectData)="getSelectData($event)"
+                        (outDefault)="getOutDefault()"
+                        *ngIf="isShowCalendar">
+                </bi-calendar-profile>
+            </div>
+            <ul class="m-a-side-date">
+                <li class="m-a-side-date-item cursor stop-element" #dateTimeFirst (click)="showMultiCalendar($event,'start', dateTimeFirst)">
+                    <div class="pull-left date-curr-time">
+                        <span class="f13-f">{{'Start' | translate}}</span>
+                        <span class="pull-left f49-f">{{startDateTemplate?.day}}</span>
+                        <div class="date-t">
+                            <span class="f32-f">{{startDateTemplate?.month}} {{startDateTemplate?.year}}</span>
+                            <span class="f27-f">{{startDateTemplate?.week}}</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="m-a-side-date-item cursor stop-element" #dateTimeLast (click)="showMultiCalendar($event,'end', dateTimeLast)">
+                    <div class="pull-left date-curr-time">
+                        <span class="f13-f">{{'End' | translate}}</span>
+                        <span class="pull-left f49-f">{{endDateTemplate?.day}}</span>
+                        <div class="date-t">
+                            <span class="f32-f">{{endDateTemplate?.month}} {{endDateTemplate?.year}}</span>
+                            <span class="f27-f">{{endDateTemplate?.week}}</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="clearfix at-hourglass-title">
+                <span class="bi-icon-vacation"></span>
+                <span class="pull-left f16-f">{{'Set national holiday' | translate}}</span>
+                <span class="font-add" (click)="openNationalHolidayDialog($event)"></span>
+            </div>
+            <perfect-scrollbar class="ps-container attendance-scroll-left">
+                <ul class="at-hourglass-list">
+                <li *ngFor="let holiday of nationalHolidayList">
+                    <h3 class="f21-f">{{holiday.name}}</h3>
+                    <div class="clearfix at-hourglass-list-time">
+                        <span class="f5-f pull-left">{{holiday.startTemplate}}</span>
+                        <span class="icon1-Shape-2"></span>
+                        <span class="f5-f pull-right">{{holiday.endTemplate}}</span>
+                    </div>
+                    <h4 class="f33-f">{{'REPLACEMENT WORK DAY' | translate}}</h4>
+                    <p class="f5-f" *ngFor="let replaceDate of holiday.insteadFormat">{{replaceDate}}</p>
+                    <div class="m-left-storage-pos">
+                        <div class="pull-left g-border4 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                             (click)="openNationalHolidayDialog($event,holiday)"
+                        >
+                            <span class="bi-icon-edit g-transition2 g-icon-center"></span>
+                        </div>
+                        <div class="pull-left g-border4 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-trash g-margin-right5"
+                             (click)="deleteTheNationalHoliday($event,holiday)"
+                        >
+                            <span class="g-transition2 g-icon-center font-trash"></span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            </perfect-scrollbar>
+        </div>
+        <div class="pull-right at-right">
+            <ul class="f33-f clearfix at-right-title o-fun-title">
+                <li class="at-w1"><i class="">{{'Staff' | translate}}</i></li>
+                <li class="at-w2"><i class="">{{'Arrived (Late)' | translate}}</i></li>
+                <li class="at-w3"><i class="">{{'Left (Early)' | translate}}</i></li>
+                <li class="at-w4"><i class="">{{'Status' | translate}}</i></li>
+                <li class="at-w5"><i class="">{{'Absenteeism' | translate}}</i></li>
+                <li class="at-w6"><i class="">{{'Remark' | translate}}</i></li>
+                <li class="at-w7"></li>
+            </ul>
+            <perfect-scrollbar class="ps-container attendance-scroll-right">
+                <ul class="f5-f at-staff-list">
+                <li class="clearfix" *ngFor="let attendance of currentAttendanceLists">
+                    <div class="clearfix at-staff-list-warp g-transition2 o-fun-style">
+                        <div class="pull-left at-w1">
+                            <span class="at-staff-list-select g-transition2"
+                                  [class.v-staff-list-select-rotate]="attendance.isShowAttendanceDetail"
+                                  (click)="showStaffAttendanceDetail($event,attendance)">
+                                <em class="font-selectbutton-soildclose "
+                                    *ngIf="attendance.has_out || attendance.has_vacation">
+                                </em>
+                            </span>
+                            <div class="attendance-user-info">
+                                <profile-img class="g-display g-margin-top4"
+                                             [userInfo]="attendance"
+                                             [settings]="{show_work_name: true}"></profile-img>
+                            </div>
+
+                        </div>
+                        <div class="pull-left at-w2"><i class="">{{attendance.arrived}}</i></div>
+                        <div class="pull-left at-w3"><i class="">{{attendance.left}}</i></div>
+                        <div class="pull-left at-w4" *ngIf="attendance.status == 1"><i class="">{{'In office' | translate}}</i></div>
+                        <div class="pull-left at-w4" *ngIf="attendance.status == 2"><i class="">{{'Use Vacation' | translate}}</i></div>
+                        <div class="pull-left at-w4" *ngIf="attendance.status == 3"><i class="">{{'Out Office' | translate}}</i></div>
+                        <div class="pull-left at-w5"><i class="">{{attendance.absenteeism}}</i></div>
+                        <div class="pull-left at-w6"><i class="">{{attendance.remark}}</i></div>
+                        <div class="pull-left at-w7 g-transition2 o-fun-style-operation">
+                            <!--<span class="bi-icon-edit"></span>-->
+                        </div>
+                    </div>
+                    <div *ngIf="attendance.has_out || attendance.has_vacation">
+                        <div class="clearfix at-staff-list-warp g-transition2 o-fun-style"
+                             [class.hide]="!attendance.isShowAttendanceDetail"
+                             *ngFor="let detail of attendance.detail"
+                        >
+                            <div class="pull-left at-w1"></div>
+                            <div class="pull-left at-w2"><i class="">{{detail?.arrived}}</i></div>
+                            <div class="pull-left at-w3"><i class="">{{detail?.left}}</i></div>
+                            <div class="pull-left at-w4" *ngIf="detail?.status == 1"><i class="">{{'In office' | translate}}</i></div>
+                            <div class="pull-left at-w4" *ngIf="detail?.status == 2"><i class="">{{'Use Vacation' | translate}}</i></div>
+                            <div class="pull-left at-w4" *ngIf="detail?.status == 3"><i class="">{{'Out Office' | translate}}</i></div>
+                            <div class="pull-left at-w5"><i class="">{{detail?.absenteeism}}</i></div>
+                            <div class="pull-left at-w6"><i class="">{{detail?.remark}}</i></div>
+                            <div class="pull-left at-w7 g-transition2 o-fun-style-operation">
+                                <!--<span class="bi-icon-edit"></span>-->
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            </perfect-scrollbar>
+        </div>
+</main>
+<!--section end-->

@@ -1,0 +1,35 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'EXPECTED RESIGNATION DATE' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <!--<input class="current-color" type="text" value="{{resignationDate}}"-->
+               <!--readonly (click)="clickShowCalendar($event)">-->
+        <input type="text" name="birthday" class="no-select add-pointer g-input-box-shadow"
+               [(ngModel)]="resignationDate" selectDate #selectTime readonly
+               [setDateOption]="dateOption" [class.show-input-error] ='date_error.show'>
+    </div>
+    <p class="meeting-show-error" *ngIf="date_error.show">{{date_error.text | translate}}</p>
+    <!--calendar repeat-->
+    <!--<bi-calendar-fix *ngIf="displayCalendar" class="calendar-move"-->
+                     <!--(outFixInfo)="getFix($event)" [dataOption]="fixData"-->
+                     <!--style="position: absolute;"></bi-calendar-fix>-->
+
+   <!-- <div class="clearfix di1-checkbox g-margin-top10" style="line-height: 12px">
+        <span class="g-checkbox "
+              [class.g-checkbox-selected.font-selectbutton-select]="isChosen"
+              [class.font-selectbutton-select]="isChosen"
+              (click)="clickChooseCheckbox($event)"></span>
+        <span class="f9-f">Last desicion</span>
+    </div>-->
+    <div class="g-title">
+        <span class="f9-f">{{'RESIGNATION REASON' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <div class="g-textArea-set">
+            <textarea textareaHeight
+                      class="g-textArea ng-pristine ng-valid ng-touched" data-maxlength="100" [(ngModel)]="message"></textarea>
+            <p class="f33-f">{{'Maximum 100' | translate}}</p>
+        </div>
+    </div>
+</div>

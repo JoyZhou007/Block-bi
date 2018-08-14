@@ -1,0 +1,11 @@
+<div class="n-cursor" (click)="refuseRecommendation()">
+    <img src="{{senderInfo?.user_profile_path ? appConfig.resourceDomain + senderInfo?.user_profile_path : ''}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{objInfo.title}}</h3>
+        <div class="n-con">
+            <p class="f20-f" [innerHtml]="objInfo.simpleMsg"></p>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>

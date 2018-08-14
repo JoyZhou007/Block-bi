@@ -1,0 +1,200 @@
+<!--contacts start-->
+<div class='{{isContacts ? "g-fixed h-contact-box" : ""}}' #hContactBox [class.h-contact-box-an]="showContactView">
+  <div class="tab-contact-hire" *ngIf="hideContact" [class.tab-contact-hire-an]="isHire">
+    <div class="g-side-width g-overflow" [ngStyle]="{left: gSideLeft + 'px'}">
+      <search-list [setNeedWarp]="true" [searchParam]="searchParam" #searchComp></search-list>
+      <current-user-info [setCouldInit]="showContactView || isOnContact"></current-user-info>
+      <div class="g-slide-button" (click)="toggleHireContact(true)">
+        <!--<span class="icon1-hire-list"></span>-->
+        <span class="icon1-contact-list" *ngIf="showHireList"
+              tooltip [tooltip]="{content: 'pending staff', position:'bottom'}"
+        ></span>
+      </div>
+      <perfect-scrollbar class="ps-container h-contact-list">
+        <!--internal start-->
+        <dl #contactInternal>
+          <dt>
+            <span class="pull-left f11-f">{{'INTERNAL' | translate}}</span>
+            <i class="pull-left">({{internalList | dataLength}})</i>
+            <span class="pull-left" #internalElement (click)="hContactPeopleShow(contactInternal, internalElement)"><em class="font-selectbutton-line"></em></span>
+          </dt>
+          <dd
+                  *ngFor="let internal of internalList;let i = index;"
+                  (click)="contactRouter(internal, $event, 'company')"
+                  class="{{(internal.uid === uid) ? 'current' : ''}}"
+                  [class.hide]="internal.current && internal.current === 1">
+            <div class="contact-img-wrap">
+              <div class="slide-people contact-slide-people">
+                <em class="slide-member-list-circle pull-left add-pointer absolute"
+                    [class.slide-member-list-circle-off-online]="internal.uid === uid && !internal.online"
+                    [class.slide-member-list-circle-available] = 'internal.online'
+                    [class.slide-member-list-circle-offline] = '!internal.online'></em>
+              </div>
+              <img class="pull-left" src="{{internal.user_profile_path ? config.resourceDomain + internal.user_profile_path : ''}}" alt="{{internal.work_name}}" />
+            </div>
+            <span class="f12-f">{{internal.work_name}}</span>
+            <span class="v5-f">{{internal.p_name}}<em class="f13-f hide">L6</em></span>
+            <i class="font-chat"
+               (click)="showChat(2, internal, $event)"></i>
+          </dd>
+        </dl>
+        <!--internal end-->
+
+        <!--cooperator start-->
+        <dl #contactCooperator>
+          <dt class="h-contact-list-margin">
+            <span class="pull-left f11-f">{{'COOPERATOR' | translate}}</span>
+            <i class="pull-left">({{cooperatorList | dataLength}})</i>
+            <span class="pull-left" #cooperatorElement (click)="hContactPeopleShow(contactCooperator, cooperatorElement)"><em class="font-selectbutton-line"></em></span>
+          </dt>
+          <dd
+                  *ngFor="let cooperator of cooperatorList;let i = index;"
+                  (click)="contactRouter(cooperator, $event, 'company')"
+                  class="{{(cooperator.uid === uid) ? 'current' : ''}}"
+                  [class.hide]="cooperator.current && cooperator.current === 1">
+            <div class="contact-img-wrap">
+              <div class="slide-people contact-slide-people">
+                <em class="slide-member-list-circle pull-left add-pointer absolute"
+                    [class.slide-member-list-circle-off-online]="cooperator.uid === uid && !cooperator.online"
+                    [class.slide-member-list-circle-available] = 'cooperator.online'
+                    [class.slide-member-list-circle-offline] = '!cooperator.online'></em>
+              </div>
+              <img class="pull-left" src="{{cooperator.user_profile_path ? config.resourceDomain + cooperator.user_profile_path : ''}}" [routerLink]="['/contacts/info/general', cooperator.uid]" alt="{{cooperator.work_name}}" />
+            </div>
+
+            <span class="f12-f">{{cooperator.work_name}}</span>
+            <span class="v5-f">{{cooperator.company_name}}<!--<em class="f13-f">L6</em>--></span>
+            <i class="font-chat"
+               (click)="showChat(2, cooperator, $event)"></i>
+          </dd>
+        </dl>
+        <!--cooperator end-->
+
+        <!--friend start-->
+        <dl #contactFriend>
+          <dt class="h-contact-list-margin">
+            <span class="pull-left f11-f">{{'FRIEND' | translate}}</span>
+            <i class="pull-left">({{friendList | dataLength}})</i>
+            <span class="pull-left" #friendElement (click)="hContactPeopleShow(contactFriend, friendElement)"><em class="font-selectbutton-line"></em></span>
+          </dt>
+          <dd
+                  *ngFor="let friend of friendList;let i = index;"
+                  (click)="contactRouter(friend, $event, 'friend')"
+                  [class.current]="friend.uid === uid"
+                  [class.hide]="friend.current && friend.current === 1" [attr.id]="'test-123' + friend.uid">
+            <div class="contact-img-wrap">
+              <div class="slide-people contact-slide-people">
+                <em class="slide-member-list-circle pull-left add-pointer absolute"
+                    [class.slide-member-list-circle-off-online]="friend.uid === uid && !friend.online"
+                    [class.slide-member-list-circle-available] = "friend.online"
+                    [class.slide-member-list-circle-offline] ="!friend.online"></em>
+              </div>
+            <img class="pull-left" src="{{friend.user_profile_path? config.resourceDomain + friend.user_profile_path : ''}}" alt="{{friend.work_name}}" />
+            </div>
+            <span class="f12-f">{{friend.work_name}}</span>
+            <span class="f12-f">{{friend.company_name}}</span>
+            <i class="font-chat"
+               (click)="showChat(1, friend, $event)"></i>
+          </dd>
+        </dl>
+        <!--friend end-->
+
+        <!--result start-->
+        <dl [class.hide]="searchMoentView">
+          <dt class="h-contact-list-margin">
+            <span class="pull-left f11-f">{{'RESULT' | translate}}</span>
+            <i class="pull-left">({{searchMemberList | dataLength}})</i>
+          </dt>
+          <dd
+                  *ngFor="let member of searchMemberList;let i = index;"
+                  (click)="contactRouter(member, $event, 'result')"
+                  class="clearfix h-search-list {{((uid && member.uid === uid || member.isActive)) ? 'active' : ''}} {{member.isCurrent ? 'h-search-list-selected' : ''}}"
+                  #searchElement>
+            <div class="clearfix h-search-people-info">
+              <div class="contact-img-wrap">
+                <!--搜索结果没有返回在线状态字段-->
+              <!--  <div class="slide-people contact-slide-people">
+                  <em class="slide-member-list-circle pull-left add-pointer absolute"
+                      [class.slide-member-list-circle-off-online]="member.uid === uid && !member.online"
+                      [class.slide-member-list-circle-available] = "member.online"
+                      [class.slide-member-list-circle-offline] ="!member.online"></em>
+                </div>-->
+              <img class="pull-left" src="{{member.user_profile_path ? config.resourceDomain + member.user_profile_path : ''}}"/>
+              </div>
+              <span class="f12-f">{{member.work_name}}</span>
+            </div>
+            <span class="h-search-select-but" (click)="getUserCompanyList($event, member, searchElement, searchSelect)">
+              <em class="font-selectbutton-soildclose" *ngIf="member.is_have_company"></em>
+            </span>
+
+            <span class="g-header-icon-list font-add add-friend-icon" *ngIf="member.is_friend == 0" (click)="addFriend(member,i)"
+                  tooltip [tooltip]="{content: 'Connect', position:'top'}"></span>
+            <div #searchSelect class="hide" [class.show]="member.isCurrent">
+              <ul class="h-search-result" *ngIf="member.is_have_company">
+                <li *ngFor="let company of member.company_list"
+                    [class.current]="uid && company.uid === uid"
+                    class="no-hide" (click)="contactRouter(company, $event, 'result',member)">
+                  <span class="g-transition2 f12-f">{{company.company_name}}</span>
+                  <span class="v5-f">{{company.p_name}}</span>
+                </li>
+              </ul>
+            </div>
+          </dd>
+        </dl>
+        <!--result end-->
+      </perfect-scrollbar>
+      <div class="but but-new-post set-but" (click)="doSettingBoxShow()">
+        <span class="base">{{'SETTING' | translate}}</span>
+      </div>
+    </div>
+
+    <!--contacts sort start-->
+    <div class="h-contact-sort" [class.h-contact-sort-an]="showHContactSort">
+      <perfect-scrollbar class="ps-container h-contact-sort-scroll">
+        <a href="javascript:;" *ngFor="let letter of letterArr" [class.current] = "currLetter === letter" (click)="doLetterSearch(letter)">{{letter}}</a>
+      </perfect-scrollbar>
+    </div>
+    <!--contacts sort end-->
+
+    <!--setting start-->
+    <div class="g-side-eject-width h-setting-fixed" #settingElement *ngIf="contactAn || hSettingAn"
+         [class.contact-setting-fixed]="!isContacts"
+         [class.contact-notification-an]="contactAn"
+         [class.h-notification-an] = "hSettingAn">
+      <span class="font-page-esc-small h-setting-close" (click)="doSettingBoxHide()"></span>
+      <h3 class="f7-f">{{'SETTING' | translate}}</h3>
+      <div class="h-me-noti-height">
+        <ul class="g-d-drag">
+          <li class="clearfix" *ngIf="personalVisible">
+            <div class="f9-f h-me-noti-title">{{'PERSONAL PRIVACY INFORMATION VISIBLE' | translate}}</div>
+            <permission-setting [setData]="personalVisible" (outToggleBtnEvent)="getUserPermission($event)"></permission-setting>
+            <p class="f14-f">{{'Eg. real name' | translate}}</p>
+          </li>
+          <li class="clearfix" *ngIf="resumeVisible">
+            <div class="f9-f h-me-noti-title">{{'RESUME VISIBLE' | translate}}</div>
+            <permission-setting [setData]="resumeVisible" (outToggleBtnEvent)="getUserPermission($event)"></permission-setting>
+            <p class="f14-f">{{'For employment case' | translate}}</p>
+          </li>
+          <li class="clearfix" *ngIf="companyVisible && hasCompany">
+            <div class="f9-f h-me-noti-title">{{'COMPANY PRIVACY INFORMATION VISIBLE' | translate}}</div>
+            <permission-setting [setData]="companyVisible" (outToggleBtnEvent)="getUserPermission($event)"></permission-setting>
+            <p class="f14-f">{{'Eg. owner,ceo,share holder address' | translate}}</p>
+          </li>
+        </ul>
+        <p class=" g-padding20-1 {{setPermission_alert.success?'alert-success' : 'alert-error'}}" *ngIf="setPermission_alert.show">
+          {{setPermission_alert.text | translate}}</p>
+      </div>
+      <a class="h-clear-notifi f5-f" href="javascript:;" (click)="defaultPermission()">
+        <span class="base">{{'DEFAULT SETTING' | translate}}</span>
+      </a>
+    </div>
+    <!--setting end-->
+  </div>
+
+  <!--not entry list start-->
+  <not-entry *ngIf="hideHire" [showNotEntry]="isNotEntry" [setCurrentUserInfo]="currentUserStatusInfo" (outShowContactList)="showContactList($event)"></not-entry>
+  <!--not entry list end-->
+
+  <a href="javascript:;" class="pull-left font-page-esc" (click)="doShowContactView($event)" *ngIf="isContacts"></a>
+</div>
+<!--contacts end-->

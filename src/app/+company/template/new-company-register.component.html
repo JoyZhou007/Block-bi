@@ -1,0 +1,164 @@
+<div class="g-scr co-register-bg">
+    <header class="r-register-header">
+        <span class="r-create-company-icon icon-big-new"></span>
+        <span class="f52-f margin-top1"> {{(  isUpgradeStudio? 'Upgrade' : 'Create') | translate}}</span>
+        <span class="f53-f margin-top1">{{( isUpgradeStudio? 'studio':'a business') | translate}}</span>
+    </header>
+
+    <!--S main-->
+    <form action="company/register" #registerForm="ngForm">
+        <div class="r-register-head-picture-box">
+            <div class="r-register-head-picture" id="register-photo"
+                 uploadDirective [fileId]="avatarId"
+                 [setIsRegister]="true"
+                 [fileType]="avatarType"
+                 (showFile)="doShowAvatar($event)" [base64File]="fileData"
+                 [isUpload]="uploadLogo">
+                <img class="g-border4" [ngStyle]="{'marginTop': avatarUrl ? '' : '26px'}"
+                     src="{{avatarUrl ? avatarUrl: '/assets/images/women2.png'}}" [class.company-logo-width]="avatarUrl"
+                     alt="">
+                <div class="but-photo-mask register-head-picture">
+                    <div class="but-photo-mask-pos">
+                        <span class="font-photo"></span>
+                        <span class="f28-f">{{'UPLOAD BUSINESS LOGO' | translate}}</span>
+                    </div>
+                    <input type="file" style="display: none; width: 100%;height: 100%;" #userInput>
+                </div>
+                <!--upload-photo start-->
+                <cropper (afterCropFile)="doCropEvent($event)" #cropperForm></cropper>
+                <!--upload-photo end-->
+            </div>
+        </div>
+
+        <div class="r-company-register-box ">
+            <div class="r-company-register clearfix">
+                <div class="co-left pull-left">
+                    <ul class="g-d-drag">
+                        <li class="clearfix">
+                            <div class="pull-left">
+                                <span class="f9-f g-margin-bottom10 g-display">{{'BUSINESS TYPE' | translate}}</span>
+                                <p class="f10-f">
+                                    {{'BUSINESS TYPE DESC' | translate}}
+                                </p>
+                            </div>
+                            <div class="pull-right">
+                                <span class="f14-f g-margin-bottom10 g-display">{{'required' | translate}}</span>
+                                <div class="g-drag1-width1 g-drag1-bg" style="margin-top: -4px!important;">
+                                    <switch-button
+                                            [initVal]="{perm: isCompany, bgColorClass: toggleBgCls, acrossWord: 'Company', defaultWord: 'Studio',isEvent:isAbleClick}"
+                                            (switchButEvent)="updateBusinessType($event)"></switch-button>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="clearfix co-business-studio" *ngIf="!isCompany">
+                        <span class="pull-left icon1-studio-company"></span>
+                        <div class="pull-right co-business-studio-con">
+                            <h3 class="HelveticaNeueMedium">{{'WHAT IS STUDIO?' | translate}}</h3>
+                            <p class="LatoRegular">{{'STUDIO DESC' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="clearfix co-business-company" *ngIf="isCompany">
+                        <span class="pull-left icon1-group-company"></span>
+                        <div class="pull-right co-business-studio-con">
+                            <h3 class="HelveticaNeueMedium">{{'WHAT IS COMPANY?' | translate}}</h3>
+                            <p class="LatoRegular">
+                                {{'COMPANY DESC' | translate}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="r-company-name pull-right">
+                    <!--加active，划入效果-->
+                    <div class="r-company-name-box active">
+                        <input class="r-company-input-name transition2 normalLight"
+                               (blur)="nameBlur($event)"
+                               [(ngModel)]="registerData.company_name"
+                               (mouseenter)="inputMouseEnter($event, 'name')"
+                               name="company_name" #company_name="ngModel">
+                        <p class="f52-f" [class.company-input-hover]="showRegNameHover">{{'BUSINESS NAME' |
+                            translate}}</p>
+                    </div>
+                    <p class="g-show-error-color g-margin-top5" [class.hide]="!name_error.isShow">{{name_error.text |
+                        translate}}</p>
+
+                    <div class="r-company-input-industry zIndex">
+                       <!-- <span class="r-company-arrow font-selectbutton-soildclose r-font-selectbutton-soildclose"></span>-->
+                        <div class="input-no-border f52-f industry-selected company-select-wrap">
+                            <select-filter [selectOption]="companyData" (outPutCurrentValue)="getCurrentValue($event)"
+                                           (blurEmpty)="onBlurEmpty($event)">
+
+                            </select-filter>
+                        </div>
+                        <!--  <em class="f52-f industry-selected" (click)="onClicktoggleSelectBut($event)">{{registerIndustryName}}</em>-->
+                        <em class="f52-f industry-title" style="z-index: 1" [class.industry-active]="industryActive">
+                            {{'INDUSTRY' | translate}}</em>
+                        <!--     <div class="d-select" style="margin-top: 6px;z-index: 4;" #toggleSelect>
+                                 <perfect-scrollbar class="ps-container g-height140">
+                                     <ul class="g-max-height-inherit" #toggleSelectContent>
+                                         <li *ngFor="let industry of registerIndustry"
+                                             (click)="selectIndustryValue(industry.id,isZhLan ? industry.name_zh : industry.name)">
+                                             <span class="base">{{isZhLan ? industry.name_zh : industry.name}}</span>
+                                         </li>
+                                     </ul>
+                                 </perfect-scrollbar>
+                             </div>-->
+
+                        <em class="g-show-error-color g-margin-top5"
+                            style="position: absolute;font-size: 12px;" [class.hide]="!industry_error.isShow">
+                            {{industry_error.text | translate}}
+                        </em>
+                    </div>
+                    <div class="r-company-business" *ngIf="isCompany">
+                        <div class="r-company-title f9-f" [class.company-register-licence-em]="comRegLicence">
+                            {{'BUSINESS LICENSE' | translate}}
+                        </div>
+                        <!--   uploadDirective [fileId]="licenceId" [fileType]="licenceType" (showFile)="doShowLicence($event)"
+                           [fileParam]="uploadFileParam"-->
+                        <div class="r-unload-license" id="company-register-licence-upload"
+                             (mouseenter)="mouseEnterLicence()" (mouseleave)="mouseLeaveLicence()"
+                             [class.background-transparent]="!showLicenceText" (click)="clickOnLicense($event,input)">
+                            <input type="file" #input style="display: none" (change)="uploadLicense(input)">
+                            <span class="f37-f" *ngIf="showLicenceText"><span class="f37-f">{{'UPLOAD LICENSE' | translate }}<br/>
+                            {{'UPLOAD LICENSE DESC' | translate }}
+                        </span></span>
+                        </div>
+                        <img [class.show-img]="showImg" *ngIf="showImg" [attr.src]="licenceUrl" width="100%" height="100%"
+                             (click)="clickOnLicense($event,input)" (change)="uploadLicense(input)"
+                             class="add-pointer"/>
+                        <em class="g-show-error-color g-margin-top5" [class.hide]="!license_error"
+                            style="position: absolute;font-size: 12px;">
+                            {{'License is required' | translate}}
+                        </em>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="r-register-footer">
+            <p class="erro">{{registerMessage}}</p>
+            <a href="javascript:;" (click)="createCompany()">
+                <div class="but but-create r-register-create-button" #registerBtn>
+                    <i class="base">{{ (isUpgradeStudio? 'UPGRADE1':'CREATE') | translate}}</i>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </div>
+                <span class="f14-f">{{'By click' | translate}}</span>
+                <span class="f46-f">{{'CREATE' | translate}}</span><span
+                    class="f14-f">&nbsp;{{'I agree to' | translate}}</span>
+                <span class="f42-f">{{'Terms of service' | translate}}</span>
+            </a>
+        </div>
+    </form>
+
+    <div [routerLink]="['/user/index']" class="r-register-close font-page-esc"></div>
+    <div class="register-success clearfix" *ngIf="registerSuccess" (click)="onClickSuccess($event)">
+        <div class="register-success-word f35-f clearfix">
+            <em>{{'Congratulations to register' | translate}}</em>
+            <span class="success-loading">
+          <i>.</i><i>.</i><i>.</i><i>.</i>
+      </span>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,44 @@
+<div class="di-con">
+<!--    <div class="g-title">
+        <span class="f9-f">TITLES</span>
+        <em class="f14-f" *ngIf="!isReadTip">require</em>
+    </div>
+    <div class="g-textArea-set" textareaHeight>
+        <textarea #textAreaAutoHeight class="g-textArea" data-maxLength="20" disabled="{{isReadTip}}" [(ngModel)]="tipsTitleValue"></textarea>
+    </div>
+    <p class="f33-f" *ngIf="!isReadTip">Maximum 20 of characters</p>-->
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+        <em class="f14-f" *ngIf="!isReadTip">{{'required' | translate}}</em>
+    </div>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea" data-maxLength="200" disabled="{{isReadTip}}" [(ngModel)]="tipsSpecificationValue"></textarea>
+    </div>
+    <p class="f33-f" *ngIf="!isReadTip">{{'Maximum 200' | translate}}</p>
+    <div class="g-title">
+        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+    </div>
+    <div class="g-title" style="padding-top: 0;" *ngIf="showPrivateDropDown">
+        <span class="f9-f">{{'Personal' | translate}}</span>
+    </div>
+    <dropdown-search *ngIf="showPrivateDropDown"
+            [dropdownOptions]="shareList"
+            [dropdownSettings]="shareSettings"
+            [selectedOptions]="selectedOptions"
+            (optionModelArrChange)="setSelectedOption($event)"
+    ></dropdown-search>
+    <!--<div class="g-title">
+        <h3 class="f9-f text-center">OR</h3>
+    </div>-->
+    <div class="g-title" *ngIf="!showPrivateDropDown">
+        <span class="f9-f">{{'Business' | translate}}</span>
+    </div>
+    <dropdown-search
+            *ngIf="!showPrivateDropDown"
+            [dropdownOptions]="shareList"
+            [dropdownSettings]="shareSettings"
+            [selectedOptions]="selectedOptions"
+            (optionModelArrChange)="setSelectedOption($event)"
+    ></dropdown-search>
+
+</div>

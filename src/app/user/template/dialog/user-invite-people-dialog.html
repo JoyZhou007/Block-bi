@@ -1,0 +1,29 @@
+<div class="di1-warp" style="overflow: hidden">
+    <div class="clearfix di-new-contact di1-title">
+        <div class="pull-left di-new-contact-left">
+            <div class="g-title">
+                <span class="f9-f">{{'The email address of the invited person' | translate}}</span>
+            </div>
+        </div>
+        <div class="pull-right di-new-contact-right">
+            <div class="g-title">
+                <em class="f14-f pull-right" style="margin-right: 14px;">{{'required' | translate}}</em>
+            </div>
+        </div>
+    </div>
+    <div class="invite-scroll">
+        <div *ngFor="let invite of inviteList;let i = index;" class="clearfix di-new-contact di1-person-list "
+             style="width: 419px;">
+            <div class="se-input">
+                <input class="current-color invite-ctrl" type="text" placeholder="{{'Fill in email' | translate}}"
+                       [(ngModel)]="invite.email" style="width: 408px;">
+            </div>
+            <span class="font-delete" *ngIf="inviteList.length > 1" (click)="clickDeleteInput($event, i)"></span>
+            <div class="alert-error"
+                 [hidden]="!invite.errorText">{{invite.errorText | translate}}
+            </div>
+        </div>
+    </div>
+    <div class="but but-add" (click)="clickAddInvitees($event)" style="width: 419px;margin-top: 10px;"><span
+        class="base">{{'MORE INVITED PERSON' | translate}}</span></div>
+</div>

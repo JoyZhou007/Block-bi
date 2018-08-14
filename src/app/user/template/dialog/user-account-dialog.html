@@ -1,0 +1,209 @@
+<div class="di1-warp" *ngIf="hasInit">
+    <div class="g-title">
+        <span class="f9-f">{{'ACCOUNT SET' | translate}}</span>
+    </div>
+    <div class="clearfix">
+        <div class="pull-left">
+            <div class="f49-f account-email">{{userObj.email}}</div>
+            <div class="f49-f account-phone ">{{userObj.phone}}</div>
+        </div>
+        <div class="pull-right">
+            <div class="account-reset cursor" (click)="clickShowResetAccount($event)"><span class="base">{{'RESET' | translate}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'PASSWORD SET' | translate}}</span>
+    </div>
+    <div class="clearfix account-reset-wrap">
+        <div class="reset-password pull-left">
+            <input type="password" value="123456789" readonly disabled>
+        </div>
+        <div class="pull-right">
+            <div class="account-reset cursor" (click)="clickShowResetPwd($event)"
+            ><span class="base">{{'RESET' | translate}}</span></div>
+        </div>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'THIRD PARTY BINDING' | translate}}</span>
+    </div>
+    <div class="clearfix relative">
+        <ul class="g-third-login-group clearfix">
+            <li>
+                <a class="bi-icon-qq"
+                   [class.g-third-icon-qq]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ].isShow"
+                ></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ].isShow"><span
+                        class="base">{{'UNBIND' | translate}}</span></div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_QQ].isShow"><span
+                        class="base">{{'BIND' | translate}}</span></div>
+            </li>
+            <li>
+                <a class="icon1-linkedin"
+                   [class.g-third-icon-linked-in]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN].isShow"
+                ></a>
+                <div class="but but-unbind"
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_LINKEDIN].isShow"><span
+                        class="base">{{'BIND' | translate}}</span></div>
+            </li>
+            <li>
+                <a class="icon1-facebook"
+                   [class.g-third-icon-facebook]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK].isShow"
+                ></a>
+                <div class="but but-unbind"
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_FACEBOOK].isShow"><span
+                        class="base">{{'BIND' | translate}}</span></div>
+            </li>
+            <li>
+                <a class="icon1-tiff"
+                   [class.g-third-icon-twitter]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER].isShow"
+                ></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_TWITTER].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+        </ul>
+        <ul class="g-third-login-group clearfix">
+            <li>
+                <a class="icon1-wechat"
+                   [class.g-third-icon-wechat]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT].isShow"
+                ></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_WECHAT].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+            <li *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow">
+                <a class="icon1-amazon"></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind"
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+            <li *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow">
+                <a class="bi-icon-amazon amazon-width">
+                    <em class="path1"></em>
+                    <em class="path2"></em>
+                    <em class="path3"></em>
+                    <em class="path4"></em>
+                    <em class="path5"></em>
+                    <em class="path6"></em>
+                    <em class="path7"></em>
+                    <em class="path8"></em>
+                </a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind "
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_AMAZON].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+            <li>
+                <a class="icon1-pin g-third-icon-pin-hover"
+                   [class.g-third-icon-pin]="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST].isShow"
+                ></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST].isShow"><span
+                        class="base">{{'UNBIND' | translate}}</span></div>
+                <div class="but but-bind "
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_PINTEREST].isShow"><span
+                        class="base">{{'BIND' | translate}}</span></div>
+            </li>
+            <li *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow">
+                <a class="bi-icon-gmail"></a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind "
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+            <li *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow">
+                <a class="bi-icon-gmail-color gmail-width">
+                    <em class="path1"></em>
+                    <em class="path2"></em>
+                    <em class="path3"></em>
+                    <em class="path4"></em>
+                </a>
+                <div class="but but-unbind "
+                     (click)="clickUnbindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE)"
+                     *ngIf="showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow"><span class="base">{{'UNBIND' | translate}}</span>
+                </div>
+                <div class="but but-bind "
+                     (click)="clickBindThirdLogin($event,ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE)"
+                     *ngIf="!showThirdHighlight[ThirdLoginConstant.THIRD_LOGIN_TYPE_GOOGLE].isShow"><span class="base">{{'BIND' | translate}}</span>
+                </div>
+            </li>
+        </ul>
+        <p class=" absolute {{thirdBind_alert.success?'alert-success' : 'alert-error'}}" *ngIf="thirdBind_alert.show">
+            {{thirdBind_alert.text}}</p>
+    </div>
+
+    <div class="account-setting">
+        <ul class="g-d-drag di-pass-setting">
+            <li class="clearfix hide">
+                <div class="pull-left">
+                    <span class="f9-f">{{'AUTO SIGN OUT' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Need to re-sign in account after page closed' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1" style="position: relative;top: 13px;">
+                    <switch-button [initVal]="{perm: userSettingObj.auto_logout, bgColorClass: 'g-d-bg1'}"
+                                   (switchButEvent)=switchIsAutoLogout($event)
+                    ></switch-button>
+                </div>
+            </li>
+            <li class="clearfix hide">
+                <div class="pull-left">
+                    <span class="f9-f">{{'SIMULTANEOUS LOGIN' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Allow to login' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1" style="position: relative;top: 13px;">
+                    <switch-button [initVal]="{perm: 1, bgColorClass: 'g-d-bg1'}"
+                    ></switch-button>
+                </div>
+            </li>
+            <li class="clearfix">
+                <div class="f9-f g-margin-bottom10">{{'AUTO TO LOGOUT' | translate}}</div>
+                <permission-setting [setData]="visibleData"
+                                    (outToggleBtnUpEvent)=outAutoLogout($event)></permission-setting>
+                <p class="f10-f g-margin-top7">{{'Set auto logout time' | translate}}</p>
+            </li>
+        </ul>
+        <p class=" absolute {{userSettingError.success?'alert-success' : 'alert-error'}}" *ngIf="userSettingError.show">
+            {{userSettingError.text | translate}}</p>
+    </div>
+
+</div>

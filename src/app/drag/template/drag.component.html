@@ -1,0 +1,79 @@
+<div class="ct-permission-folder">
+    <ol>
+        <li [class.current]="currentPermissionType === folderConstant.PERMISSION_FOLDER_READ"
+            (click)="selectThePermission(folderConstant.PERMISSION_FOLDER_READ)">
+            <span>{{'READ' | translate}}</span>
+        </li>
+        <li [class.current]="currentPermissionType === folderConstant.PERMISSION_FOLDER_WRITE"
+            [class.hide]="!permission.isAbleWrite"
+            (click)="selectThePermission(folderConstant.PERMISSION_FOLDER_WRITE)">
+            <span>{{'WRITE' | translate}}</span>
+        </li>
+        <li [class.current]="currentPermissionType === folderConstant.PERMISSION_FOLDER_CONTROL"
+            [class.hide]="!permission.isAbleControl"
+            (click)="selectThePermission(folderConstant.PERMISSION_FOLDER_CONTROL)">
+            <span>{{'CONTROL' | translate}}</span>
+        </li>
+    </ol>
+    <div class="fo-type2-list di-folder-select">
+        <perfect-scrollbar class="ps-container di-folder-select-scroll">
+            <ul class="clearfix" #dragUl>
+            <li class="drag-li-ele"
+                style="cursor: pointer"
+                draggable="true"
+                *ngFor="let option of currentPermissionOption let i= index"
+                (dragstart)="dragStartEvent($event, option, i)"
+                (dragend)="dragEndEvent($event)">
+                <profile-img [userInfo]="option" [settings]="{show_work_name: true}" class="g-line-height26"></profile-img>
+                <span class="remove-but" (click)="deleteTheSelect($event,option)">
+                    <em class="font-remove"></em>
+                </span>
+            </li>
+        </ul>
+        </perfect-scrollbar>
+        <!--<ul class="hide" #dragElementContainer>-->
+        <!--</ul>-->
+    </div>
+    <div class="ct-permission-folder-bottom">
+                    <span class="icon1-inform">
+                        <em class="path1"></em>
+                    </span>
+        <em class="f51-f">{{'Drag the people from current permission to new permission' | translate}}</em>
+    </div>
+</div>
+
+
+<div class="g-width ct-permission-set" [class.ct-permission-set-an]="isStartMove">
+    <ul>
+        <li [class.current]="isRead" draggable="true"
+            (dragover)="allowDrop($event)"
+            (dragenter)="dragEnterEvent($event,folderConstant.PERMISSION_FOLDER_READ)"
+            (dragleave)="dragLeaveEvent($event,folderConstant.PERMISSION_FOLDER_READ)"
+            (drop)="dropEvent($event, folderConstant.PERMISSION_FOLDER_READ)">
+            <span class="font-chatinput" *ngIf="!isRead"></span>
+            <span class="font-selectbutton-select" *ngIf="isRead"></span>
+            <span class="v7-f">{{'READ' | translate}}</span>
+            <span class="f13-f">{{'READ DESC' | translate}}</span>
+        </li>
+        <li draggable="true" [class.current]="isWrite"
+            (dragover)="allowDrop($event)"
+            (dragenter)="dragEnterEvent($event,folderConstant.PERMISSION_FOLDER_WRITE)"
+            (dragleave)="dragLeaveEvent($event,folderConstant.PERMISSION_FOLDER_WRITE)"
+            (drop)="dropEvent($event, folderConstant.PERMISSION_FOLDER_WRITE)">
+            <span class="font-chatinput" *ngIf="!isWrite"></span>
+            <span class="font-selectbutton-select" *ngIf="isWrite"></span>
+            <span class="v7-f">{{'WRITE' | translate}}</span>
+            <span class="f13-f">{{'WRITE DESC' | translate}}</span>
+        </li>
+        <li draggable="true" [class.current]="isControl"
+            (dragover)="allowDrop($event)"
+            (dragenter)="dragEnterEvent($event,folderConstant.PERMISSION_FOLDER_CONTROL)"
+            (dragleave)="dragLeaveEvent($event,folderConstant.PERMISSION_FOLDER_CONTROL)"
+            (drop)="dropEvent($event, folderConstant.PERMISSION_FOLDER_CONTROL)">
+            <span class="font-chatinput" *ngIf="!isControl"></span>
+            <span class="font-selectbutton-select" *ngIf="isControl"></span>
+            <span class="v7-f">{{'CONTROL' | translate}}</span>
+            <span class="f13-f">{{'CONTROL DESC' | translate}}</span>
+        </li>
+    </ul>
+</div>

@@ -1,0 +1,7 @@
+<div class="os-{{os}} b-{{browser}}" [class.ch-browser]="chBrowser"
+     [class.zh-browser]="zhBrowser" [class.lb-browser]="lbBrowser" [class.qq-browser]="QQBrowser" [class.ay-browser]="ayBrowser">
+    <router-outlet #routerOutlet></router-outlet>
+    <bi-chat-new *ngIf="userDataService.checkUserLoginStatus()"></bi-chat-new>
+    <dynamic-global-component #dynamicGlobalComponent ></dynamic-global-component>
+    <notification-dialog *ngIf="userDataService.checkUserLoginStatus() && prepared"></notification-dialog>
+</div>

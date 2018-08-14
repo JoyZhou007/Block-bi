@@ -1,0 +1,10 @@
+<div class="g-style1 g-padding20 m-a-type" data-step="step_mission_11" id="step_mission_11">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'TRACK'| translate}}</span>
+    </div>
+    <div class="se-input">
+        <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="inputDropdownOptions"
+                         [selectedOptions]="trackArr"></dropdown-search>
+    </div>
+</div>

@@ -1,0 +1,97 @@
+<div class="n-pos" [class.hide]="isActive" #messageDialog>
+    <div *ngFor="let notification of myNotificationList; let i=index;">
+        <div [ngSwitch]="notification.act" class="clearfix n-warp wrap-default" [class.hide]="notification.isHide"
+             autoFade [setFadeIn]="{'data':fadeIn,'sendObj':myNotificationList,'index':i, 'currentObj': notification}"
+             #autoFadeElement  [class.showDialog]="notification.isShow"
+             (hideNotification)="deleteMessage($event, i, autoFadeElement)"
+             id="id_{{notificationKey}}" (click)="clickCloseBtn(i, '', notification)">
+            <div *ngIf="!notification.isMission">
+                <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_ADD_FRIEND">
+                    <new-contact-message [setNotification]="notification" #messageContent></new-contact-message>
+                </template>
+                <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_RECOMMEND_USER">
+                    <new-recommendation-request [setNotification]="notification" #messageContent></new-recommendation-request>
+                </template>
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_MEMBER_GROUP_INVITE">
+                    <chat-member-group-invite [setNotification]="notification"
+                                              #messageContent></chat-member-group-invite>
+                </template>
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_HIRE">
+                    <new-hire [setNotification]="notification" #messageContent></new-hire>
+                </template>
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_COMPANY_RELATIONSHIP">
+                    <join-company [setNotification]="notification" #messageContent></join-company>
+                </template>
+
+                <!-- chat create group start-->
+                <template [ngSwitchCase]="notificationService.config.ACT_CHAT_NOTICE_GROUP_CREATE">
+                    <chat-create-group-message [setNotification]="notification"
+                                               #messageContent></chat-create-group-message>
+                </template>
+                <!-- chat create group end-->
+                <!--chat invite group message start-->
+                <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_MEMBER_GROUP_INVITE_RECEIVER">
+                    <chat-invite-group-message [setNotification]="notification" #messageContent></chat-invite-group-message>
+                </template>
+                <!--chat invite group message end-->
+                <!--set company owner start-->
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_SET_COMPANY_ADMIN">
+                    <set-company-admin [setNotification]="notification" #messageContent></set-company-admin>
+                </template>
+
+                <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_SHAREHOLDER_APPROVE">
+                    <company-admin-change [setNotification]="notification"  #messageContent></company-admin-change>
+                </template>
+                <!--set company owner end-->
+
+                <!--add recommend start-->
+                <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_RECOMMEND_ADD_FRIEND">
+                    <add-recomm-contact [setNotification]="notification" #messageContent></add-recomm-contact>
+                </template>
+                <!--add recommend end-->
+
+                <!--update company ceo start-->
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_SET_COMPANY_STRUCTURE_ADMIN">
+                    <update-company-ceo [setNotification]="notification" #messageContent></update-company-ceo>
+                </template>
+
+                <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_OUT_OFFICE_APPLY">
+                    <out-office-application-message [setNotification]="notification"  #messageContent></out-office-application-message>
+                </template>
+
+                <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_SHAREHOLDER_APPROVE_STRUCTURE_ADMIN">
+                    <set-company-ceo [setNotification]="notification"  #messageContent></set-company-ceo>
+                </template>
+                <!--update company ceo end-->
+
+                <!--S vacation-apply-->
+                <template [ngSwitchCase]="notificationService.config.ACT_USER_VACATION_APPLY">
+                    <vacation-apply [setNotification]="notification"  #messageContent></vacation-apply>
+                </template>
+                <!--E vacation-apply-->
+
+                <!--S resignation-apply-->
+                <template [ngSwitchCase]="notificationService.config.ACT_APPLICATION_REQUEST_APPLY_DISMISSION">
+                    <resignation-apply [setNotification]="notification"  #messageContent></resignation-apply>
+                </template>
+
+                <template [ngSwitchCase]="notificationService.config.ACT_APPLICATION_NOTICE_DISMISSION_ACCEPT">
+                    <resignation-apply [setNotification]="notification"  #messageContent></resignation-apply>
+                </template>
+                <!--E resignation-apply-->
+
+                <!--default notification start-->
+                <template ngSwitchDefault>
+                    <new-notice [setNotification]="notification" #messageContent></new-notice>
+                </template>
+                <!--default notification end-->
+            </div>
+            <div *ngIf="notification.isMission">
+                <mission-request-message [setNotification]="notification" #messageContent></mission-request-message>
+            </div>
+
+            <!--default notification end-->
+            <a class="font-page-esc-small" href="javascript:;" #closeBut (click)="clickCloseBtn(i, 'but')"></a>
+        </div>
+    </div>
+</div>

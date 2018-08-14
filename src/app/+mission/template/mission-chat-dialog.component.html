@@ -1,0 +1,25 @@
+<div *ngIf="isShowMissionChat">
+    <div class="g-mission-chat add-pointer"  #missionChatDialog
+         style="position: absolute; left:300px; top: 200px;z-index: 22;padding-bottom:40px;">
+        <header class="mission-chat-hd"  (mousedown)="mouseDownEvent($event)">
+            <div class="g-transition2 ch-page-icon">
+                <span class="g-transition2 bi-icon-open" (click)="openMissionDetail($event)"></span>
+                <span class="g-transition2 font-page-esc-small" (click)="closeMissionChatDialog($event)"></span>
+            </div>
+            <div class="mission-chat-return">
+                <!-- chat-close-->
+                <i class="font-selectbutton-line chat-open hide"></i>
+                <span>{{missionObj?.name}}</span>
+            </div>
+            <ul class="chat-avatar-lst clearfix">
+                <li *ngFor="let person of currentGroupInfo?.info">
+                    <img class="g-border2" src="{{person.user_profile_path ? config.resourceDomain + person.user_profile_path : ''}}"
+                         title="{{person.work_name}}">
+                </li>
+            </ul>
+        </header>
+        <div class="ch-message mission-chat-dialog">
+            <chat-content-message #chatContentMessage [setIsMiniDialog]="true"></chat-content-message>
+        </div>
+    </div>
+</div>

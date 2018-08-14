@@ -1,0 +1,65 @@
+<div class="di-con" style="margin-top: 10px;">
+    <div class="di-people-height">
+        <div class="clearfix di-people di-margin10" *ngFor="let transferFile of transferFileList;let i=index">
+                        <span class="icon-file-folder di-fo-file-icon"
+                              *ngIf="transferFile.is_dir===1">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+            <span class="icon-file-excel di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='excel'">
+                            <em class="path1"></em>
+                        </span>
+            <span class="icon-file-word di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='word'">
+                            <em class="path1"></em>
+                         </span>
+            <span class="icon-file-information di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='information'">
+                           <em class="path1"></em>
+                         </span>
+            <span class="icon-file-other di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='other'">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                    </span>
+            <span class="icon-file-analysis di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='analysis'">
+                        <em class="path1"></em>
+                         <em class="path2"></em>
+                    </span>
+            <span class="icon-file-acrobat di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='pdf'">
+                         <em class="path1"></em>
+                    </span>
+            <span class="icon-file-post di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='email'">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                        <em class="path3"></em>
+                    </span>
+            <span class="icon1-excel di-fo-file-icon"
+                  *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='ppt'">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                    </span>
+            <div class="pull-left" *ngIf="transferFile.is_dir === 0 && transferFile.ext_type==='image'" >
+                <img  class="g-img34" src="{{transferFile.thumb_s ? config.resourceFolderDomain + transferFile.thumb_s:''}}">
+            </div>
+
+            <span class="f19-f">{{transferFile.name}}</span>
+            <span class="f5-f">{{'Last edit' | translate}}{{transferFile.lastUpdateTemplate}}</span>
+            <span class="font-delete" *ngIf="transferFileList.length > 1" (click)="deleteTemporaryFile($event,transferFile,i)"></span>
+        </div>
+    </div>
+    <div class="g-title" style="padding-top: 10px;">
+        <span class="f9-f">{{'TRANSFER TO WHO' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="se-input">
+        <dropdown-search [optionModelArr]="transferArr" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                         [selectedOptions]="transferArr"
+        ></dropdown-search>
+    </div>
+</div>

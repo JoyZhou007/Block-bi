@@ -1,0 +1,138 @@
+<div class="pull-left s-edit-position s-edit-position-hide"  data-step="step_str_3" id="step_str_3"
+     [class.s-edit-position-hide]="formHide">
+    <p class="s-edit-position-title f7-f">
+        {{editPositionTitle | translate}}
+        <span (click)="closePositionForm()" class="s-edit-position-close font-page-esc-small"></span>
+    </p>
+    <div class="s-contact-detail ">
+        <perfect-scrollbar class="ps-container s-contact-detail-scroll">
+            <div class="s-contact-detail-input">
+                <div class="g-title" style="padding-top: 1px;">
+                    <span class="f9-f">{{'STAFF' | translate}}</span>
+                    <em class="f14-f" [hidden]="isCeo">{{'required' | translate }}</em>
+                </div>
+                <dropdown-search *ngIf="pendingOptions"
+                        (optionModelArrChange)="pendingChange($event)"
+                        [dropdownSettings]="pendingSettings" [dropdownOptions]="pendingOptions"
+                        [selectedOptions]="pendingSelectedOptions"></dropdown-search>
+
+                <div class="s-contact-detail-input" style="padding-bottom: 0;">
+                    <div class="g-title">
+                        <span class="f9-f">{{'FUNCTION MANAGER' | translate}}</span>
+                        <em class="f14-f"[hidden]="isCeo">{{'required' | translate}}</em>
+                    </div>
+                    <dropdown-search *ngIf="functionOptions"
+                            (optionModelArrChange)="functionChange($event)"
+                            [dropdownSettings]="functionSettings" [dropdownOptions]="functionOptions"
+                            [selectedOptions]="functionSelectedOptions"></dropdown-search>
+                    <p class="f33-f g-margin-top5">{{'Direct report line' | translate}}</p>
+
+                </div>
+                <div class="s-contact-detail-input" >
+                    <div class="g-title">
+                        <span class="f9-f">{{'ADMIN MANAGER' | translate}}</span>
+                        <!--<em class="f14-f">{{'require' | translate}}</em>-->
+                    </div>
+                    <dropdown-search *ngIf="adminOptions"
+                            (optionModelArrChange)="adminChange($event)"
+                            [dropdownSettings]="adminSettings" [dropdownOptions]="adminOptions"
+                            [selectedOptions]="adminSelectedOptions" [calcWindowHeight]="100"
+                    ></dropdown-search>
+                    <p class="f33-f g-margin-top5">{{'Daily admin management' | translate}}</p>
+                </div>
+                <div class="s-contact-detail-input" style="padding-bottom: 0;">
+                    <div class="g-title g-padding-top0">
+                        <span class="f9-f">{{'SUBORDINATES' | translate}}</span>
+                    </div>
+                    <dropdown-search *ngIf="subordinatesOptions"
+                            (optionModelArrChange)="subordinatesChange($event)"
+                            [dropdownSettings]="subordinatesSettings" [dropdownOptions]="subordinatesOptions"
+                            [selectedOptions]="subordinatesSelectedOptions"></dropdown-search>
+                </div>
+
+                <div class="clearfix">
+                    <div class="s-contact-detail-input clearfix width195 pull-left">
+                        <div class="g-title">
+                            <span class="f9-f">{{'POSITION NAME' | translate}}</span>
+                            <em class="f14-f">{{'required' | translate}}</em>
+                        </div>
+                        <div class="se-input" toggleSelectGroup [currClass]="'se-input-current'" [minusHeight]="100">
+                            <div #toggleSelectBut>
+                                <div class="se-input-select">
+                                    <span class="font-selectbutton-soildclose"></span>
+                                </div>
+                                <input class="current-color g-input-box-shadow" type="text"
+                                       [class.g-readonly-input]="isCeo"
+                                       [(ngModel)]="editPosition.title_name" [disabled]="positionTitleDisabled" #titleName/>
+                            </div>
+                            <div class="d-select" #toggleSelect> <!-- [class.hide]='positionNameListIsShow'-->
+                                <perfect-scrollbar class="ps-container g-height140">
+                                    <ul class="g-max-height-inherit" #toggleSelectContent>
+                                        <li *ngFor="let item of localPositionNameInfo" (click)="choosePositionTitleByName(item)">
+                                            <span class="base">{{item.title_name}}</span>
+                                        </li>
+                                    </ul>
+                                </perfect-scrollbar>
+                                <div class="f19-f g-no-data-color g-margin-top10 g-margin-bottom20 text-center" *ngIf="localPositionNameInfo.length === 0">
+                                    {{'No Data' | translate}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="s-contact-detail-input clearfix width195 pull-right">
+                        <div class="g-title">
+                            <span class="f9-f">{{'POSITION LEVEL' | translate}}</span>
+                            <em class="f14-f" [hidden]="isCeo || editPosition.is_ass == '1'">{{'required' | translate}}</em>
+                        </div>
+                        <div class="se-input"
+                             toggleSelectGroup
+                             #toggleInput
+                             [minusHeight]="105"
+                             (callBackData)="showPositionList($event)"
+                             [currClass]="'se-input-selected'"
+                             [class.g-readonly-input]="isCeo || editPosition.is_ass == '1'">
+                            <div #toggleSelectBut>
+                                <div class="se-input-select">
+                                    <span class="font-selectbutton-soildclose"></span>
+                                </div>
+                                <input class="current-color g-input-box-shadow" type="text" [(ngModel)]="editPosition.p_name" readonly/>
+                            </div>
+
+                            <div class="d-select d-select-level structure-select-ctrl" #toggleSelect style="padding-bottom: 0;">
+                                <div class="d-structure-level" style="padding-bottom: 50px;">
+                                    <perfect-scrollbar class="ps-container g-height140">
+                                        <p class="level-title f14-f clearfix cursor">
+                                            <i class="font-help"
+                                               tooltip
+                                               [tooltip]="{maxWidth: 190, position:'bottom', trigger: {on: 'click'}, content: levelContent, isCloseBut: true}"></i>
+                                           <span class="pull-left">what is level</span>
+                                        </p>
+                                            <ul class="g-max-height-inherit" *ngFor="let item of positionLevelList">
+                                                <li class="se-title"><span>{{item.title}} LEVEL</span></li>
+                                                <li *ngFor="let i of item.position" (click)="choosePositionLevel(i)">
+                                                    <i class="base">{{i.p_name}}</i>
+                                                </li>
+                                            </ul>
+                                            <!--新建level-->
+                                    </perfect-scrollbar>
+                                    <p class="new-level" (click)="newLevel($event)">NEW LEVEL</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- todo 下一版本功能 -->
+                <div class="s-contact-lock f36-f">
+                    <span class="base">{{'LOCK FILES AND SUSPEND MISSION' | translate}}</span>
+                </div>
+
+            </div>
+        </perfect-scrollbar>
+        <div [hidden]="isCeo" (click)="deletePositionStructure($event)" class="s-contact-detail-save-button but but-delete" #deleteBtn>
+            <span class="base">{{'DELETE' | translate}}</span>
+        </div>
+        <div (click)="savePositionInfo()" class="s-contact-detail-del-button but but-save">
+            <span class="base">{{'SAVE' | translate}}</span>
+        </div>
+    </div>
+</div>

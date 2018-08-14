@@ -1,0 +1,98 @@
+<perfect-scrollbar class="ps-container home-search-wrap">
+<div class="" #scrollSearchContent style="z-index: 0">
+    <div class="home-search">
+        <div class="home-search-title clearfix">
+            <div class="home-search-title-left pull-left">
+                <div class="f35-f home-search-title-left-top">{{'Search result' | translate}}</div>
+                <div class="f35-f home-search-title-left-bottom ">{{'Sparated types to show…' | translate}}</div>
+            </div>
+            <div class="home-search-title-right pull-left">
+                <img src="{{config.staticResourceDomain + 'assets/images/loading.gif'}}" alt="">
+            </div>
+        </div>
+        <div class="home-search-contact">
+            <div class="home-search-mission-title f9-f">{{'CONTACT' | translate}}</div>
+            <div class="home-search-contact-list" style="position: relative;min-height: 80px">
+                <ul class="clearfix" *ngIf="searchContactList.length !== 0">
+                    <li *ngFor="let person of searchContactList" class="add-pointer"
+                        (click)="showSearchMemberInfo($event,person)">
+                        <div class="home-search-contact-left">
+                            <img title="{{person.work_name}}"
+                                 src="{{ person.user_profile_path ? config.resourceFolderDomain + person.user_profile_path: ''}}"/>
+                        </div>
+                        <div class="home-search-contact-right">
+                            <div class="f19-f">
+                                {{person.work_name}}
+                            </div>
+                            <div class="hide">
+                                <span class="f5-f"></span>
+                                <em class="f13-f">L4</em>
+                            </div>
+                        </div>
+                </ul>
+                <div class="g-no-data-monkey" *ngIf="searchContactList.length === 0">
+                    <span class="icon1-no-data-monkey"></span>
+                    <p class="f41-f">{{'NO RESULT' | translate}}</p>
+                </div>
+            </div>
+        </div>
+        <!--mission-->
+        <div class="home-search-mission">
+            <div class="home-search-mission-title f9-f">{{'MISSION' | translate}}</div>
+            <div class="home-search-mission-list" style="position: relative;min-height: 80px">
+                <ul class="clearfix" *ngIf="searchMissionList.length !== 0">
+                    <li class="clearfix add-pointer" *ngFor="let mission of searchMissionList"
+                        (click)="showSearchMissionDetail($event,mission)">
+                        <div class="mission-left-task-list">
+                            <h2 class="f21-f" title="{{mission.name}}">{{mission.name}}</h2>
+                            <p class="clearfix"><span
+                                    class="icon-board-{{mission.missionType | lowercase}}"></span><span class="f5-f">
+                                {{mission.missionType | translate}} {{mission.last_update_info.formatDate.hour}}:{{mission.last_update_info.formatDate.minute}}{{mission.last_update_info.formatDate.ap}} {{mission.last_update_info.formatDate.day}} {{mission.last_update_info.formatDate.month}}
+                            </span>
+                            </p>
+                            <div class="m-left-storage-people">
+                                <span class="icon1-Shape-3"></span>
+                                <profile-img class="ch-msg-logo" [userInfo]="mission?.last_update_info?.user_info" [settings]="{show_work_name: true}"></profile-img>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <div class="g-no-data-monkey" *ngIf="searchMissionList.length === 0">
+                    <span class="icon1-no-data-monkey"></span>
+                    <p class="f41-f">{{'NO RESULT' | translate}}</p>
+                </div>
+            </div>
+        </div>
+        <!--folder-->
+        <div class="home-search-folder">
+            <div class="home-search-folder-title f9-f">{{'FOLDER/FILES' | translate}}</div>
+            <div class="home-search-folder-list" style="position: relative;min-height: 80px">
+                <ul class="clearfix" *ngIf="searchFolderList.length !==0">
+                    <li *ngFor="let file of searchFolderList" class="add-pointer"
+                        (click)="enterToFolderComponent($event,file)">
+                        <div class="fo-type1-list-select "
+                             title="{{file.name}}"
+                             [class.fo-type1-list-pin]="file.is_starred === 1">
+                            <span *ngIf="file.chn==0  || file.chn == -1" class="icon-new-list icon-new-list-{{file.ext_type}}"></span>
+                            <div *ngIf="file.is_dir === 0 && file.ext_type==='image'">
+                                <img src="{{file.thumb_s ? config.resourceFolderDomain + file.thumb_s : ''}}"
+                                     style="margin-top: 10px;">
+                            </div>
+                        </div>
+                        <h3 class="f5-f" style="max-height: 29px;width: 50px;overflow: hidden;padding-bottom:4px;"
+                            title={{file.name}}
+                            [class.hide]="file.isShowInput">
+                            {{file.name}}
+                        </h3>
+                    </li>
+                </ul>
+                <div class="g-no-data-monkey" *ngIf="searchFolderList.length ===0" style="margin-left: -15px;">
+                    <span class="icon1-no-data-monkey"></span>
+                    <p class="f41-f">{{'NO RESULT' | translate}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <a href="javascript:;" class="pull-left font-page-esc home-search-esc" (click)="closeSearchComponent($event)"></a>
+</div>
+</perfect-scrollbar>

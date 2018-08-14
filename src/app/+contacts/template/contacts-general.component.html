@@ -1,0 +1,133 @@
+<perfect-scrollbar class="ps-container pull-left ct-right-left">
+    <div *ngIf="init">
+        <div class="a-list-top">
+            <h3 class="f7-f">{{'INDIVIDUAL INFORMATION' | translate}}</h3>
+            <p class="f14-f">{{'General information visible' | translate}}</p>
+        </div>
+        <ul *ngIf="isPrivate && init" class="ct-right-general">
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'WORK NAME' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!individual?.work_name">{{individual?.work_name?individual?.work_name:noData}}</p>
+            </li>
+            <li class="clearfix">
+                <div class="pull-left ct-right-general-left">
+                    <div class="g-title">
+                        <span class="f9-f">{{'PERSONAL PHONE' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!individual?.phone">{{individual?.phone?individual?.phone:noData}}</p>
+                </div>
+                <div class="pull-left ct-right-general-right">
+                    <div class="g-title">
+                        <span class="f9-f">{{'PERSONAL EMAIL' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!individual?.email">{{individual?.email?individual?.email:noData}}</p>
+                </div>
+            </li>
+            <li class="clearfix">
+                <div class="pull-left ct-right-general-left">
+                    <div class="g-title">
+                        <span class="f9-f">{{'GENDER' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!genderVal">{{(genderVal?genderVal:noData) | translate}}</p>
+                </div>
+                <div class="pull-left ct-right-general-right">
+                    <div class="g-title">
+                        <span class="f9-f">{{'BIRTHDAY' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!individual?.birthday">{{individual?.birthday?individual?.birthday:noData}}</p>
+                </div>
+            </li>
+            <li class="clearfix">
+                <div class="pull-left ct-right-general-left">
+                    <div class="g-title">
+                        <span class="f9-f">{{'CITY' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!individual?.nation">{{individual?.nation?individual?.nation:noData}}</p>
+                </div>
+                <div class="pull-left ct-right-general-right">
+                    <div class="g-title">
+                        <span class="f9-f">{{'COUNTRY' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!countryVal">{{countryVal?countryVal:noData}}</p>
+                </div>
+            </li>
+            <li *ngIf="companyList">
+                <div class="g-title">
+                    <span class="f9-f">{{'CURRENT BUSINESS' | translate}}</span>
+                </div>
+                <p class="f19-f ct-curr-company-list" *ngFor="let company of companyList">
+                <span *ngIf="company.could_add && currentPSID !== ''" title="add business friend" (click)="addBusinessFriend($event, company)"
+                      class="bi-icon-addpeople pull-left add-pointer"></span> {{company.company_name}} -
+                    {{company.p_name}}
+                </p>
+                <p class="f19-f g-no-data-color" *ngIf="companyList.length === 0">{{noData | translate}}</p>
+            </li>
+        </ul>
+        <ul *ngIf="!isPrivate && init" class="ct-right-general">
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'WORK NAME' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!individual.work_name">{{individual.work_name?individual.work_name:noData}}</p>
+            </li>
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'WORK EMAIL' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!individual.work_email">{{individual.work_email?individual.work_email:noData}}</p>
+            </li>
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'WORK PHONE' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!individual.work_phone">{{individual.work_phone?individual.work_phone:noData}}</p>
+            </li>
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'POSITION' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!individual.p_name">{{individual.p_name?individual.p_name:noData}}</p>
+            </li>
+        </ul>
+        <div class="a-list-top" *ngIf="privacy">
+            <h3 class="f7-f">{{'PRIVACY INFORMATION' | translate}}</h3>
+            <p class="f14-f">{{'Sensitive information set by your request' | translate}}</p>
+        </div>
+        <ul class="ct-right-general" *ngIf="privacy">
+            <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'REAL NAME' | translate}}</span>
+                </div>
+                <p class="f19-f" [class.g-no-data-color]="!privacy.real_name">{{privacy.real_name?privacy.real_name:noData}}</p>
+            </li>
+            <li class="clearfix">
+                <div class="pull-left ct-right-general-left">
+                    <div class="g-title">
+                        <span class="f9-f">{{'ID' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!privacy.identity_card">{{privacy.identity_card?privacy.identity_card:noData}}</p>
+                </div>
+                <div class="pull-left ct-right-general-right">
+                    <div class="g-title">
+                        <span class="f9-f">{{'PASSPORT' | translate}}</span>
+                    </div>
+                    <p class="f19-f" [class.g-no-data-color]="!privacy.passport">{{privacy.passport?privacy.passport:noData}}</p>
+                </div>
+            </li>
+
+           <!-- <li>
+                <div class="g-title">
+                    <span class="f9-f">{{'WAGE CARD' | translate}}</span>
+                </div>
+                <p class="f19-f">{{privacy.wage_card}}</p>
+            </li>-->
+        </ul>
+    </div>
+    <div class="profile-loadding" *ngIf="!init">
+        <loaders-css [loader]="'ball-scale-ripple-multiple'">
+            <div class="loader-inner ball-pulse"></div>
+        </loaders-css>
+    </div>
+</perfect-scrollbar>

@@ -1,0 +1,24 @@
+<div>
+    <folder-header #folderHeader
+                   (doSwitchView)="switchTheFolderView($event)"
+                   (doGoPreviousFolder)="enterFolder($event)"
+                   (doSearchFile)="searchFileByKeyWords($event)"
+                   (doShoWHelp)="showFolderHelpIntro($event)"
+                   [setSelected]="selectedInfo"
+    ></folder-header>
+    <section class="g-width">
+        <folder-left-menu #folderMenu
+                          (doSwitchFold)="enterFolder($event)"
+                          (outputSearchByExt)="searchFileByType($event)"
+                          (outFetchYourShare)="enterYourShareList($event)">
+        </folder-left-menu>
+        <folder-content #folderContent
+                        (outDealDropEvent)="dealOutDealDropEvent($event)"
+                        (enterFolderIn)="enterFolder($event)"
+                        (doSelectChange)="selectedChange($event)"
+                        (outputSwitchFolderPath)="switchSearchFolderPath($event)"
+                        [setFileList]="fileObj">
+        </folder-content>
+    </section>
+</div>
+

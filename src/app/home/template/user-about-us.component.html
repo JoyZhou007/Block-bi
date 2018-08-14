@@ -1,0 +1,86 @@
+<div class="login " [class.cn]="translate.lan === 'zh-cn'">
+    <div class="g-transition2 login-bg3" [class.login-filter]="isShowContactUs || isPicShow"></div>
+    <div class="g-transition2 login-mask"></div>
+
+    <div class="login-wrap">
+        <home-header></home-header>
+        <div class="login-main-menu" [class.hide]="isShowContactUs">
+            <!-- hide show-->
+            <div class="about-main" *ngIf="isMainShow">
+                <h2>{{"About us" | translate}}</h2>
+                <p class="f22-f">{{"about us1" | translate}}</p>
+                <p class="f22-f">{{"about us11" | translate}}</p>
+                <p class="f22-f">{{"about us12" | translate}}</p>
+            </div>
+            <div class="figure-explain-wrap" *ngIf="isPicShow">
+                <div class="figure-explain animated" [class.slideInLeft]="isServiceFlip" *ngIf="isServiceFlip">
+                    <h2>{{"Service Dept" | translate}}</h2>
+                    <p class="f22-f" [innerHTML]="'service1' | translate"></p>
+                </div>
+
+                <div class="figure-explain animated" *ngIf="isIdeaFlip" [class.slideInLeft]="isIdeaFlip">
+                    <h2>{{"Idea Dept" | translate}}</h2>
+                    <p class="f22-f" [innerHTML]="'idea1' | translate"></p>
+                </div>
+                <div class="figure-explain animated" *ngIf="isMarketingFlip" [class.slideInLeft]="isMarketingFlip">
+                    <h2>{{"Marketing Dept" | translate}}</h2>
+                    <p class="f22-f" [innerHTML]="'market1' | translate"></p>
+                </div>
+                <div class="figure-explain animated" *ngIf="isTechnicalFlip" [class.slideInLeft]="isTechnicalFlip">
+                    <h2>{{"Technical Dept" | translate}}</h2>
+                    <p class="f22-f" [innerHTML]="'tech1' | translate"></p>
+                </div>
+            </div>
+
+
+            <ul class="main-lst" *ngIf="isPicShow">
+                <li class="flip Y"
+                    (mouseenter)="flip($event,'idea')"
+                    (mouseleave)="flip($event,'idea')">
+                    <div class="front" [class.flip-front]="isIdeaFlip"
+                    ><span class="main-lst-txt f30-f">{{"IDEA" | translate}}<br>{{"DEPT" | translate}}</span></div>
+                    <div class="back bg1" [class.flip-back]="isIdeaFlip">
+                        <img src="{{config.staticResourceDomain + 'assets/images/man2.png'}}" alt="">
+                    </div>
+                </li>
+                <li class="flip Y"
+                    (mouseenter)="flip($event,'technical')"
+                    (mouseleave)="flip($event,'technical')">
+                    <div class="front" [class.flip-front]="isTechnicalFlip"
+                    ><span class="main-lst-txt f30-f">{{"TECHNICAL" | translate}}<br>{{"DEPT" | translate}}</span></div>
+                    <div class="back bg2" [class.flip-back]="isTechnicalFlip">
+                        <img src="{{config.staticResourceDomain + 'assets/images/man4.png'}}" alt="">
+                    </div>
+                </li>
+                <li class="flip Y"
+                    (mouseenter)="flip($event,'marketing')"
+                    (mouseleave)="flip($event,'marketing')">
+                    <div class="front" [class.flip-front]="isMarketingFlip"
+                    ><span class="main-lst-txt f30-f">{{"MARKETING" | translate}}<br>{{"DEPT" | translate}}</span></div>
+                    <div class="back bg3" [class.flip-back]="isMarketingFlip">
+                        <img src="{{config.staticResourceDomain + 'assets/images/man3.png'}}" alt="">
+                    </div>
+                </li>
+                <li class="flip Y"
+                    (mouseenter)="flip($event,'service')"
+                    (mouseleave)="flip($event,'service')">
+                    <div class="front" [class.flip-front]="isServiceFlip"
+                    ><span class="main-lst-txt f30-f">{{"SERVICE" | translate}}<br>{{"DEPT" | translate}}</span></div>
+                    <div class="back bg4" [class.flip-back]="isServiceFlip"
+                    >
+                        <img src="{{config.staticResourceDomain + 'assets/images/women2.png'}}" alt="">
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+        <!--S contact-us-->
+        <user-contact #contactUs (OutCloseContact)="clickShowContactUs($event)"></user-contact>
+        <!--E contact-us-->
+
+
+        <!--footer-->
+        <user-footer [isShowContactUs]="isShowContactUs" (OutShowContact)="clickShowContactUs($event)"></user-footer>
+    </div>
+</div>
+

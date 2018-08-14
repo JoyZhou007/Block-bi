@@ -1,0 +1,17 @@
+<div class="di2-con" (click)="stopPropagation($event)">
+    <div class="clearfix di2-time">
+        <span class="pull-left f49-f days">{{day}}</span>
+        <span class="f32-f"><em class="month">{{month}}</em> <em class="year">{{year}}</em></span>
+        <span class="f27-f week">{{week}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea current" data-maxLength="100" (blur)="onBlur($event)"
+                  placeholder="{{'Input your comments' | translate}}" [(ngModel)]="testMsg"></textarea>
+        <p class="g-show-error-color" *ngIf="errorMsg">{{'Can not be empty' | translate}}</p>
+    </div>
+    <div class="clearfix di2-share">
+        <span class="font-selectbutton-select g-checkbox" [class.g-checkbox-selected]="shareSelect" (click)="selectShare($event)"></span>
+        <span class="f9-f">{{'Share your pin to mission person' | translate}}</span>
+    </div>
+    <p class="f14-f">{{'Not select this option,only you will see this pin' | translate}}</p>
+</div>

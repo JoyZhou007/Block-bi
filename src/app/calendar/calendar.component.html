@@ -1,0 +1,121 @@
+<div class="date" #dateForm
+     [class.hide]="showTimeEl" [class.calendar-zindex]="Zindex"
+     [class.g-box-shadow-style1]="toggleBoxShadow"
+     [style.zIndex]="calendarZIndex"
+     (click)="onClickCalendar($event)">
+    <div class="clearfix date-top">
+        <a class="date-top-but date-top-prev font-page-next-small add-pointer"
+           (click)="setShowDate(1, $event)"
+           (mousedown)="onHourMouseDown('left',$event)"></a>
+        <div class="pull-left date-top-warp">
+            <div class="data-top-month" #dataMonth>
+                <span (click)="showSelectMonth($event)">{{dateWord.month[showDateIn.month]}}</span>
+                <div class="d-select date-month single-date-month single-month-position">
+                    <ul class="hide d-select date-month" #selectMonth>
+                        <li *ngFor="let month of dateWord.month; let i = index"
+                            [class.calendar-year-active]='month ===dateWord.month[showDateIn.month]'
+                            (click)="setShowMonth($event,i)">
+                            <span class="base">{{month}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="data-top-year" #dataYear>
+                <span (click)="showSelectYear($event)">{{showDateIn.year}}</span>
+                <div class="d-select date-year single-date-year single-year-position">
+                        <ul class="hide" #selectYear>
+                        <li *ngFor="let year of showSelectYearArr"
+                            [class.calendar-year-active]='year === showDateIn.year'
+                            (click)="setShowYear($event,year)">
+                            <span class="base">{{year}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <a class="date-top-but date-top-next font-page-next-small add-pointer"
+           (click)="setShowDate(2, $event)"
+           (mousedown)="onHourMouseDown('right',$event)"></a>
+    </div>
+    <ul class="clearfix f5-f date-week">
+        <li>su</li>
+        <li>mo</li>
+        <li>tu</li>
+        <li>we</li>
+        <li>th</li>
+        <li>fr</li>
+        <li>sa</li>
+    </ul>
+    <div>
+        <ul class="clearfix f39-f date-list">
+            <li *ngFor="let date of showDate,let i=index"
+                [class.hide]="date.isHide"
+                [class.date-list-gray]="date.before || date.after"
+                [class.hasdone]="date.done"
+                [class.todo]="date.todo"
+                [class.date-list-left]="date.selectedStart || i%7 == 0 || (date.leftRadius && !date.done && !date.todo)"
+                [class.date-list-right]="date.selectedEnd || i%7 == 6 || date.lastBeforeToday || (date.rightRadius  && !date.done && !date.todo)"
+                [class.haveTask]="date.task"
+                [class.current]="date.isToday"
+                [class.enddate]="date.selectedEnd"
+                [class.selected]="date.selected"
+                (click)="onClickEvent(date, i, $event); ondblClickEvent(date,i, $event)">
+
+                <span [class.done-background]="date.spanDoneBg"> {{date.selectedCurrent ? '' : date.monthDay}}</span>
+                <em></em>
+                <p class="date-left"
+                   [class.done-background]="date.leftDoneBg && !date.selectedStart"
+                ></p>
+                <p class="date-right"
+                   [class.todo-background]="date.isMiddle"
+                ></p>
+            </li>
+        </ul>
+
+        <div class="date-pins" [class.hide]="!isShowPin">
+            <div class="date-add-pin">
+                <div class="date-pins-top-wrap">
+                    <!--pins-->
+                    <div *ngFor="let pinObj of pinList;let i = index" class="date-pins-top" [class.hide]="pinObj.hide">
+                        <span class="bi-icon-edit g-transition2" (click)="pinHandle('update',$event, pinObj,i)"></span>
+                        <span class="font-remove g-transition2" (click)="removePin($event,pinObj)"></span>
+                        <div class="clearfix date-add-pin-user">
+                            <img src="{{pinObj.user_info===undefined ? '' : config.resourceDomain + pinObj.user_info.user_profile_path}}"
+                                 alt="" class="pull-left">
+                            <div class="pull-left">
+                                <div class="f23-f">{{pinObj.user_info===undefined ? '' : pinObj.user_info.name}}</div>
+                                <div class="f5-f">{{pinObj.showTime }}</div>
+                            </div>
+                        </div>
+                        <p class="f25-f date-add-pin-con">{{pinObj.description}}</p>
+                    </div>
+                    <!--missions-->
+                    <div class="date-pins-list" *ngFor="let missionObj of missionList">
+                        <div class="date-pins-item" [class.hide]="missionObj.isHide">
+                            <p class="f12-f date-pins-item-title"
+                               title="{{missionObj.getMissionType +' '+missionObj.name}}"
+                               *ngIf="missionObj.missionType != undefined">{{missionObj.getMissionType +" "+missionObj.name}}</p>
+                            <p>
+                                <span class="date-pins-item-circle"
+                                      [class.date-pins-item-circle-start]="missionObj.type === 0"></span>
+                                <span class="date-pins-item-start">{{missionObj.des}}</span>
+                                <span class="pull-right f22-f">{{(missionObj.showTime)}}</span>
+                                <span class="date-pins-item-line" *ngIf="missionObj.type === 2"></span>
+                            </p>
+                            <p *ngIf="missionObj.type === 2">
+                                <span class="date-pins-item-circle date-pins-item-circle-start"></span>
+                                <span class="date-pins-item-start">End time</span>
+                                <span class="pull-right f22-f">{{missionObj.mission_end.showTime}}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="but but-deep-color date-pins-bottom" (click)="pinHandle('add')">
+                    <span class="base g-clearStyle">{{'ADD A PIN' | translate}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

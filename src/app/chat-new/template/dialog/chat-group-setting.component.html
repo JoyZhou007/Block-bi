@@ -1,0 +1,27 @@
+<div class="g-title" *ngIf="!isMission">
+    <span class="f9-f">{{'INVITATION PERMISSION' | translate}}</span>
+</div>
+<ul class="g-d-drag" *ngIf="!isMission">
+    <li class="clearfix">
+        <div class="pull-left">
+            <p class="f10-f">{{'allow person' | translate}}</p>
+        </div>
+        <div class="g-drag1-width1 g-margin-top-4" style="width:56px;">
+            <switch-button [initVal] = "invitePeoplePerm" (switchButEvent) = "setInvitePeoplePerm($event)"></switch-button>
+        </div>
+    </li>
+</ul>
+<div class="g-title g-padding-top0">
+    <span class="f9-f">{{'TOPIC' | translate}}</span>
+</div>
+<div class="g-textArea-set">
+    <textarea textareaHeight class="g-textArea di-textArea" data-maxLength="50" [(ngModel)]="getData.topic"></textarea>
+</div>
+<p class="f33-f g-margin-top5">{{'Maximum 50' | translate}}</p>
+<div class="g-title" *ngIf="!isMission">
+    <span class="f9-f">{{'CHANNEL NAME' | translate}}</span>
+</div>
+<div class="g-textArea-set"  *ngIf="!isMission" >
+    <textarea textareaHeight class="g-textArea di-textArea" data-maxLength="50" [(ngModel)]="getData.name"></textarea>
+</div>
+<p class="f33-f g-margin-top5" *ngIf="!isMission">{{'Maximum 50' | translate}}</p>

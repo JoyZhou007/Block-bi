@@ -1,0 +1,20 @@
+<div class="pull-right a-right" *ngIf="role">
+    <div class="a-photo"
+         uploadDirective [fileId]="avatarId" [fileParam]="uploadFileParam"
+         (showFile)="doShowAvatar($event)" [base64File]="fileData" [isUpload]="upload">
+        <img src="{{avatarUrl ? avatarUrl : ''}}" />
+        <div class="but-photo-mask pull-left">
+            <div class="but-photo-mask-pos">
+                <span class="font-photo"></span>
+                <span class="f28-f">{{'UPLOAD BUSINESS LOGO' | translate}}</span>
+            </div>
+            <input type="file" style="display: none; width: 100%;height: 100%;" #userInput>
+        </div>
+        <cropper (afterCropFile)="doCropEvent($event)" #cropperForm></cropper>
+    </div>
+</div>
+<div class="pull-right a-right" *ngIf="!role">
+    <div class="a-photo">
+        <img src="{{avatarUrl ? avatarUrl : ''}}" />
+    </div>
+</div>

@@ -1,0 +1,54 @@
+<div class="ch-r-right-item ch-r-right-files " [class.ch-r-right-item-hide]="!showPostFiles">
+    <div class="ch-r-right-item-title cursor" style="margin-bottom: 15px"
+         (click)="clickShowPostFiles($event)">
+        <span class="icon-title-post g-margin-top2 chat-sidebar-post-file-icon"></span>
+        <!--<span class="icon-file-post g-margin-top2">-->
+            <!--<em class="path1"></em>-->
+            <!--<em class="path2"></em>-->
+            <!--<em class="path3"></em>-->
+        <!--</span>-->
+        <i class="f16-f">{{'Post' | translate}}</i>
+        <span class="font-selectbutton-soildclose pull-right"
+              (click)="clickShowPostFiles($event)"
+        ></span>
+    </div>
+    <div class="ch-r-right-item-content chat-pins-empty f31-f" *ngIf="postFilesList.length === 0 && hasInit">
+        {{'post desc' | translate }}
+    </div>
+    <div class="ch-r-right-item-content">
+        <div class="ch-r-right-files-list">
+            <ul>
+
+
+                <li class="ch-pins-list-item ch-pins-list-item-post"
+                    *ngFor="let postObj of postFilesList; trackBy: postObj?.msg_id;"
+                    (click)="jumpToMessage($event,postObj)"
+                >
+                    <div toggleSelectGroup *ngIf="postObj.status === 1">
+                        <span class="font-remove ch-pins-list-icon" (click)="removeTheMessage($event,postObj)"></span>
+                        <span class="font-more ch-pins-list ch-pins-list-icon"
+                              #toggleSelectBut
+                        ></span>
+                        <div class="d-select" #toggleSelect>
+                            <ul style="max-height:400px;">
+                                <li (click)="setPinMessageForward($event, postObj)"><em class="base">{{'Forward' | translate}}</em></li>
+                                <li (click)="setMessageAt($event, postObj)"><em class="base">@</em></li>
+                                <li  *ngIf="!postObj.hasPin" (click)="setMessagePin($event,postObj)"><em class="base">{{'Pin it' | translate}}</em></li>
+                                <li  *ngIf="postObj.hasPin" (click)="setMessagePin($event,postObj)"><em class="base">{{'Unpin it' | translate}}</em></li>
+                                <li class="d-select-remove" (click)="removeTheMessage($event,postObj)"><em class="base">{{'Remove this message' | translate}}</em></li>
+                            </ul>
+                        </div>
+                        <p class="f21-f">{{postObj?.detail?.post_name}}</p>
+                        <p style="margin-top: 2px;">
+                            <span class="icon-board-post"></span> <span class="f5-f">Post</span>
+                        </p>
+                    </div>
+                    <div *ngIf="postObj.status === 0">
+                        {{'This message have been revoked, this post will be removed automatically' | translate}}
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+</div>

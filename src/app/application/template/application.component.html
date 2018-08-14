@@ -1,0 +1,182 @@
+<div class="new-apply-wrap clearfix">
+    <div class="new-apply-left pull-left">
+        <ul class="new-apply-left-list">
+            <li class="current" [class.current]="isShowAttendance" (click)="onClickTab('attendance',$event)">
+                <span class="icon1-attendance"></span>
+                <br />
+                <em class="f15-f">{{'Attendance' | translate}}</em>
+            </li>
+            <li [class.current]="isShowVacation" (click)="onClickTab('vacation',$event)">
+                <span class="icon1-vacation"></span>
+                <br />
+                <em class="f15-f">{{'Vacation' | translate}}</em>
+            </li>
+            <li [class.current]="isShowResignation" (click)="onClickTab('resignation',$event)">
+                <span class="icon1-workhour"></span>
+                <br />
+                <em class="f15-f">{{'Resignation Application' | translate}}</em>
+            </li>
+        </ul>
+    </div>
+    <div class="new-apply-right pull-right">
+        <div class="attendance-right apply-right-item" [class.hide]="!isShowAttendance">
+            <p class="attendance-right-b g-line-height16">
+                <span class="f5-f" *ngIf="isHasLastLeaveData">{{'Out office from' | translate}}
+                    {{attendanceData.last_out_office?.formatStartDate.hour}}:{{attendanceData.last_out_office?.formatStartDate.minute}}
+                    {{attendanceData.last_out_office?.formatStartDate.monthDay}} {{attendanceData.last_out_office?.formatStartDate.stringMonth}}</span>
+                <span class="f5-f" *ngIf="!isHasLastLeaveData">{{'None Out Office' | translate}}</span>
+                <span class="f46-f g-margin-left5 application-result"
+                      *ngIf="attendanceData.last_out_office && attendanceData.last_out_office.status == 1">{{'approved' |translate}}</span>
+                <span class="f9-f g-margin-left5 application-result"
+                      *ngIf="attendanceData.last_out_office && attendanceData.last_out_office.status == 2">{{'refused' | translate}}</span>
+                <span class="font-add pull-right apply-add-icon" (click)="addAttendance($event)"
+                      tooltip [tooltip]="{content:'out office application', position:'top'}"></span>
+            </p>
+            <p class="f13-f g-line-height16" *ngIf="hasCid && workDayString">{{workDayString}} {{'from' | translate}} {{everyDayStart}}
+                {{'to' | translate}} {{everyDayEnd}}</p>
+            <div class="attendance-list clearfix">
+                <ul class="attendance-list-title clearfix">
+                    <li class="f33-f">
+                        {{'Date' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Arrived' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Left' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Status' | translate}}
+                    </li>
+                </ul>
+                <div class="attendace-scroll">
+                    <ul class="attendance-list-content clearfix" *ngFor="let attendance of attendanceList">
+                        <li>
+                            <span class="base f15-f">{{attendance.formatArrivedTime?.monthDay}} {{attendance.formatArrivedTime?.stringMonth}}</span>
+                        </li>
+                        <li>
+                            <span class="f5-f base">{{attendance.formatArrivedTime?.hour}}:{{attendance.formatArrivedTime?.minute}}</span>
+                        </li>
+                        <li>
+                    <span
+                            class="f5-f base">{{attendance.formatLeaveTime?.hour}}:{{attendance.formatLeaveTime?.minute}}</span>
+                        </li>
+                        <li class="f5-f">
+                            <span>{{'Status' | translate}}</span>
+                        </li>
+                    </ul>
+                    <p class="g-no-data-color g-margin-top10" style="text-align: center;"
+                       *ngIf="!attendanceList.length">{{'No Data' | translate}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="vacation-right apply-right-item" [class.hide]="!isShowVacation">
+            <p class="attendance-right-b g-line-height16">
+                <span class="f5-f" *ngIf="vacationData.type"> {{'your last' | translate}} {{vacationData.type | translate}} {{'vacation: from' | translate}}
+                    {{vacationData.startTime}} {{ 'to ' | translate}} {{vacationData.endTime}}</span>
+                <span class="f5-f" *ngIf="!vacationData.type">{{'no vacation application' | translate}}</span>
+                <span class="f46-f g-margin-left5 application-result" *ngIf="vacationData && vacationData.status==1">{{'approved' | translate}}</span>
+                <span class="f9-f g-margin-left5 application-result" *ngIf="vacationData && vacationData.status==2">{{'refused' | translate}}</span>
+                <span class="font-add pull-right apply-add-icon" (click)="onAddVacationApplication($event)"
+                      tooltip [tooltip]="{content:'leave application', position:'top'}"></span>
+            </p>
+            <p class="f13-f g-line-height16" *ngIf="nextHoliday.name"> {{'next holiday is' | translate}} {{nextHoliday.name}}
+                , {{ 'from' | translate }} {{nextHoliday.start}} {{ 'to' | translate}}
+                {{nextHoliday.end}} | {{ 'Replace day' | translate}} : {{replaceDate}}</p>
+            <p class="f13-f" *ngIf="!nextHoliday.name">{{'no vacation information' | translate}}</p>
+            <div class="rest-vacation clearfix">
+                <span class="f15-f pull-left g-line-height16"><em class="base">{{'Rest of annual vacation' | translate}}</em></span>
+                <span class="f5-f pull-right g-line-height16"><em class="base">{{restVacation}} {{'Days' | translate}}</em></span>
+            </div>
+            <div class="attendance-list clearfix">
+                <ul class="vacation-list-title clearfix">
+                    <li class="f33-f">
+                        {{'Casual leave' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Sick leave' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Marital leave' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Maternity leave' | translate}}
+                    </li>
+                    <li class="f33-f">
+                        {{'Annual leave' | translate}}
+                    </li>
+                </ul>
+                <ul class="vacation-list-content clearfix" *ngIf="hasInit">
+                    <li class="clearfix">
+                        <div class="list-content-item">
+                            <div class="se-input-select" *ngIf="tplVacationTimeList.length">
+                            <span class="font-selectbutton-soildclose"
+                                  [class.font-selectbutton-soildclose-apply]="!showVacationDetail"
+                                  (click)="clickShowVacationDetail($event)"></span>
+                            </div>
+                            <span class="f5-f base">{{vacationObj[1]?.used}}/{{vacationObj[1]?.all===-1?'∞':vacationObj[1]?.all}}</span>
+                        </div>
+                        <div class="list-content-item">
+                            <span class="f5-f base">{{vacationObj[2]?.used}}/{{vacationObj[2]?.all===-1?'∞':vacationObj[2]?.all}}</span>
+                        </div>
+                        <div class="list-content-item">
+                            <span class="f5-f base">{{vacationObj[3]?.used}}/{{vacationObj[3]?.all===-1?'∞':vacationObj[3]?.all}}</span>
+                        </div>
+                        <div class="list-content-item">
+                            <span class="f5-f base">{{vacationObj[4]?.used}}/{{vacationObj[4]?.all===-1?'∞':vacationObj[4]?.all}}</span>
+                        </div>
+                        <div class="list-content-item">
+                            <span class="f5-f base">{{vacationObj[5]?.used}}/{{vacationObj[5]?.all===-1?'∞':vacationObj[5]?.all}}</span>
+                        </div>
+                        <div class="list-content-item-child" [hidden]="!showVacationDetail"
+                             *ngFor="let dateObj of tplVacationTimeList;"
+                        >
+                            <div class="list-content-item">
+                                <span class="f5-f base" *ngIf="dateObj[1].isExist">{{dateObj[1].start}} <span
+                                        class="icon1-Shape-2"></span> {{dateObj[1].end}}</span>
+                                <span class="f5-f base" *ngIf="!dateObj[1].isExist">&#45;&#45;</span>
+                            </div>
+                            <div class="list-content-item">
+                                <span class="f5-f base" *ngIf="dateObj[2].isExist">{{dateObj[2].start}} <span
+                                        class="icon1-Shape-2"></span> {{dateObj[2].end}}</span>
+                                <span class="f5-f base" *ngIf="!dateObj[2].isExist">&#45;&#45;</span>
+                            </div>
+                            <div class="list-content-item">
+                                <span class="f5-f base" *ngIf="dateObj[3].isExist">{{dateObj[3].start}} <span
+                                        class="icon1-Shape-2"></span> {{dateObj[3].end}}</span>
+                                <span class="f5-f base" *ngIf="!dateObj[3].isExist">&#45;&#45;</span>
+                            </div>
+                            <div class="list-content-item">
+                                <span class="f5-f base" *ngIf="dateObj[4].isExist">{{dateObj[4].start}} <span
+                                        class="icon1-Shape-2"></span> {{dateObj[4].end}}</span>
+                                <span class="f5-f base" *ngIf="!dateObj[4].isExist">&#45;&#45;</span>
+                            </div>
+                            <div class="list-content-item">
+                                <span class="f5-f base" *ngIf="dateObj[5].isExist">{{dateObj[5].start}} <span
+                                        class="icon1-Shape-2"></span> {{dateObj[5].end}}</span>
+                                <span class="f5-f base" *ngIf="!dateObj[5].isExist">&#45;&#45;</span>
+                            </div>
+                        </div>
+                        <p class="g-no-data-color g-margin-top10" style="text-align: center;"
+                           [class.hide]="!tplVacationTimeList.length">{{'No Data' | translate}}</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="resignation-right apply-right-item" [class.hide]="!isShowResignation">
+            <p class="f9-f g-line-height16">{{'Notes' |  translate}}</p>
+            <p class="f27-f g-margin-top10 g-line-height16">
+              {{'register desc' | translate}}
+            </p>
+            <div class="resignation-btn" [class.g-readonly-input]="isCeo"
+                 (click)="clickApplyResignation($event)">
+                <em class="base">
+                    {{'Apply Now' | translate}}
+                </em>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

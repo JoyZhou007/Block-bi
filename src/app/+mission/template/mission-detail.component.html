@@ -1,0 +1,525 @@
+<div *ngIf="missionObj">
+    <header class="g-header mission-header">
+        <div class="pull-left m-header-title m-create-header-title "
+             [class.m-detail-header-title]="!isEditModel"
+             [class.m-header-application]="isEditModel">
+            <div class="clearfix m-create-title">
+                <span class="icon-title-{{currentTypeTitle | lowercase}}"></span>
+                <span class="pull-left f18-f">{{currentTypeTitle | translate}}</span>
+                <span class="pull-left m-create-line"></span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_DOING">{{'doing' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_TODO">{{'to do' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING">{{'pending' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_RESET">{{'reset' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_PAUSE">{{'pause' | translate}}</span>
+                <span class="m-create-header-done f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_DONE">{{'done' | translate}}</span>
+                <span class="m-create-header-done f42-f"
+                      *ngIf="missionObj.mission_status === missionConstant.MISSION_STATUS_STORAGE">{{'storage' | translate}}</span>
+            </div>
+            <div class="clearfix m-create-planning g-title-des" *ngIf="!isEditModel">
+                <span class="font-prior m-prior {{'font-prior-color'+importanceValue}}"></span>
+                <span class="pull-left f15-f mission-title-width" title="{{missionObj.name}}">{{missionObj.name}}</span>
+            </div>
+            <div class="clearfix m-create-planning" *ngIf="isEditModel">
+                <div class="pull-left f13-f m-header-edit-type" (click)="doShowInput($event)">
+                    <div class="mission-title-width" title="{{missionObj.name ? missionObj.name : (('Type your mission name in here') | translate)}}">
+                        {{missionObj.name ? missionObj.name : (('Type your mission name in here') | translate)}}
+                    </div>
+                    <span class="bi-icon-edit"></span>
+                </div>
+                <div class="edit-type" [class.hide]="!isShowEditInput" (click)="doStopPropagation($event)">
+                    <input type="text" placeholder="{{'Type your mission name in here' | translate}}"
+                           [(ngModel)]="missionObj.name"
+                           (keyup)="confirmMissionName($event)"
+                    />
+                    <span class="">{{'Enter to submit, ESC to cancel' | translate}}</span>
+                </div>
+                <span class="pull-left m-create-line"></span>
+                <span class="m-create-table g-checkbox  font-selectbutton-select"
+                      (click)="showOnTable()"
+                      [class.g-checkbox-selected]="isShowOnTable"
+                ></span>
+                <span class="m-create-table f9-f">{{'Show on the table' | translate}}</span>
+            </div>
+        </div>
+        <div class="pull-right">
+            <!------只读模式下------------->
+            <div class="pull-left g-header-but" *ngIf="!isEditModel">
+                <span class="pull-left but but-refuse" *ngIf="isShowRefuse"
+                      (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_REFUSE)">
+                    <span class="base g-inline-block">{{'REFUSE' | translate}}</span>
+                </span>
+                <span class="pull-left but but-approve"
+                      *ngIf="isShowAccept &&  (currentType===missionConstant.MISSION_TYPE_APPLICATION)"
+                      (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_APPROVOR)">
+                    <span class="base g-inline-block">{{'APPROVE' | translate}}</span>
+                </span>
+                <span class="pull-left but but-accept"
+                      *ngIf="isShowAccept && (currentType!==missionConstant.MISSION_TYPE_APPLICATION) "
+                      (click)="operateTheMission($event,missionConstant.MISSION_USER_OPERATOR_ACCEPT)">
+                    <span class="base g-inline-block">{{'ACCEPT' | translate}}</span>
+                </span>
+                <span class="pull-left but but-complete" *ngIf="isShowComplete"
+                      (click)="completeTheMission($event)">
+                    <i class="base">{{'COMPLETE' | translate}}</i>
+                </span>
+                <span class="pull-left but but-accept" *ngIf="isShowRestart"
+                      (click)="changeMissionStatus($event,missionConstant.MISSION_STATUS_DOING)">
+                    <i class="base">{{'RESTART' | translate}}</i>
+                </span>
+                <span class="pull-left but but-accept" *ngIf="isShowCheck"
+                      (click)="checkTheMission($event)">
+                    <i class="base">{{'CHECK' | translate}}</i>
+                </span>
+            </div>
+            <!------编辑模式下--------------->
+            <div class="pull-left g-header-but" *ngIf="isEditModel && isShowUpload">
+                <i class="g-btn-error" title="{{btnFail | translate}}">{{btnFail | translate}}</i>
+                <span class="pull-left but but-cancel" (click)="cancelEdit($event)">
+                    <i class="base">{{'CANCEL' | translate}}</i>
+                </span>
+                <span class="pull-left but but-done" saveDataGroup #saveDataElement (outSaveData)="upLoadMission(saveDataElement, currentType)">
+                    <i class="base">{{'UPLOAD' | translate}}</i>
+                    <i class="font-selectbutton-select but-status"></i>
+                    <i class="font-remove but-status"></i>
+                </span>
+            </div>
+            <div class="pull-left g-header-icon">
+                <div class="pull-left" *ngIf="isShowPause">
+                   <span class="g-header-icon-list icon1-pause"
+                         tooltip [tooltip]="{content:'PAUSE', position:'bottom'}"
+                         (click)="changeMissionStatus($event,missionConstant.MISSION_STATUS_PAUSE)"></span>
+                </div>
+                <div class="pull-left">
+                   <span class="g-header-icon-list font-calendarcondition-schedule"
+                         tooltip [tooltip]="{content:'schedule', position:'bottom'}"
+                         [class.current]="showSchedule"
+                         mission-list-schedule [schedule]="{content: chooseList, viewContainer: viewBox}"
+                         (click)="clickShowSchedule($event)"></span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list font-trash g-trash"
+                          tooltip [tooltip]="{content:'delete', position:'bottom'}"
+                          *ngIf="isPublisher &&
+                           (missionObj.mission_status !== missionConstant.MISSION_STATUS_DONE)
+                            && (missionObj.mission_status !== missionConstant.MISSION_STATUS_STORAGE)"
+                          (click)="deleteTheMission($event)"></span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list  font-transfer"
+                          tooltip [tooltip]="{content:'transfer', position:'bottom'}"
+                          *ngIf="isPublisher
+                            && (currentType !== missionConstant.MISSION_TYPE_APPLICATION)
+                            && (missionObj.mission_status !== missionConstant.MISSION_STATUS_DONE)
+                            && (missionObj.mission_status !== missionConstant.MISSION_STATUS_STORAGE)"
+                          (click)="transferTheMission($event)">
+                    </span>
+                </div>
+                <div class="pull-left" (click)="openMissionChatDialog($event)">
+                    <span class="g-header-icon-list bi-icon-rectangle"
+                          tooltip [tooltip]="{content:'chat', position:'bottom'}"
+                          *ngIf="currentType !== missionConstant.MISSION_TYPE_APPLICATION && !missionObj.is_observer"></span>
+                </div>
+                <div class="pull-left"
+                     (click)="changeMissionStatus($event,missionConstant.MISSION_STATUS_STORAGE)"
+                     *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_DONE) && isPublisher">
+                    <span class="g-header-icon-list font-archive"
+                          tooltip [tooltip]="{content:'archive', position:'bottom'}"
+                    ></span>
+                </div>
+                <div class="pull-left" (click)="doEditTheMission($event)"
+                     *ngIf="(!isEditModel && isPublisher && isShowUpload)
+                     && ((missionObj.mission_status === missionConstant.MISSION_STATUS_TODO)
+                     ||(missionObj.mission_status === missionConstant.MISSION_STATUS_DOING)
+                     ||(missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING))">
+                    <span class="g-header-icon-list bi-icon-edit" hiddentooltip
+                          [tooltip]="{content:'edit', position:'bottom'}"></span>
+                </div>
+                <div class="pull-left" toggleSelectGroup (callBackData)="getElement($event, missionObj.has_alarm)">
+                    <div #toggleSelectBut>
+                        <span class="g-header-icon-list font-alarm"
+                              tooltip [tooltip]="{content:'alarm', position:'bottom'}"
+                              *ngIf="!missionObj.has_alarm">
+                        </span>
+                        <span class="g-header-icon-list icon1-alarm alarm-clicked" *ngIf="missionObj.has_alarm"
+                              tooltip [tooltip]="{content:'alarm', position:'bottom'}"
+                              title="{{missionObj.effective_time_display}}"></span>
+                    </div>
+                    <div class="d-select" style="left:auto;right:0;" #toggleSelect>
+                        <ul #toggleSelectContent>
+                            <li *ngIf="missionObj.alarm_type ==1 || missionObj.alarm_type ==0" (click)="onclickPeriodicity($event)">{{'Periodicity' | translate}}</li>
+                            <li *ngIf="missionObj.alarm_type ==2 || missionObj.alarm_type ==0" (click)="onClickFixTime($event)">{{'Fixed time' | translate}}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <a href="javascript:;" class="pull-left font-page-esc add-pointer" (click)="backToMissionList()"></a>
+        </div>
+    </header>
+
+    <!--calendar repeat -->
+    <bi-calendar-repeat class="calendar-repeat-init" [dataOption]="repeatData"
+                        (outRepeatInfo)="getRepeat($event)" (outRepeatDeleteInfo)="deleteRepeat($event)" [class.hide]="!isShowCalendarRepeat"
+    ></bi-calendar-repeat>
+    <!--calendar fix-->
+   <bi-calendar-fix class="calendar-fix-init"
+                    *ngIf="isMissionShow"
+                    (outFixInfo)="getFix($event)"
+                    (outDeleteInfo)="deleteFix($event)"
+                    (outDefault)="getOutDefault()"
+                    [dataOption]="fixData"
+    ></bi-calendar-fix>
+  <!--  <perfect-scrollbar class="ps-container m-detail-warp">-->
+        <section [class.hide]="showSchedule" class="clearfix mission-warp m-detail-warp">
+
+        <!--left start-->
+            <perfect-scrollbar class="ps-container m-detail-warp m-left pull-left" *ngIf="!isEditModel">
+            <bi-calendar [setOption]="calendarOption" [isBoxShadow]="false"></bi-calendar>
+            <!--link start-->
+            <mission-link [setMissionDetail]="missionObj"></mission-link>
+            <!--link end-->
+            <!-- 评分 -->
+        <!--    <div class="m-side-grade g-margin-top20">
+                <div class="clearfix m-side-grade-title">
+                    <span class="font-grade"></span>
+                    <span class="f16-f base">{{'Evaluate' | translate}}</span>
+                </div>
+                <span class="f33-f g-title-des g-display-inline-block">Just grade related ability in this mission</span>
+                <div class="m-side-grade-people">
+                    <profile-img [userInfo]="{user_profile_path: '/assets/images/personal-profile-title-img1.jpg', work_name: 'Anthony Schultz'}" [settings]="{show_work_name: true}"></profile-img>
+                    <span class="font-selectbutton-soildclose"></span>
+                </div>
+                <ul class="m-side-grade-simple hide">
+                    <li class="clearfix">
+                        <span class="pull-left f9-f">{{'MANAGEMENT' | translate}}</span>
+                        <span class="font-mission-too-bad2"><em class="path1"></em></span>
+                    </li>
+                    <li class="clearfix">
+                        <span class="pull-left f9-f">{{'CREATIVITY' | translate}}</span>
+                        <span class="font-mission-meh2"><em class="path1"></em></span>
+                    </li>
+                    <li class="clearfix">
+                        <span class="pull-left f9-f">{{'EXECUTION' | translate}}</span>
+                        <span class="font-mission-bad2"><em class="path1"></em></span>
+                    </li>
+                    <li class="clearfix">
+                        <span class="pull-left f9-f">{{'PLANNING' | translate}}</span>
+                        <span class="font-mission-good2"><em class="path1"></em></span>
+                    </li>
+                    <li class="clearfix">
+                        <span class="pull-left f9-f">{{'STRAIN' | translate}}</span>
+                        <span class="font-mission-awesome2"><em class="path1"></em></span>
+                    </li>
+                </ul>
+                <dl class="m-side-grade-list">
+                    <dt class="f9-f"></dt>
+                    <dd class="clearfix">
+                        <ul class="clearfix">
+                            <li>
+                                <span class="font-mission-too-bad2"><em class="path1"></em></span>
+                            </li>
+                            <li><span class="font-mission-bad1"></span></li>
+                            <li><span class="font-mission-meh1"></span></li>
+                            <li><span class="font-mission-good1"></span></li>
+                            <li><span class="font-mission-awesome1"></span></li>
+                        </ul>
+                    </dd>
+                    <dt class="f9-f">{{'CREATIVITY' | translate}}</dt>
+                    <dd class="clearfix">
+                        <ul class="clearfix">
+                            <li><span class="font-mission-too-bad1"></span></li>
+                            <li><span class="font-mission-bad1"></span></li>
+                            <li>
+                                <span class="font-mission-meh2"><em class="path1"></em></span>
+                            </li>
+                            <li><span class="font-mission-good1"></span></li>
+                            <li><span class="font-mission-awesome1"></span></li>
+                        </ul>
+                    </dd>
+                    <dt class="f9-f">{{'EXECUTION' | translate}}</dt>
+                    <dd class="clearfix">
+                        <ul class="clearfix">
+                            <li><span class="font-mission-too-bad1"></span></li>
+                            <li>
+                                <span class="font-mission-bad2"><em class="path1"></em></span>
+                            </li>
+                            <li><span class="font-mission-meh1"></span></li>
+                            <li><span class="font-mission-good1"></span></li>
+                            <li><span class="font-mission-awesome1"></span></li>
+                        </ul>
+                    </dd>
+                    <dt class="f9-f">{{'PLANNING' | translate}}</dt>
+                    <dd class="clearfix">
+                        <ul class="clearfix">
+                            <li><span class="font-mission-too-bad1"></span></li>
+                            <li><span class="font-mission-bad1"></span></li>
+                            <li><span class="font-mission-meh1"></span></li>
+                            <li>
+                                <span class="font-mission-good2"><em class="path1"></em></span>
+                            </li>
+                            <li><span class="font-mission-awesome1"></span></li>
+                        </ul>
+                    </dd>
+                    <dt class="f9-f">{{'STRAIN' | translate}}</dt>
+                    <dd class="clearfix">
+                        <ul class="clearfix">
+                            <li><span class="font-mission-too-bad1"></span></li>
+                            <li><span class="font-mission-bad1"></span></li>
+                            <li><span class="font-mission-meh1"></span></li>
+                            <li><span class="font-mission-good1"></span></li>
+                            <li>
+                                <span class="font-mission-awesome2"><em class="path1"></em></span>
+                            </li>
+                        </ul>
+                    </dd>
+                </dl>
+            </div>-->
+            <!-- notification -->
+            <div class="side-message hide">
+                <img class="pull-left" src="{{config.staticResourceDomain + 'assets/images/personal-profile-title-img1.jpg'}}"/>
+                <span class="f23-f">Roy Reed</span>
+                <span class="f5-f">Upload 11:02am16th Jun</span>
+                <a class="font-remove" href="javascript:;"></a>
+            </div>
+            </perfect-scrollbar>
+        <div class="pull-left m-left" *ngIf="isEditModel">
+            <div class="m-a-period">
+                <div class="clearfix m-a-side-title">
+                    <span class="pull-left font-hourglass"></span>
+                    <span class="f16-f">{{'Set mission period' | translate}}</span>
+                </div>
+                <p class="f33-f g-title-des g-display-inline-block">{{'If don`t set it' | translate}}</p>
+            </div>
+            <div style="position:relative;">
+                <div class="fixed z-index-num4" #calendarProfile>
+                    <bi-calendar-multiselect
+                            *ngIf="isShowCalendar"
+                            [multiselectOption]="multiCalendar"
+                            (outSelectData)="getSelectData($event)"
+                            (outDefault)="getOutDefault()">
+                    </bi-calendar-multiselect>
+                </div>
+                <ul class="m-a-side-date">
+                    <li>
+                        <div class="m-a-side-date-item" #startCalendar (click)="showCalendar($event,'start', startCalendar)">
+                            <div class="date-curr-time">
+                                <span class="f13-f">Start</span>
+                                <div *ngIf="!dateTemplate.start.isShowDateTime">
+                                        <span class="f49-f"
+                                              *ngIf="!dateTemplate.start.isHasLink && !isProject">
+                                    {{dateTemplate.start.defaultContent | translate}}
+                                        </span>
+                                    <span class="v8-f"
+                                          *ngIf="!dateTemplate.start.isHasLink && isProject">
+                                        {{dateTemplate.start.defaultContent | translate}}
+                                        </span>
+                                    <span class="v8-f" *ngIf="dateTemplate.start.isHasLink">{{linkInfoName}}</span>
+                                </div>
+                                <div *ngIf="dateTemplate.start.isShowDateTime">
+                                    <span class="pull-left f49-f">{{formatStartDate.monthDay}}</span>
+                                    <div class="date-t">
+                                        <span class="f32-f">{{formatStartDate.stringMonth}} {{formatStartDate.year}}</span>
+                                        <span class="f27-f">{{formatStartDate.hour}}:{{formatStartDate.minute}} {{formatStartDate.week}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="m-a-side-date-icon"
+                                 *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_TODO) ||
+                             (missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING)"
+                            >
+                                   <span class="icon-mission-link"
+                                         (click)="linkTheMission($event)"
+                                         *ngIf="dateTemplate.start.isAbleLink">
+                                </span>
+                                <span class="font-rightnow"
+                                      (click)="resetTime($event)"
+                                      *ngIf="dateTemplate.start.isShowNowBtn"
+                                ></span>
+                                <span class="font-page-esc-small"
+                                      *ngIf="dateTemplate.start.isShowCloseBtn"
+                                      (click)="recoveryPending($event,'start')">
+                                </span>
+                            </div>
+                        </div>
+                    </li>
+                    <!----------link-------->
+                    <li class="clearfix" *ngIf="isShowLinkList">
+                        <div class="m-a-side-date-start">
+                            <div class="mission-left-task-list" *ngFor="let link  of linkMissionList"
+                                 (click)="selectLinkMission(link)">
+                                <h2 class="f21-f" title="{{link.name}}">
+                                    {{link.name}}</h2>
+                                <p class="clearfix"><span class="icon-board-{{link.typeTxt| lowercase}}"></span>
+                                    <span class="f5-f">{{link.typeTxt}} {{link.hm}}  {{link.ap}} {{link.day}} {{link.month}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                    <!-------------date_period---------->
+                    <li class="m-a-side-date-item" *ngIf="dateTemplate.end.isShowDatePeriod">
+                        <div class="chat-search-time-end chat-search-time-start pull-right">
+                            <!--period-->
+                            <span class="f13-f">End</span>
+                            <div class="period">
+                                <div class="se-input m-r-c-tab-common">
+                                    <div class="se-input-select" (click)="showDatePeriodList($event)">
+                                        <span class="f14-f">{{dateTemplate.end.date_period.unit | translate}}</span>
+                                    </div>
+                                    <input class="current-color ng-valid ng-dirty ng-touched" type="text"
+                                           (keydown)="onKeyDown($event)"
+                                           [(ngModel)]="dateTemplate.end.date_period.data">
+                                    <div class="d-select d-select-min-width" [hidden]="!isShowDatePeriodUnit">
+                                        <ul>
+                                            <li *ngFor="let unit of dateUnit" (click)="selectTheUnit($event,unit)">
+                                                <i class="base">{{unit.key | translate}}</i>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <!----------------END------------->
+                    <li *ngIf="!dateTemplate.end.isShowDatePeriod">
+                        <div class="m-a-side-date-item" #endCalendar (click)="showCalendar($event,'end', endCalendar)">
+                            <div class="date-curr-time">
+                                <span class="f13-f">End</span>
+                                <div *ngIf="!dateTemplate.end.isShowDateTime">
+                                <span class="f49-f" *ngIf="!isProject">
+                                    {{dateTemplate.end.defaultContent | translate}}
+                                </span>
+                                    <span class="v8-f" *ngIf="isProject">
+                                   {{dateTemplate.end.defaultContent | translate}}
+                                </span>
+                                </div>
+                                <div *ngIf="dateTemplate.end.isShowDateTime">
+                                    <span class="pull-left f49-f">{{formatEndDate.monthDay}}</span>
+                                    <div class="date-t">
+                                        <span class="f32-f">{{formatEndDate.stringMonth}} {{formatEndDate.year}}</span>
+                                        <span class="f27-f">{{formatEndDate.hour}}:{{formatEndDate.minute}} {{formatEndDate.week}}</span>
+                                    </div>
+                                </div>
+                                <div class="m-a-side-date-icon"
+                                     *ngIf="(missionObj.mission_status === missionConstant.MISSION_STATUS_TODO) ||
+                             (missionObj.mission_status === missionConstant.MISSION_STATUS_PENDING)">
+                                    <span class="font-page-esc-small"
+                                          (click)="recoveryPending($event,'end')"
+                                          *ngIf="dateTemplate.end.isShowCloseBtn"
+                                    ></span>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <read-function [setMissionDetail]="missionObj"></read-function>
+        </div>
+        <!--left end-->
+        <div class="m-right">
+            <perfect-scrollbar class="ps-container m-right-left-scroll pull-left scroll-element">
+                <!--<div class="pull-left m-right-left">-->
+                <mission-detail-project
+                        [setUserRoleIntro]="userRoleIntro"
+                        (outOpenMiniDialog)="openMiniDialog($event)"
+                        *ngIf="isProject"
+                        [setMissionDetail]="missionObj"
+                        #detailProject>
+                </mission-detail-project>
+                <mission-detail-application
+                        (outOpenMiniDialog)="openMiniDialog($event)"
+                        [setUserRoleIntro]="userRoleIntro"
+                        *ngIf="isApplication"
+                        [setMissionDetail]="missionObj"
+                        #detailApplication>
+                </mission-detail-application>
+                <mission-detail-assignment
+                        [setUserRoleIntro]="userRoleIntro"
+                        (outOpenMiniDialog)="openMiniDialog($event)"
+                        *ngIf="isAssignment"
+                        [setMissionDetail]="missionObj"
+                        #detailAssignment>
+                </mission-detail-assignment>
+                <mission-detail-meeting
+                        [setUserRoleIntro]="userRoleIntro"
+                        (outOpenMiniDialog)="openMiniDialog($event)"
+                        *ngIf="isMeeting"
+                        [setMissionDetail]="missionObj"
+                        #detailMeeting>
+                </mission-detail-meeting>
+                <mission-detail-task
+                        [setUserRoleIntro]="userRoleIntro"
+                        (outOpenMiniDialog)="openMiniDialog($event)"
+                        *ngIf="isTask"
+                        [setMissionDetail]="missionObj"
+                        #detailTask>
+                </mission-detail-task>
+                <read-recorder
+                        [setMissionDetail]="missionObj"
+                        *ngIf="isEditModel && isUnlockRecorder"
+                        #detailRecorder>
+                </read-recorder>
+                <read-importance
+                        [setMissionDetail]="missionObj"
+                        *ngIf="isEditModel && isUnlockImportance"
+                        #detailImportance>
+                </read-importance>
+                <read-track
+                        [setMissionDetail]="missionObj"
+                        [setCurrentType]="currentType"
+                        *ngIf="isEditModel && isUnlockTrack"
+                        #detailTrack>
+                </read-track>
+                <read-participant
+                        [setMissionDetail]="missionObj"
+                        *ngIf="isEditModel && isUnlockParticipant"
+                        #detailParticipant>
+                </read-participant>
+                <read-expense
+                        [setMissionDetail]="missionObj"
+                        [setReadType]="isEditModel"
+                        *ngIf="isUnlockExpense"
+                        #detailExpense>
+                </read-expense>
+                <read-target
+                        [setMissionDetail]="missionObj"
+                        [setReadType]="isEditModel"
+                        *ngIf="isUnlockTarget"
+                        #detailTarget>
+                </read-target>
+                <read-bidding
+                        [setMissionDetail]="missionObj"
+                        [setReadType]="isEditModel"
+                        *ngIf="isUnlockBidding"
+                        (outCalendarParent)="getOutDefault()"
+                        #detailBidding>
+                </read-bidding>
+            <!--</div>-->
+            </perfect-scrollbar>
+            <div class="pull-right m-right-right">
+                <!-------------文件模块------->
+                <mission-folder [setFolderId]="missionObj.folder_id" [setMissionDetail]="missionObj"></mission-folder>
+                <!---------地图模块------------>
+                <map-presentation [setParams]="'detail'" [setMissionDetail]="missionObj"
+                                  [class.hide]="currentType == missionConstant.MISSION_TYPE_APPLICATION"
+                                  [setCurrentType]="currentType"></map-presentation>
+
+            </div>
+        </div>
+    </section>
+        <!--schedule-->
+        <div [class.hide]="!showSchedule">
+            <template #myTargetDiv></template>
+        </div>
+    <!--</perfect-scrollbar>-->
+
+</div>
+
+
+
+

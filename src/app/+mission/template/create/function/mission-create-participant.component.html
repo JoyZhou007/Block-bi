@@ -1,0 +1,11 @@
+<div class="g-style1 g-padding20 m-a-type" data-step="step_mission_5" id="step_mission_5">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'PARTICIPANT' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <dropdown-search [optionModelArr]="observerArr" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="inputDropdownOptions"
+                         [selectedOptions]="observerArr"
+        ></dropdown-search>
+    </div>
+</div>

@@ -1,0 +1,33 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'PERIOD' | translate}}</span>
+    </div>
+    <div class="clearfix g-time" style="position: relative">
+        <input class="pull-left ng-pristine ng-valid ng-touched g-width180"
+               [class.g-color-not-select]="!hasTime"
+               readonly="" type="text" [(ngModel)]="startTemplate"
+               (click)="showCalendar($event,'start')">
+        <span class="pull-left icon1-Shape-2"></span>
+        <input class="pull-left ng-pristine ng-valid ng-touched g-width180"
+               [class.g-color-not-select]="!hasTime"
+               readonly="" type="text"  [(ngModel)]="endTemplate"
+               (click)="showCalendar($event,'end')">
+    </div>
+    <div class="absolute z-index-num4 calendar-move" #calendarProfile>
+        <bi-calendar-multiselect
+                *ngIf="isShowCalendar"
+                [multiselectOption]="multiCalendar"
+                (outSelectData)="getSelectData($event)"
+                (outDefault)="getOutDefault()">
+        </bi-calendar-multiselect>
+    </div>
+    <p class="alert-error absolute" *ngIf="isShowtimeError">{{selectDateError | translate}}</p>
+    <div class="g-title">
+        <span class="f9-f">{{'DIALOG MESSAGE' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea class="g-textArea ng-pristine" textareaHeight data-maxlength="200" style="height: 20px;" [(ngModel)]="attendanceMsg"></textarea>
+        <p class="f33-f padding-top10">{{'Maximum 200' | translate}}</p>
+
+    </div>
+</div>

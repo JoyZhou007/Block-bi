@@ -1,0 +1,29 @@
+<div class="account-top-title">
+    <h1 class="pull-left">{{'Company Profile' | translate}}</h1>
+</div>
+<ul id="company-profile-title" class="clearfix account-title-list">
+    <li class="{{_pageModuleId === 1 ? 'current' : ''}}">
+        <a [routerLink]="['/company/general']">{{'General' | translate}}</a>
+    </li>
+    <li class="{{_pageModuleId === 2 ? 'current' : ''}}">
+        <a [routerLink]="['/company/analysis']">{{'Company analysis' | translate}}</a>
+    </li>
+    <li class="{{_pageModuleId === 3 ? 'current' : ''}}">
+        <a [routerLink]="['/company/account']">{{'Account' | translate}}</a>
+    </li>
+    <li class="{{_pageModuleId === 4 ? 'current' : ''}}">
+        <a [routerLink]="['/company/permission']">{{'Permission' | translate}}</a>
+    </li>
+</ul>
+
+<!--box close start-->
+<div class="box-close text-center transition2"><a class="transition2" [routerLink]="['/user/index']">ESC</a></div>
+<!--box close end-->
+
+<!-- char-button start-->
+<div class="public-char transition2"><a href="javascript:" class="char-icon"></a></div>
+<!-- char-button end-->
+
+<!--help start-->
+<div class="public-help public-icon transition2"><a href="javascript:" class="public-icon"></a></div>
+<!--help end-->

@@ -1,0 +1,179 @@
+<!--header start-->
+<header class="g-header v-header">
+    <div class="pull-left v-header-title">
+        <div class="clearfix">
+            <span class="icon1-title-vacation"></span>
+            <span class="pull-left f18-f">{{'VACATION' | translate}}</span>
+        </div>
+        <p class="f17-f g-title-des g-display-inline-block">Last update 20:00am 20th Jul</p>
+    </div>
+    <div class="g-search-wrap-width">
+        <div class="pull-left g-search-wrap">
+            <span class="font-search-blue1"></span>
+            <span class="font-remove" *ngIf="searchText" (click)="onCloseSearch($event)"></span>
+            <input class="f26-f g-font-normal f-color-dark" type="text" placeholder="{{'Search' | translate}}" [(ngModel)]="searchText">
+        </div>
+    </div>
+
+    <div class="pull-right">
+        <div class="pull-left g-header-icon">
+            <div class="pull-left">
+                <span class="g-header-icon-list font-setting" (click)="onClickSetting($event)"
+                      tooltip [tooltip]="{content:'set vacation', position:'bottom'}"></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+    </div>
+</header>
+<!--header end-->
+
+<!--section start-->
+<main class="g-scroll g-bg-white v-section">
+    <!--left-->
+    <div class="pull-left at-left va-left">
+        <div style="position: relative">
+            <div class="absolute z-index-num4 calendar-move" #calendarProfile>
+                <bi-calendar-multiselect
+                        *ngIf="isShowCalendar"
+                        [multiselectOption]="multiCalendar"
+                        (outSelectData)="getSelectData($event)"
+                        (outDefault)="getOutDefault()">
+                </bi-calendar-multiselect>
+            </div>
+            <ul class="m-a-side-date">
+                <li class="m-a-side-date-item" #startCalendar (click)="onClickStart($event, startCalendar)">
+                    <div class="pull-left date-curr-time">
+                        <span class="f13-f">{{'Start' | translate}}</span>
+                        <span class="pull-left f49-f">{{showStartTime.day}}</span>
+                        <div class="date-t">
+                            <span class="f32-f">{{showStartTime.month}} {{showStartTime.year}}</span>
+                            <span class="f27-f">{{showStartTime.hourMinute}} {{showStartTime.week}}</span>
+                        </div>
+                    </div>
+                </li>
+                <li class="m-a-side-date-item" #endCalendar (click)="onClickEnd($event, endCalendar)">
+                    <div class="pull-left date-curr-time">
+                        <span class="f13-f">{{'End' | translate}}</span>
+                        <span class="pull-left f49-f">{{showEndTime.day}}</span>
+                        <div class="date-t">
+                            <span class="f32-f">{{showEndTime.month}} {{showEndTime.year}}</span>
+                            <span class="f27-f">{{showEndTime.hourMinute}} {{showEndTime.week}}</span>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--right-->
+    <div class="pull-right at-right va-right">
+        <!--<ul class="clearfix f33-f v-title o-fun-title">
+            <li class="v-width1"><span class="base">{{'Staff' | translate}}</span></li>
+            <li *ngFor="let item of vacations" class="v-width2">
+                <span class="base">{{item.type | translate}}</span>
+            </li>
+            <li class="v-width3">
+                <em class="font-selectbutton-select g-checkbox" [class.g-checkbox-selected]="selectAll"
+                    (click)="onSelectAll($event)"></em>
+                <span class="base">{{'All' | translate}}</span>
+            </li>
+            <li class="v-width4">
+                <em class="bi-icon-edit" (click)="onClickMulti($event)"></em>
+            </li>
+        </ul>-->
+        <ul class="clearfix f33-f v-title o-fun-title">
+            <li class="v-width1">{{'Staff' | translate}}</li>
+            <li class="v-width2">
+            {{'Casual leave' | translate}}
+        </li><li class="v-width2">
+             {{'Sick leave' | translate}}
+        </li><li class="v-width2">
+             {{'Marital leave' | translate}}
+        </li><li class="v-width2">
+             {{'Maternity leave' | translate}}
+        </li><li class="v-width2">
+            {{'Annual leave' | translate}}
+        </li>
+            <li class="v-width3">
+                <em class="font-selectbutton-select g-checkbox" [class.g-checkbox-selected]="isAll"  (click)="onSelectAll($event)"></em>
+                {{'All' | translate}}
+            </li>
+            <li class="v-width4">
+                <em class="bi-icon-edit vacation-edit" (click)="onClickMulti($event)"></em>
+            </li>
+        </ul>
+        <perfect-scrollbar class="ps-container vacation-scroll">
+             <ul class="v-content text-center">
+            <li *ngFor="let vacation of vacationInfoList;let i = index;" class="f5-f">
+                <div class="clearfix g-transition2 v-content-list o-fun-style">
+                    <div class="pull-left v-width1">
+                    <span class="g-transition2 v-staff-list-select" (click)="onClickHideUser(vacation,$event,i)" *ngIf="vacation.has_vacation"
+                          [class.v-staff-list-select-rotate]="!vacation.isHide">
+                        <em class="font-selectbutton-soildclose"></em>
+                    </span>
+                        <div class="vacation-user-info g-text-left">
+                            <profile-img class="pull-left g-margin-top4 g-display" [userInfo]="vacation"
+                                         [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+
+                    </div>
+                    <div class="pull-left v-width2" *ngFor="let number of vacations;let j= index">
+                        {{ vacation.vacation? vacation.vacation[j+1]['all'] == -1 ? '∞' : (vacation.vacation[j+1]['used'] + '/' + vacation.vacation[j+1]['all']):0}}
+                    </div>
+
+                    <div class="pull-left v-width3">
+                        <em class="font-selectbutton-select g-transition2 g-checkbox o-fun-style-operation"
+                            [class.g-checkbox-selected]="vacation.isSelect"
+                            (click)="onClickSelect($event,i)" [class.g-opacity1]="vacation.isSelect"></em>
+                    </div>
+                    <div class="pull-left v-width4"><em class="g-transition2 bi-icon-edit o-fun-style-operation"></em></div>
+                </div>
+                <!--class.g-opacity0-->
+                <div [class.hide]="vacation.isHide">
+                    <div class="clearfix g-transition2 v-content-list o-fun-style" *ngFor="let item of vacation.vacationList">
+                        <div class="pull-left v-width1"></div>
+                        <div class="pull-left v-width2" [class.g-opacity0]="!item[1]">
+                            <div *ngIf="item[1]">
+                                <em>{{item[1].showStart}}</em>
+                                <span class="icon1-Shape-2"></span>
+                                <em>{{item[1].showEnd}}</em>
+                            </div>
+                        </div>
+                       <div class="pull-left v-width2" [class.g-opacity0]="!item[2]">
+                           <div *ngIf="item[2]">
+                            <em>{{item[2].showStart}}</em>
+                            <span class="icon1-Shape-2"></span>
+                            <em>{{item[2].showEnd}}</em>
+                           </div>
+                        </div>
+                        <div class="pull-left v-width2" [class.g-opacity0]="!item[3]">
+                            <div *ngIf="item[3]">
+                            <em>{{item[3].showStart}}</em>
+                            <span class="icon1-Shape-2"></span>
+                            <em>{{item[3].showEnd}}</em>
+                            </div>
+                        </div>
+                        <div class="pull-left v-width2" [class.g-opacity0]="!item[4]">
+                            <div *ngIf="item[4]">
+                            <em>{{item[4].showStart}}</em>
+                            <span class="icon1-Shape-2"></span>
+                            <em>{{item[4].showEnd}}</em>
+                            </div>
+                        </div>
+                        <div class="pull-left v-width2" [class.g-opacity0]="!item[5]">
+                            <div *ngIf="item[5]">
+                            <em>{{item[5].showStart}}</em>
+                            <span class="icon1-Shape-2"></span>
+                            <em>{{item[5].showEnd}}</em>
+                            </div>
+                        </div>
+                        <div class="pull-left v-width3"></div>
+                        <div class="pull-left v-width4"></div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        </perfect-scrollbar>
+    </div>
+
+</main>
+<!--section end-->

@@ -1,0 +1,14 @@
+<div class="di-con" style="margin-top: 0;">
+    <div *ngFor="let vacation of vacations;let i = index;">
+        <div class="g-title">
+            <span class="f9-f">{{vacation.type | uppercase | translate}}</span>
+        </div>
+        <div class="se-input di-min-add">
+            <span class="font-min" style="top: 10px;" (click)="onClickDay($event,i,0)" [hidden]="vacation.type==='Casual leave' || vacation.type==='Sick leave'"></span>
+            <span class="font-add" style="top: 10px;" (click)="onClickDay($event,i,1)" [hidden]="vacation.type==='Casual leave' || vacation.type==='Sick leave'"></span>
+            <input class="current-color text-center" type="text"   [(ngModel)]="vacation.num" [hidden]="vacation.type==='Casual leave' || vacation.type==='Sick leave'">
+            <input class="current-color text-center" type="text" readonly disabled value="∞" *ngIf="vacation.type==='Casual leave' || vacation.type==='Sick leave'">
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,13 @@
+<!-- 聊天框头部基本信息，菜单 -->
+<chat-content-header (OutputChatSearchMessage)="sendSearchChatMessage($event)" #chatContentHeader></chat-content-header>
+<!-- 聊天内容显示区域 -->
+<div class="ch-r-left ch-message" [class.ch-default-r-left]="isDefaultContent">
+    <chat-content-default [class.hide]="!isDefaultContent"></chat-content-default>
+    <chat-content-message [class.hide]="isDefaultContent" #chatContentMessage></chat-content-message>
+</div>
+<!-- 聊天群组信息，如群内标记的pin，群组成员，群组基本信息等 -->
+<perfect-scrollbar class="ps-container ch-r-right">
+    <!--<div class="">-->
+        <chat-content-sidebar #chatContentSideBar></chat-content-sidebar>
+    <!--</div>-->
+</perfect-scrollbar>

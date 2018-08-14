@@ -1,0 +1,92 @@
+<div class="g-style1 m-create-map g-margin-bottom0" style="overflow: hidden;"
+data-step="step_mission_19" id="step_mission_19"
+>
+    <div class="clearfix">
+        <div class="pull-left m-create-title1">
+            <span>{{'MAP' | translate}}</span>
+            <span>{{'Search the location by your pin' | translate}}</span>
+        </div>
+        <div class="g-search-wrap-width">
+            <div class="pull-right s-style1 g-input-box-shadow">
+                <span class="font-search-blue1"></span>
+                <input class="f26-f f-color-dark" type="text" id="suggestId" #input1 placeholder="{{'Search' | translate}}">
+                <span class="icon-input-return"></span>
+            </div>
+        </div>
+
+    </div>
+    <div class="m-create-map-warp">
+        <div class="map-loading" [class.map-loaded]="loadAll">
+                <loaders-css [loader]="'semi-circle-spin'" [loaderClass]="'my-loader'">
+                    <div class="loader-inner ball-pulse"></div>
+                </loaders-css>
+            <div class="f7-f map-loading-des">{{'Loading Map...' | translate}}</div>
+        </div>
+        <div class="m-create-map-svg">
+            <baidu-map ak="{{akKey}}"
+                       [options]="opts"
+                       [offline]="offlineOpts"
+                       (onMapLoaded)="loadMap($event)"
+                       (onMarkerClicked)="clickMarker($event)">
+            </baidu-map>
+        </div>
+        <div class="m-create-map-list" *ngIf="trackDataList.length > 0">
+            <a class="font-page-next-small" href="javascript:" (click)="trackPage(-1)"></a>
+            <div class="map-list">
+                <ul [style.left]="moveLeft+'px'">
+                    <li class="hover" *ngFor="let tracker of trackDataList; let i=index;"
+                        [class.current]="clickIndex===i" (click)="clickList($event, i ,tracker)">
+                        <span *ngIf="tracker.user_info.p_name!==''"></span>
+                        <img *ngIf="!tracker.isPin  && (tracker.user_info.user_profile_path!=='' && tracker.user_info.p_name!=='')"
+                             src="{{config.resourceDomain + tracker.user_info.user_profile_path}}"
+                             title="{{tracker.user_info.name}}">
+                        <i *ngIf="!tracker.isPin && (tracker.user_info.user_profile_path==='' && tracker.user_info.p_name!=='')">
+                            {{tracker.user_info.p_name.charAt(0)}}
+                        </i>
+                        <em class="font-calendar-location" *ngIf="tracker.isPin"></em>
+                    </li>
+                </ul>
+            </div>
+            <a class="font-page-next-small" href="javascript:;" (click)="trackPage(1)"></a>
+        </div>
+
+        <div class="di-warp m-map-dialog"
+             [class.hide]="!isShowPingBox">
+            <div class="di-vertical-align">
+                <div class="di-warp-style">
+                    <h2><span class="f11-f">{{'PIN' | translate}}</span><em class="font-page-esc-small" (click)="cancelAddPing($event)"></em></h2>
+                    <div class="di-con">
+                        <div class="g-title g-padding-top0">
+                            <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+                        </div>
+                        <div inputBlur>
+                            <!--<textarea class="g-textArea g-add-transition current" [(ngModel)]="desc" #inputContent [class.g-show-input-error]="isShowError"></textarea>-->
+                            <div class="g-textArea-set">
+                                <textarea textareaHeight class="g-textArea g-add-transition current" data-maxlength="30" [(ngModel)]="desc" #inputContent [class.g-show-input-error]="isShowError"></textarea>
+                            </div>
+                            <p style="color: #EF428D;" [class.hide]="!isShowError" #inputError>{{'Can not be empty' | translate}}</p>
+                        </div>
+                        <p class="f33-f">{{'Maximum 30' | translate}}</p>
+                    </div>
+                    <div class="di-but">
+                        <div class="but but-cancel" (click)="cancelAddPing($event)"><span class="base">{{'CANCEL' | translate}}</span></div>
+                        <div class="but but-send" (click)="confirmAddPing($event)"><span class="base">{{'UPLOAD' | translate}}</span></div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <svg>
+                <defs id="mytest">
+                    <pattern id="pattern-1" patternUnits="objectBoundingBox" x="0%" width="100%" height="100%">
+                        <use xlink:href="#image-2" transform="scale(0.15625,0.15625)"></use>
+                    </pattern>
+                    <image id="image-2" width="128" height="128" xlink:href="assets/images/people-icon1.png"></image>
+                </defs>
+            </svg>
+        </div>
+    </div>
+</div>
+

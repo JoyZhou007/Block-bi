@@ -1,0 +1,37 @@
+<header class="login-header clearfix">
+    <ul class="login-header-lst clearfix">
+        <li class="g-border5 g-transition2"
+            [class.current]="current == 'about'"
+            [routerLink]="['/home/about']"><a class="f28-f base">{{"ABOUT US" | translate}}</a></li>
+        <li class="g-border5 g-transition2"
+            [class.current]="current == 'product'"
+            [routerLink]="['/home/product']"><a class="f28-f base">{{"PRODUCT" | translate}}</a></li>
+        <li class="g-border5 g-transition2"
+            [class.current]="current == 'price'"
+            [routerLink]="['/home/price']"><a class="f28-f base">{{"PRICE" | translate}}</a></li>
+        <li class="g-border5 g-transition2"
+            [class.current]="current == 'blog'"
+            [routerLink]="['/home/blog']"><a class="f28-f base">{{"BLOG" | translate}}</a></li>
+    </ul>
+    <div class="login-language pull-right">
+        <div class="login-language-main" toggleSelectGroup>
+            <div class="pull-left h-header-lan" #toggleSelectBut>
+                <span class="v1-f">{{translate.lan == 'en' ? 'EN' : '中文'}}</span>
+                <span class="font-selectbutton-soildclose"></span>
+            </div>
+            <div class="d-select d-select-cn" #toggleSelect>
+                <ul #toggleSelectContent>
+                    <li [class.current]="translate.lan === 'en'" (click)="switchLanguage($event, 'en')">
+                        <span class="base">ENGLISH</span>
+                        <span class="font-selectbutton-select"></span>
+                    </li>
+                    <li [class.current]="translate.lan === 'zh-cn'" (click)="switchLanguage($event, 'zh-cn')">
+                        <span class="base">中文</span>
+                        <span class="font-selectbutton-select"></span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>
+<h1 class="login-logo" (click)="clickLogo($event,true)"><span class="icon-logo"></span></h1>

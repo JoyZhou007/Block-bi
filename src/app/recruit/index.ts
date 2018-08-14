@@ -1,0 +1,1 @@
+export {RecruitModule} from './recruit.module';

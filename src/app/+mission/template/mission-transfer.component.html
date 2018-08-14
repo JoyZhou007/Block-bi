@@ -1,0 +1,29 @@
+<div class="di-con">
+    <div class="clearfix di-people">
+        <div class="pull-left">
+            <span class="icon-title-application"
+                  *ngIf="missionObj.type == missionConstant.MISSION_TYPE_APPLICATION"></span>
+            <span class="icon-title-task" *ngIf="missionObj.type === missionConstant.MISSION_TYPE_TASK"></span>
+            <span class="icon-title-assignment"
+                  *ngIf="missionObj.type === missionConstant.MISSION_TYPE_ASSIGNMENT"></span>
+            <span class="icon-title-meeting" *ngIf="missionObj.type === missionConstant.MISSION_TYPE_MEETING"></span>
+            <span class="icon-title-project" *ngIf="missionObj.type === missionConstant.MISSION_TYPE_PROJECT"></span>
+        </div>
+        <span class="f19-f">{{missionObj.name}}</span>
+        <span class="f5-f">{{'Last edit' | translate}}{{missionObj.last_update_info?.lastUpdateTemplate}}</span>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'TRANSFER TO WHO' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <div class="se-input">
+        <dropdown-search [optionModelArr]="transferArr" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                         [selectedOptions]="transferArr"
+        ></dropdown-search>
+    </div>
+    <div class="g-title hide">
+        <span class="f9-f">{{'MESSAGE' | translate}}</span>
+    </div>
+    <p class="g-show-error-color g-margin-top5">{{btnError}}</p>
+</div>

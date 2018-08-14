@@ -1,0 +1,47 @@
+<div class="di-con scroll-element">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'HOLIDAY NAME' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <input class="current-color" type="text" [(ngModel)]="holidayName">
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'HOLIDAY LEAVE PERIOD' | translate}}</span>
+    </div>
+    <div class="clearfix relative g-time">
+        <input class="pull-left ng-pristine ng-valid ng-touched"
+               [class.g-color-not-select]='!hasTime'
+               readonly="" type="text" [(ngModel)]="startTemplate"
+               (click)="showCalendar($event,'start')">
+        <span class="pull-left icon1-Shape-2"></span>
+        <input class="pull-left ng-pristine ng-valid ng-touched"
+               [class.g-color-not-select]='!hasTime'
+               readonly="" type="text" [(ngModel)]="endTemplate"
+               (click)="showCalendar($event,'end')">
+    </div>
+    <div class="absolute z-index-num4" #calendarProfile>
+        <bi-calendar-profile
+                *ngIf="isShowCalendar"
+                [multiselectOption]="multiCalendar"
+                (outSelectData)="getSelectData($event)"
+                (outDefault)="getOutDefault()"></bi-calendar-profile>
+    </div>
+    <div class="di-replacement-list">
+        <div class="g-title" *ngIf="insteadArr.length > 0">
+            <span class="f9-f">{{'REPLACEMENT WORK DAY' | translate}}</span>
+        </div>
+        <div class="clearfix g-transition2 se-input"
+             *ngFor="let date of insteadArr;let i=index"
+             style="position: relative">
+            <input class="current-color" type="text" [(ngModel)]="date.found_date" readonly
+                   (click)="showReplaceCalendar(date,$event)">
+            <span class="font-delete" (click)="deleteReplaceDate(i)"></span>
+            <bi-calendar [setOption]='date.calendarOption' style="position: absolute"
+                         [class.hide]="!date.isShowCalendar"
+                         (doSelectDate)="selectReplaceDate($event,date)">
+            </bi-calendar>
+        </div>
+    </div>
+    <div class="but but-add id-but-h30" style="margin-top: 15px;" (click)="addReplaceDay($event)"><span
+            class="base">{{'ADD REPLACEMENT WORK DAY' | translate}}</span></div>
+</div>

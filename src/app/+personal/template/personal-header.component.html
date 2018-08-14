@@ -1,0 +1,24 @@
+<header class="g-width g-header a-header">
+    <div class="pull-left">
+        <div class="clearfix">
+            <span class="icon-title-profile g-header-margin"></span>
+            <span class="pull-left f18-f">{{'PERSONAL PROFILE' | translate}}</span>
+        </div>
+        <ul class="clearfix f17-f g-header-column LatoRegular g-title-des">
+            <li routerLinkActive="current" [routerLinkActiveOptions]="{exact: true}" [routerLink] = "['/personal','general']">{{'General' | translate}}</li>
+            <li routerLinkActive="current" [routerLinkActiveOptions]="{exact: true}" [routerLink] = "['/personal', 'resume']">{{'Resume' | translate}}</li>
+            <li routerLinkActive="current" [routerLinkActiveOptions]="{exact: true}" [routerLink] = "['/personal', 'analysis']">{{'Analysis' | translate}}</li>
+        </ul>
+    </div>
+    <div class="pull-right">
+        <div class="pull-left g-header-but g-header-but-reset">
+            <i class="g-btn-error" title="{{btnFail | translate}}">{{btnFail | translate}}</i>
+            <span class="pull-left but but-approve firefox-header-but" saveDataGroup #saveDataElement (outSaveData)="saveData(saveDataElement)">
+                 <i class="base">{{'UPLOAD' | translate}}</i>
+                 <i class="font-selectbutton-select but-status"></i>
+                 <i class="font-remove but-status"></i>
+            </span>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+    </div>
+</header>

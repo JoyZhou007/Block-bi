@@ -1,0 +1,101 @@
+<div [class.g-margin-top20]="!isListLinkShow" *ngIf="linkInfo" [class.m-side-link]="!isListLinkShow" [class.mission-link-prompt]="isListLinkShow">
+    <div class="clearfix m-side-link-to-title" *ngIf="isListLinkShow">
+        <span class="pull-left f24-f">{{'LINK' | translate}}</span>
+        <span class="font-page-esc-small"
+            (click)="closeLink()"
+        ></span>
+    </div>
+    <div class="clearfix" *ngIf="!isListLinkShow">
+        <span class="font-link2"></span>
+        <span class="f16-f">{{'Link' | translate}}</span>
+    </div>
+    <span class="f33-f g-title-des g-display-inline-block" *ngIf="!isListLinkShow">{{'Related mission' | translate}}</span>
+    <div class="m-side-link-con" *ngIf="(linkInfo.before.length ===0 && linkInfo.after.length ===0)">
+        <img src="{{config.staticResourceDomain + 'assets/images/man5.png'}}">
+        <p class="f41-f">{{'NO MISSION LINK' | translate}}</p>
+    </div>
+    <div class="m-side-link-list" *ngIf="(linkInfo.before.length !==0 || linkInfo.after.length !==0)">
+        <div class="m-side-link-title f9-f" *ngIf="linkInfo.before.length !==0">{{'BEGIN IT FROM' | translate}}</div>
+        <ul class="clearfix m-left-storage-list" >
+            <li class="clearfix" *ngFor="let link of linkInfo.before">
+                <div class="mission-left-task-list">
+                    <h2 class="f21-f" title="{{link.name}}">{{link.name}}</h2>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_TASK"><span
+                            class="icon-board-task"></span>
+                        <span class="f5-f">Task {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_APPLICATION"><span
+                            class="icon-board-application"></span>
+                        <span class="f5-f">Application {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_MEETING"><span
+                            class="icon-board-meeting"></span>
+                        <span class="f5-f">Meeting {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_ASSIGNMENT"><span
+                            class="icon-board-assignment">
+                    </span><span class="f5-f">Assignment {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_PROJECT"><span
+                            class="icon-board-project"></span>
+                        <span class="f5-f">Project {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <div class="m-left-storage-people">
+                        <span class="icon1-Shape-3"></span>
+                        <profile-img [userInfo]="link.creator_info.user_info" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+                <div class="m-left-storage-pos">
+                    <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5">
+                        <span class="bi-icon-rectangle g-transition2 g-icon-center"></span>
+                    </div>
+                    <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                         (click)="redirectToDetail($event, link)">
+                        <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                    </div>
+                </div>
+            </li>
+        </ul>
+        <div class="m-side-link-title f9-f" *ngIf="linkInfo.after.length !==0">{{'AFTER COMPLETED' | translate}}</div>
+        <ul class="clearfix m-left-storage-list" >
+            <li class="clearfix" *ngFor="let link of linkInfo.after">
+                <div class="mission-left-task-list">
+                    <h2 class="f21-f" title="{{link.name}}">{{link.name}}</h2>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_TASK"><span
+                            class="icon-board-task"></span>
+                        <span class="f5-f">{{'Task' | translate}} {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_APPLICATION"><span
+                            class="icon-board-application"></span>
+                        <span class="f5-f">{{'Application' | translate}} {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_MEETING"><span
+                            class="icon-board-meeting"></span>
+                        <span class="f5-f">{{'Meeting' | translate}} {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_ASSIGNMENT"><span
+                            class="icon-board-assignment">
+                    </span><span class="f5-f">{{'Assignment' | translate}} {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <p class="clearfix" *ngIf="link.type===missionConstant.MISSION_TYPE_PROJECT"><span
+                            class="icon-board-project"></span>
+                        <span class="f5-f">{{'Project' | translate}} {{link.formatDate.hour}}:{{link.formatDate.minute}} {{link.formatDate.day}} {{link.formatDate.month}} {{link.formatDate.year}}</span>
+                    </p>
+                    <div class="m-left-storage-people">
+                        <span class="icon1-Shape-3"></span>
+                        <profile-img class="pull-left" [userInfo]="link.creator_info.user_info" [settings]="{show_work_name: true}"></profile-img>
+                    </div>
+                </div>
+                <div class="m-left-storage-pos">
+                    <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5" *ngIf="link.type != missionConstant.MISSION_TYPE_APPLICATION">
+                        <span class="bi-icon-rectangle g-transition2 g-icon-center"></span>
+                    </div>
+                    <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5" (click)="redirectToDetail($event, link)">
+                        <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                    </div>
+
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>

@@ -1,0 +1,38 @@
+<div class="di-con">
+    <div class="clearfix di-people">
+        <!--<img src="{{senderInfo?.user_profile_path ? config.resourceDomain + senderInfo?.user_profile_path : ''}}"-->
+             <!--style="width: 28px;height: 28px;float: left"-->
+        <!--&gt;-->
+        <!--<span class="f19-f" style="margin-left: 40px">{{senderInfo?.work_name}}</span>-->
+        <!--<span class="f5-f">{{senderInfo?.p_name}}</span>-->
+        <profile-img [userInfo]="senderInfo" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+    </div>
+    <div class="di-n-title">
+        <span class="f9-f">PERIOD</span>
+    </div>
+    <div class="clearfix di-n-time">
+        <span class="f19-f">
+            {{formatStartDate.hour}}:{{formatStartDate.minute}} {{formatStartDate.monthDay}} {{formatStartDate.month}} {{formatStartDate.year}}
+        </span>
+        <span class="icon1-Shape-2"></span>
+        <span class="f19-f">
+              {{formatEndDate.hour}}:{{formatEndDate.minute}} {{formatEndDate.monthDay}} {{formatEndDate.month}} {{formatEndDate.year}}
+        </span>
+    </div>
+    <div class="di-n-title">
+        <span class="f9-f">MESSAGE</span>
+    </div>
+    <p class="v7-f di-n-con">{{sendMessage}}</p>
+</div>
+<div class="di-n-message di-n-success" [class.di-n-message-opacity]="diNSuccess">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-selectbutton-select"></span>
+        <p class="f55-f">{{'ACCEPTED' | translate}}</p>
+    </div>
+</div>
+<div class="di-n-message di-n-error" [class.di-n-message-opacity]="diNError">
+    <div class="di-n-refuse di-n-center">
+        <span class="font-page-esc-small"></span>
+        <p class="f55-f">{{'REFUSE' | translate}}</p>
+    </div>
+</div>

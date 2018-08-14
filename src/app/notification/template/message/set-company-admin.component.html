@@ -1,0 +1,15 @@
+<div [class.n-cursor]="notificationIn.role !== 3" (click)="setCompanyOwner()">
+    <img src="{{appConfig.resourceDomain + senderInfo?.user_profile_path}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{objInfo.title}}</h3>
+        <p class="f20-f" [innerHtml]="objInfo.simpleMsg"></p>
+        <div class="n-con n-company">
+            <p class="f20-f">{{notificationIn?.comments}}</p>
+            <span class="f4-f n-con-company-name" *ngIf="notificationIn.company_name">
+                <i class="base">{{notificationIn.company_name}}</i>
+            </span>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>

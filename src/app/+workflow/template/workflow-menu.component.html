@@ -1,0 +1,29 @@
+<div class="g-side-width pull-left wo-left">
+    <!-- @see src/app/+contacts/template/contacts-list.component.html:324 -->
+    <search-list #searchList [searchParam]="searchParam"></search-list>
+    <current-user-info [setCouldInit]="true"></current-user-info>
+    <perfect-scrollbar class="ps-container wo-left-top-wrap">
+        <div class="wo-left-top"
+         *ngFor="let workflowList of workflowListData"
+             toggle-group [toggleData]="toggleIn"  #toggleStatus>
+        <p class="wo-tit1  clearfix " #toggleBtn>
+            <span class="f11-f pull-left">{{workflowList.title | translate}}</span> <em class="pull-left">({{workflowList.size}})</em>
+            <span class="font-selectbutton-line pull-left"></span>
+        </p>
+        <ul class="wo-left-list">
+            <li *ngFor="let wk of workflowList.data"
+                (click)="showWorkflowDetail($event, wk)"
+                [class.wo-current]="isCurrent(wk)"
+                data-id="{{wk.cid}}">
+                <p class="wo-supplier v4-f">
+                    <span class="wo-line"><span class="font-remove" (click)="deleteWorkflow($event, wk)"></span></span>
+                    {{wk.name}}
+                </p>
+            </li>
+        </ul>
+    </div>
+    </perfect-scrollbar>
+    <div class="wo-new-work f6-f" (click)="createWorkflow($event)" data-step="step_wk_2" id="step_wk_2">
+        {{'NEW WORKFLOW' | translate}}
+    </div>
+</div>

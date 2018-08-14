@@ -1,0 +1,89 @@
+<!-- 弹出框 -->
+<!-- di-bg di2-bg 深灰色-->
+<!-- di1-bg 白色 -->
+<!-- di-bg di2-bg 浅灰色 -->
+<div class="{{dialogSettings?.bgClass}} {{openBgClass}}" style="display:none;" #alertWrap>
+    <a href="javascript:;" *ngIf="dialogSettings?.mode === '2'" class="pull-left font-page-esc di-esc"
+       (click)="close()"></a>
+
+    <div class="{{dialogSettings?.warpClass}} {{dialogSettings?.isAddClass}}" #wrapper
+         [class.m-map-dialog]="dialogSettings?.mode === '1-1' || dialogSettings?.mode === '1-2'"
+         [class.m-map-pro-list]="dialogSettings?.mode === '1-2'">
+        <div class="di-vertical-align">
+            <div class="di-warp-style" #alertWrap>
+                <!-- 模式1 title -->
+                <div class="di-title f7-f" *ngIf="dialogSettings?.mode === '1'">
+                    {{dialogSettings?.title | translate}}
+                    <a class="font-page-esc-small" href="javascript:;" (click)="close()"></a></div>
+                <!-- 模式1-1 模式1-2 title -->
+                <h2 *ngIf="dialogSettings?.mode === '1-1' || dialogSettings?.mode === '1-2'">
+                    <span class="f11-f" *ngIf="dialogSettings?.title ">{{dialogSettings?.title}}</span>
+                    <em (click)="close()" class="font-page-esc-small"></em>
+                </h2>
+                <!-- 模式2 title -->
+                <div class="di-top" *ngIf="dialogSettings?.mode === '2'">
+                    <span class="{{dialogSettings?.titleIcon}}"></span>
+                    <span class="f52-f">{{dialogSettings?.titleAction | translate}} </span>
+                    <span class="f53-f">{{dialogSettings?.titleComponent | translate}}</span>
+                    <p class="f40-f" *ngIf="dialogSettings?.titleDesc">
+                        <i>{{dialogSettings?.titleDesc[0] | translate}}</i>
+                        <em class="f54-f">{{dialogSettings?.titleDesc[1] | translate}}</em>
+                        <i>{{dialogSettings?.titleDesc[2] | translate}}</i>
+                    </p>
+                </div>
+                <!-- 模式3 title -->
+                <h3 class="f9-f" *ngIf="dialogSettings?.mode === '3'">
+                    <span class="icon1-{{dialogSettings?.modeIcon}}"></span>
+                    {{dialogSettings?.title | translate}}
+                </h3>
+                <!----模式4 title----->
+                <div class="g-title g-padding-top0" *ngIf="dialogSettings?.mode === '4'">
+                    <span class="f9-f">{{'IMPORT' | translate}}</span>
+                    <em class="f14-f chat-di2-title"><span class="icon-input-return"></span>{{'to search' | translate}}</em>
+                </div>
+                <!----模式5 title----->
+                <div *ngIf="dialogSettings?.mode === '5'">
+                    <ul class="clearfix f46-f occupation-tab " *ngIf="dialogSettings?.selectTitleBtnList.length!==1"
+                        [class.permission-selected]="currentTitleBtnIdx===0">
+                        <li class="LatoLight" *ngFor="let selectBtn of dialogSettings?.selectTitleBtnList; let i =index;"
+                            [class.current]="i===currentTitleBtnIdx"
+                            (click)="clickChosenTitle($event,selectBtn)">{{selectBtn.btnText | translate}}
+                        </li>
+                    </ul>
+                    <div class="" *ngIf="dialogSettings?.selectTitleBtnList.length===1">
+                        <h2 class="f53-f text-center">{{'EDIT OCCUPATION' | translate}}</h2>
+                    </div>
+                </div>
+                <!-- title 结束 -->
+
+                <!-- content 开始-->
+                <div *ngIf="dialogSettings?.isSimpleContent" class="di-con di-size14">
+                    <span class="f27-f" [innerHtml]="dialogSettings?.simpleContent | translate | sanitizeHtml"></span>
+                </div>
+
+                <dynamic-component *ngIf="dialogSettings && !dialogSettings?.isSimpleContent"
+                        #dynamicComponent [settings]="dialogSettings" (outViewInit)="initDynamicComponent($event)"></dynamic-component>
+
+                <!-- content 结束-->
+
+                <!-- 按钮 开始-->
+                <div class="clearfix di-but" *ngIf="dialogSettings?.buttonList.length">
+                    <p class="g-show-error-color g-button-error" [class.hide]="errorMsg == ''">{{'Error' | translate}}: {{errorMsg | translate}}</p>
+                    <div *ngFor="let btn of dialogSettings?.buttonList" class="but {{btn.btnClass}}"
+                         [class.but-ok-disable]="btn.disable"
+                         (click)="excEvent(btn, $event)"
+                         (mouseenter)="butMouseEnter(btn, $event)"
+                         (mouseleave)="butMouseLeave(btn, $event)">
+                        <span class="base">{{btn.btnText | translate}}</span>
+                        <i class="font-selectbutton-select but-status"></i>
+                        <i class="font-remove but-status"></i>
+                    </div>
+                </div>
+                <!-- 按钮 结束 -->
+            </div>
+            <div *ngIf="dialogSettings?.showErrorInfo.errorHtml" [innerHtml]="dialogSettings?.showErrorInfo.errorHtml"></div>
+        </div>
+    </div>
+</div>
+
+

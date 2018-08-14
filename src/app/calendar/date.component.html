@@ -1,0 +1,133 @@
+<div class="box-date" #dateForm [class.hide]="!showDateForm">
+    <div *ngIf="initDateForm">
+        <h1 class="{{dateOptions.type !== 0 ? 'hide' : 'box-date-h1'}}">Date</h1>
+        <h1 class="{{dateOptions.type !== 0 ? 'box-date-h1 clearfix box-date-h1-border' : 'hide'}}">
+            <span [class.current]="dateOptions.type === 1"  (click)="setSelectType(1, $event)">Before</span>
+            <span [class.current]="dateOptions.type === 2" (click)="setSelectType(2, $event)">Period</span>
+            <span [class.current]="dateOptions.type === 3"  (click)="setSelectType(3, $event)">After</span>
+        </h1>
+        <div class="box-current-date">
+            <div class="pull-left public-relative"  (click)="setStartDateTime()">
+                <p class="transition2 box-date-on" [class.box-date-on-small]="selectedDateIn">{{dateOn}}</p>
+                <div class="transition2" *ngIf="selectedDateIn" >
+                    <p class="pull-left box-current-day">{{selectedDateIn.monthDay}}</p>
+                    <p class="pull-left">
+                        <span class="box-current-year">{{dateWord.monthSmall[selectedDateIn.month]}} {{selectedDateIn.year}}</span>
+                        <span class="box-current-week">
+                            {{isSelectTime ? (selectedDateIn.hour | numberFormat:2)+':'+(selectedDateIn.minute| numberFormat:2) : ''}}
+                            {{selectedDateIn.weekDayName}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+            <div *ngIf="dateOptions.type === 2" class="box-date-arrow public-icon pull-left"></div>
+            <div *ngIf="dateOptions.type === 2" class="pull-right public-relative" (click)="setEndDateTime()">
+                <p class="transition2 box-date-on" [class.box-date-on-small]="selectedEndDateIn" [class.box-date-end]="!selectedEndDateIn">End</p>
+                <div class="transition2" *ngIf="selectedEndDateIn" >
+                    <p class="pull-left box-current-day">{{selectedEndDateIn.monthDay}}</p>
+                    <p class="pull-left">
+                        <span class="box-current-year">{{dateWord.monthSmall[selectedEndDateIn.month]}} {{selectedEndDateIn.year}}</span>
+                        <span class="box-current-week">
+                            {{isSelectTime ? (selectedEndDateIn.hour | numberFormat:2) +':'+(selectedEndDateIn.minute | numberFormat:2) : ''}}
+                            {{selectedEndDateIn.weekDayName}}
+                        </span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="box-set-date">
+            <a class="box-set-date-prev pull-left public-icon" href="javascript:" (click)="setShowDate(1, $event)"></a>
+            <div class="box-choice-date">
+                <div class="box-choice-month">
+                    <span (click)="showSelectMonth($event)">{{dateWord.month[showDateIn.month]}}</span>
+                    <ul class="hide" #selectMonth>
+                        <li *ngFor="let month of dateWord.month; let i = index" (click)="setShowMonth(i)">{{month}}</li>
+                    </ul>
+                </div>
+                <div class="box-choice-year">
+                    <span (click)="showSelectYear($event)">{{showDateIn.year}}</span>
+                    <ul class="hide" #selectYear>
+                        <li *ngFor="let year of showSelectYearArr" (click)="setShowYear(year)">{{year}}</li>
+                    </ul>
+                </div>
+            </div>
+            <a class="box-set-date-next pull-right public-icon" href="javascript:" (click)="setShowDate(2, $event)"></a>
+        </div>
+        <ul class="box-week clearfix">
+            <li>Su</li><li>Mo</li><li>Tu</li><li>We</li><li>Th</li><li>Fr</li><li>Sa</li>
+        </ul>
+        <ul class="box-date-con clearfix" *ngIf="dateOptions.type === 2">
+            <li *ngFor="let date of showDate" [class.active-left]="date.selectedStart"
+                [class.active-center]="date.selectedIn" [class.active-right]="date.selectedEnd"
+                [class.active-current]="date.selectedCurrent"
+                [class.active]="date.selected" [class.firstDay] = "date.monthDay === 1"
+                [class.gray-bg]="date.before || date.after"
+                [class.current]="date.isToday"
+                (dblclick)="doSelectOne($event, date)"
+                (click)="onSelectDate(date, $event)"
+                (mousedown)="doSelectArea($event, date)"
+                (mouseover)="doSelectArea($event, date)">
+                {{date.selectedCurrent ? '' : date.monthDay}}
+                <span *ngIf="date.selectedCurrent">{{date.monthDay}}</span>
+                <span *ngIf="date.monthDay === 1">
+                    <em>{{dateWord.monthSmall[date.month]}}</em>
+                </span>
+            </li>
+        </ul>
+        <ul class="box-date-con clearfix" *ngIf="dateOptions.type !== 2">
+            <li *ngFor="let date of showDate"
+                [class.active-left]="date.selectedStart"
+                [class.active-center]="date.selectedIn" [class.active-right]="date.selectedEnd"
+                [class.active-current]="date.selectedCurrent"
+                [class.active]="date.selected" [class.firstDay] = "date.monthDay === 1"
+                [class.gray-bg]="date.before || date.after"
+                [class.current]="date.isToday"
+                (click)="onSelectDate(date, $event)" >
+                {{date.monthDay}}
+                <span *ngIf="date.monthDay === 1">
+                    <em>{{dateWord.monthSmall[date.month]}}</em>
+                </span>
+            </li>
+        </ul>
+        <div class="box-date-click">
+            <a href="javascript:" (click) = 'outputDate();' [class.hide] = 'dateOptions.type !== 2 && !isSelectTime'>Save</a>
+            <a href="javascript:" (click)="clearDate()">Remove</a>
+        </div>
+        <div class="box-date-time" *ngIf="isSelectTime" [class.hide]="showSelectTime === false" >
+            <div class="box-date-time-list">
+                <a class="pull-left box-date-time-prev public-icon" href="javascript:" (click)="switchHourPage(1, $event)"></a>
+                <div class="box-date-time-wrap">
+                    <ul class="clearfix">
+                        <li *ngFor="let hour of showHour;" (click)="selectHour(hour)"
+                            [class.current]="(isShowStartDate && selectedDateIn.hour === hour)
+                             || (isShowEndDate && selectedEndDateIn.hour === hour)">{{hour}}</li>
+                    </ul>
+                </div>
+                <a class="pull-left box-date-time-next public-icon" href="javascript:" (click)="switchHourPage(2, $event)"><span>Hour</span></a>
+            </div>
+            <div class="box-date-time-list" *ngIf="isSelectMinute">
+                <a class="pull-left box-date-time-prev public-icon" href="javascript:" (click)="switchMinutePage(1, $event)"></a>
+                <div class="box-date-time-wrap">
+                    <ul class="clearfix">
+                        <li *ngFor="let minute of showMinute;" (click)="selectMinute(minute)"
+                            [class.current]="(isShowStartDate && selectedDateIn.minute === minute)
+                             || (isShowEndDate && selectedEndDateIn.minute === minute)">{{minute}}</li>
+                    </ul>
+                </div>
+                <a class="pull-left box-date-time-next public-icon" href="javascript:"
+                   (click)="switchMinutePage(2, $event)"><span>Min</span></a>
+            </div>
+            <ul class="box-date-all-month box-date-all clearfix" *ngIf="dateOptions.type === 2">
+                <li (click)="setAllMonth()" [class.current]="isSetAllMonthDay"><span>All Month</span></li>
+                <li (click)="setAllDay()" [class.current]="isSetAllDay"><span>All Day</span></li>
+            </ul>
+            <ul class="box-date-all-day box-date-all clearfix" *ngIf="dateOptions.type === 2">
+                <li [class.current]="isShowStartDate" (click)="showStartTime(true)"><span>Start</span></li>
+                <li [class.current]="isShowEndDate" (click)="showEndTime(true)"><span>End</span></li>
+            </ul>
+            <a class="box-data-time-done" href="javascript:" (click)="completeDateTime()">
+                <span class="base g-clearStyle">{{'Done' | translate}}</span>
+            </a>
+        </div>
+    </div>
+</div>

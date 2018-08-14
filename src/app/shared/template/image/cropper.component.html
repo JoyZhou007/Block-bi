@@ -1,0 +1,27 @@
+
+<div class="upload-fixed" [class.hide]="!showCropper">
+    <!--<div class="box-close text-center transition2"><a class="transition2" (click)="doCropper(false)">ESC</a></div>-->
+    <a class="r-register-close font-page-esc cropper-esc" (click)="doCropper(false)"></a>
+        <header class="clearfix login-header">
+        <!--<a class="pull-left login-about-us transition2 forget-back public-icon" [routerLink]="['/user/login']">BACK</a>-->
+        <a class="font-page-back pull-left" [routerLink]="['/home/login']">
+            <em class="path1"></em>
+        </a>
+    </header>
+    <h1 class="upload-fixed-h1 text-center f53-f" data-default="Cropping your photo" data-upload="Uploading ...">{{'CROPPING YOUR PHOTO' | translate}}</h1>
+    <div class="upload-canvas" [class.hide]="!formatError">
+        <!--div class="upload-prompt border-radius5" alt="Picture" id="crop_image">Avatar size is 300*300</div-->
+        <!--#uploadPrompt-->
+        <div class="upload-prompt border-radius5" #uploadPrompt><img src="#" alt="Picture" #curImage></div>
+    </div>
+    <div class="uploaded-pic" *ngIf="!formatError">
+        <div class="uploaded-pic-error">
+            <p class="f41-f">{{showFileError | translate}}</p>
+            <span class="v1-f" [class.hide]="showFileError!=='THE PHOTO SIZE MUST BE BIGGER THAN'">H: 400 PX &nbsp;&nbsp; W:400 PX</span>
+        </div>
+    </div>
+    <div class="reset-pass">
+        <div class="but but-save cropper-but" (click)="showImage()" [class.no-save]="!formatError"><span class="base">{{'SAVE' | translate}}</span></div>
+        <div class="but but-done cropper-but" (click)="selectImage()"><span class="base">{{'REUPLOAD' | translate}}</span></div>
+    </div>
+</div>

@@ -1,0 +1,657 @@
+<div *ngIf="hasAccess">
+    <header class="g-header mission-header">
+        <div class="m-header-title m-create-header-title m-header-application"
+             data-step="step_mission_1" id="step_mission_1" toggleSelectGroup>
+            <div class="clearfix m-create-title">
+                <span class="icon-title-application"
+                      *ngIf="missionType === missionConstant.MISSION_TYPE_APPLICATION"></span>
+                <span class="icon-title-task"
+                      *ngIf="missionType === missionConstant.MISSION_TYPE_TASK"></span>
+                <span class="icon-title-assignment"
+                      *ngIf="missionType === missionConstant.MISSION_TYPE_ASSIGNMENT"></span>
+                <span class="icon-title-meeting"
+                      *ngIf="missionType === missionConstant.MISSION_TYPE_MEETING"></span>
+                <span class="icon-title-project"
+                      *ngIf="missionType === missionConstant.MISSION_TYPE_PROJECT"></span>
+                <div class="pull-left" #toggleSelectBut>
+                    <em class="pull-left f18-f">{{'NEW' | translate}}
+                        {{(((projectData.isProjectPart || isAddProjectChild) && missionType !== missionConstant.MISSION_TYPE_PROJECT )? 'CHILD':'' ) | translate}}
+                        {{missionTitle | translate}}</em>
+                    <span class="font-selectbutton-line"></span>
+                </div>
+                <div class="d-select" #toggleSelect>
+                    <ul #toggleSelectContent>
+                        <li *ngFor="let missionTypeObj of tplTypeList | slice:1"
+                            [class.d-opacity]="(projectData.isProjectPart && missionTypeObj.key === missionConstant.MISSION_TYPE_PROJECT)
+                 || (isAddProjectChild && missionTypeObj.key === missionConstant.MISSION_TYPE_PROJECT)"
+                            (click)="createMission(missionTypeObj.title)">
+                            <em class="base">
+                                {{'New' | translate}} {{((projectData.isProjectPart || isAddProjectChild)? 'Child':'' ) | translate}}{{missionTypeObj.title | translate}}</em>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix m-create-planning" style="min-width:300px;">
+                <div class="pull-left f13-f m-header-edit-type" (click)="doShowInput($event)"
+                     [class.hide]="isShowEditInput">
+                   <div class="mission-title-width" title="{{missionName? missionName :  (('Type your mission name in here') | translate) }}">
+                       {{missionName? missionName :  (('Type your mission name in here') | translate) }}
+                   </div>
+                    <span class="bi-icon-edit"></span>
+                </div>
+                <div class="edit-type" [class.hide]="!isShowEditInput" (click)="doStopPropagation($event)">
+                    <input type="text" placeholder="{{'Type your mission name in here' | translate}}"
+                           [(ngModel)]="missionName"
+                           autofocus
+                           (blur)="blurEvent($event,'missionName')"
+                           (focus)="focusEvent($event,'missionName')"
+                           (keyup)="confirmMissionName($event)"
+                    />
+                    <span>{{'Enter to submit, ESC to cancel' | translate}}</span>
+                </div>
+                <span *ngIf="showMissionNameHover"
+                      style="position: absolute;top:50px;left: 22px;color: #EF428D"
+                      class="mission-name-reg">{{'Mission name is required' | translate}}</span>
+                <span class="pull-left m-create-line"></span>
+                <span class="pull-left f9-f" style="line-height:20px;"
+                      (click)="quitCreateMission(true)"
+                      *ngIf="(projectData.isProjectPart || isAddProjectChild) &&  missionType !== missionConstant.MISSION_TYPE_PROJECT">
+                    {{showMissionName ? showMissionName : 'Project'}}
+                </span>
+                <span class="pull-left m-create-line"
+                      *ngIf="(projectData.isProjectPart || isAddProjectChild) &&  missionType !== missionConstant.MISSION_TYPE_PROJECT"></span>
+                <span class="m-create-table g-checkbox  font-selectbutton-select"
+                      (click)="showOnTable()"
+                      [class.g-checkbox-selected]="isShowOnTable"
+                ></span>
+                <span class="m-create-show f9-f">{{'Show on the table' | translate}}</span>
+            </div>
+        </div>
+        <div class="absolute" style="right:0;top:13px;">
+            <div class="pull-left g-header-but">
+                <i class="g-btn-error" title="{{btnFail}}">{{btnFail | translate }}</i>
+                <span class="pull-left but but-refuse" (click)="quitCreateMission()">
+                    <i class="base">{{'CANCEL' | translate}}</i>
+                </span>
+                <span class="pull-left but but-approve" saveDataGroup #saveDataElement (outSaveData)="uploadMission(saveDataElement, missionType)">
+                    <i class="base">{{'UPLOAD' | translate}}</i>
+                     <i class="font-selectbutton-select but-status"></i>
+                     <i class="font-remove but-status"></i>
+                </span>
+            </div>
+            <div class="pull-left g-header-icon">
+                <div class="pull-left" (click)="showMissionHelp($event)">
+                    <span class="g-header-icon-list font-help"
+                          tooltip [tooltip]="{content:'help', position:'bottom'}"
+                    ></span>
+                </div>
+            </div>
+            <a href="javascript:;" class="pull-left font-page-esc" (click)="quitCreateMission()"></a>
+        </div>
+    </header>
+    <section class="clearfix mission-warp">
+        <perfect-scrollbar class="ps-container pull-left m-left">
+            <div class="">
+            <div class="m-a-period">
+                <div class="clearfix m-a-side-title">
+                    <span class="pull-left font-hourglass"></span>
+                    <span class="f16-f base">{{'Set mission period' | translate}}</span>
+                </div>
+                <p class="f33-f g-title-des g-display-inline-block">{{'If don`t set it' | translate}}</p>
+            </div>
+            <div>
+                <div class="relative">
+                    <div class="fixed z-index-num4" #calendarProfile>
+                        <bi-calendar-multiselect
+                                *ngIf="isShowCalendar"
+                                [multiselectOption]="multiCalendar"
+                                (outSelectData)="getSelectData($event)"
+                                (outDefault)="getOutDefault()">
+                        </bi-calendar-multiselect>
+                    </div>
+
+                    <ul class="m-a-side-date" data-step="step_mission_2" id="step_mission_2">
+                        <!---------start---------->
+                        <li>
+                            <div class="m-a-side-date-item" #startCalendar (click)="onStartCalendar($event, startCalendar)">
+                                <div class="pull-left date-curr-time">
+                                    <span class="f13-f">{{'Start' | translate}}</span>
+                                    <div *ngIf="!dateTemplate.start.isShowDateTime">
+                                        <div *ngIf="!dateTemplate.start.isHasLink">
+                                           <span class="f49-f"
+                                                 *ngIf="missionType !== missionConstant.MISSION_TYPE_PROJECT">
+                                    {{dateTemplate.start.defaultContent | translate}}
+                                         </span>
+                                            <span class="v8-f g-margin-top5"
+                                                  *ngIf="missionType === missionConstant.MISSION_TYPE_PROJECT">
+                                        {{dateTemplate.start.defaultContent | translate}}
+                                        </span>
+                                        </div>
+                                        <span class="v8-f  add-pointer" *ngIf="dateTemplate.start.isHasLink"
+                                              (click)="hrefToLinkMission($event)">{{linkInfoName}}
+                                    </span>
+                                    </div>
+                                    <div *ngIf="dateTemplate.start.isShowDateTime">
+                                        <span class="pull-left f49-f">{{formatStartDate.monthDay}}</span>
+                                        <div class="date-t">
+                                            <span class="f32-f">{{formatStartDate.stringMonth}} {{formatStartDate.year}}</span>
+                                            <span class="f27-f">{{formatStartDate.hour}}:{{formatStartDate.minute}} {{formatStartDate.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-a-side-date-icon">
+                                <span class="icon-mission-link"
+                                      (click)="linkTheMission($event)"
+                                      *ngIf="dateTemplate.start.isAbleLink">
+                                </span>
+                                    <span class="font-rightnow"
+                                          (click)="resetTime($event)"
+                                          *ngIf="dateTemplate.start.isShowNowBtn"
+                                    ></span>
+                                    <span class="font-page-esc-small"
+                                          *ngIf="dateTemplate.start.isShowCloseBtn"
+                                          (click)="recoveryPending($event,'start')">
+                                </span>
+                                </div>
+                            </div>
+                        </li>
+                        <!----------Mission link------------>
+                        <li class="clearfix" *ngIf="isShowLinkList">
+                            <perfect-scrollbar class="m-a-side-date-start">
+                                <div class="">
+                                    <div class="mission-left-task-list" *ngFor="let link  of linkMissionList"
+                                         (click)="selectLinkMission(link)">
+                                        <h2 class="f21-f" title="{{link.name}}">
+                                            {{link.name}}</h2>
+                                        <p class="clearfix"><span class="icon-board-{{link.typeTxt| lowercase}}"></span>
+                                            <span class="f5-f">{{link.typeTxt}} {{link.hm}}  {{link.ap}} {{link.day}} {{link.month}}</span>
+                                        </p>
+                                    </div>
+                                </div>
+                            </perfect-scrollbar>
+                        </li>
+                        <!-------------date_period---------->
+                        <li class="m-a-side-date-item" *ngIf="dateTemplate.end.isShowDatePeriod">
+                            <div class="chat-search-time-end chat-search-time-start">
+                                <!--period-->
+                                <span class="f13-f">{{'End' | translate}}</span>
+                                <div class="period">
+                                    <div class="se-input m-r-c-tab-common">
+                                        <div class="se-input-select" (click)="showDatePeriodList($event)">
+                                            <span class="f14-f">{{dateTemplate.end.date_period.unit}}</span>
+                                        </div>
+                                        <input class="current-color ng-valid ng-dirty ng-touched" type="text"
+                                               (keydown)="onKeyDown($event)"
+                                               [(ngModel)]="dateTemplate.end.date_period.data">
+
+
+                                        <div class="d-select d-select-min-width" [hidden]="!isShowDatePeriodUnit">
+                                            <ul>
+                                                <li *ngFor="let unit of dateUnit" (click)="selectTheUnit($event,unit)">
+                                                    <i class="base">{{unit.key}}</i>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <!----------End--------->
+                        <li *ngIf="!dateTemplate.end.isShowDatePeriod">
+                            <div class="m-a-side-date-item" #endCalendar (click)="onEndCalendar($event, endCalendar)">
+                                <div class="date-curr-time">
+                                    <span class="f13-f">{{'End' | translate}}</span>
+                                    <div *ngIf="!dateTemplate.end.isShowDateTime">
+                                <span class="f49-f" *ngIf="missionType !== missionConstant.MISSION_TYPE_PROJECT">
+                                    {{dateTemplate.end.defaultContent | translate}}
+                                </span>
+                                        <span class="v8-f g-margin-top5" *ngIf="missionType === missionConstant.MISSION_TYPE_PROJECT">
+                                   {{dateTemplate.end.defaultContent | translate}}
+                            </span>
+                                    </div>
+                                    <div *ngIf="dateTemplate.end.isShowDateTime">
+                                        <span class="pull-left f49-f">{{formatEndDate.monthDay}}</span>
+                                        <div class="date-t">
+                                            <span class="f32-f">{{formatEndDate.stringMonth}} {{formatEndDate.year}}</span>
+                                            <span class="f27-f">{{formatEndDate.hour}}:{{formatEndDate.minute}} {{formatEndDate.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="m-a-side-date-icon">
+                                <span class="font-page-esc-small"
+                                      (click)="recoveryPending($event,'end')"
+                                      *ngIf="dateTemplate.end.isShowCloseBtn"
+                                ></span>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="m-a-side-fun g-border-top-none" *ngIf="!isHelpPage">
+                <div class="clearfix m-a-side-title">
+                    <span class="pull-left font-function"></span>
+                    <span class="f16-f base">{{'Function' | translate}}</span>
+                </div>
+                <p class="f33-f g-title-des g-display-inline-block">{{'Set those function to be satisfy request' | translate}}</p>
+                <!---------Application------->
+                <ul *ngIf="missionType === missionConstant.MISSION_TYPE_APPLICATION">
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_EXPENSE,$event)"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+                <!-----------Assignment------->
+                <ul *ngIf="missionType === missionConstant.MISSION_TYPE_ASSIGNMENT">
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TARGET,$event)"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+                <!------------Task------------------>
+                <ul *ngIf="missionType === missionConstant.MISSION_TYPE_TASK">
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li *ngIf="isShowBidding">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li class="current" *ngIf="!isShowBidding">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li *ngIf="isShowTarget || isShowTrack">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li class="current" *ngIf="!isShowTarget && !isShowTrack">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_BIDDING,$event)"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li *ngIf="isShowBidding">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li class="current" *ngIf="!isShowBidding">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TARGET,$event)"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+                <!------------Meeting------------------>
+                <ul *ngIf="missionType === missionConstant.MISSION_TYPE_MEETING">
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox  font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_MEMO_RECORDER,$event)"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox font-selectbutton-select"
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_TRACKING,$event)"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+                <!------------Project------------------>
+                <ul *ngIf="missionType === missionConstant.MISSION_TYPE_PROJECT">
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select" #projectParticipant
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_OBSERVER,$event)"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select" #projectImportance
+                              (click)="showFunction(missionConstant.MISSION_FUNCTION_IMPORTANCE,$event)"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li>
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+            </div>
+            <!--help显示专用-->
+            <div class="m-a-side-fun g-border-top-none"
+                 *ngIf="isHelpPage"
+                 data-step="3" id="step_mission_3">
+                <div class="clearfix m-a-side-title">
+                    <span class="pull-left font-function"></span>
+                    <span class="f16-f base">{{'Function' | translate}}</span>
+                </div>
+                <ul>
+                    <li class="current" data-step="step_mission_4" id="step_mission_4">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Participant' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Only realize mission situation' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_6" id="step_mission_6">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Memo' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Record the mission summary' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_8" id="step_mission_8">
+                        <div class="clearfix">
+                        <span class="g-checkbox  font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Priority level' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'3 level to set from low to high' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_10" id="step_mission_10">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Track' | translate}}</span>
+                        </div>
+                        <span class="f13-f">{{'Locate mission people in real time' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_12" id="step_mission_12">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Bidding' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to compare' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_14" id="step_mission_14">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Target' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Select at least 2 members to complete one or each target' | translate}}</span>
+                    </li>
+                    <li class="current" data-step="step_mission_16" id="step_mission_16">
+                        <div class="clearfix">
+                            <span class="g-checkbox font-selectbutton-select"></span>
+                            <span class="f9-f">{{'Income or outlay' | translate}}</span>
+                        </div>
+                        <span class="f13-f g-display g-margin-top5">{{'Set expense process' | translate}}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        </perfect-scrollbar>
+
+        <div class="m-right">
+            <perfect-scrollbar class="ps-container m-right-left-scroll pull-left" id="scrollBar">
+                <div class="m-right-left relative scroll-element">
+                <!----------Application----------------------->
+                <mission-create-application #createApplication
+                                            *ngIf="missionType === missionConstant.MISSION_TYPE_APPLICATION"
+                ></mission-create-application>
+                <!-------------assignment--------->
+                <mission-create-assignment #createAssignment (doCalculationMember)="doCalculationChooseMember($event)"
+                                           *ngIf="missionType === missionConstant.MISSION_TYPE_ASSIGNMENT "
+                ></mission-create-assignment>
+                <!-----------+meeting---------->
+                <mission-create-meeting #createMeeting (doCalculationMember)="doCalculationChooseMember($event)"
+                                        *ngIf="missionType === missionConstant.MISSION_TYPE_MEETING "
+                ></mission-create-meeting>
+                <!------------TASK--------------------------------->
+                <mission-create-task #createTask (doCalculationMember)="doCalculationChooseMember($event)"
+                                     *ngIf="missionType === missionConstant.MISSION_TYPE_TASK"
+                ></mission-create-task>
+                <mission-create-project #createProject
+                                        (doAddMission)="addProjectMission($event)"
+                                        [setParams]="projectData"
+                                        *ngIf="missionType === missionConstant.MISSION_TYPE_PROJECT">
+                </mission-create-project>
+                <!-----------------七个function----------------------------------------------->
+                <!------------知情者  observer-------------------->
+                <create-observer *ngIf="isShowKnowPeople || isHelpPage" #observer></create-observer>
+                <!---------------追踪 track--------------------------------->
+                <create-track *ngIf="isShowTrack || isHelpPage" [setParams]="remainMember" [setCurrentType]="missionType"
+                              #track></create-track>
+                <!------------重要等级  importance -------------------->
+                <create-importance *ngIf="isShowImportance || isHelpPage" #importance></create-importance>
+                <!-------------竞标 bidding-------------------------->
+                <create-bidding *ngIf="isShowBidding || isHelpPage" #bidding [setParams]="createTask?.approveArr"
+                                [setBidder]="createTask?.bidderArr" (outCalendarParent)="getOutDefault()"></create-bidding>
+                <!--------------目标  target------------>
+                <create-target *ngIf="isShowTarget || isHelpPage" #target
+                               [setParams]="createAssignment? createAssignment?.assignmentArr:createTask?.operatorArr"></create-target>
+                <!-------------会议记录着 recorder------------>
+                <create-recorder *ngIf="isShowRecorder || isHelpPage" [setParams]="remainMember" #recorder></create-recorder>
+                <!-----------支付功能 expense-------------->
+                <create-expense *ngIf="isShowExpense || isHelpPage" #expense></create-expense>
+
+            </div>
+            </perfect-scrollbar>
+            <div class="pull-right m-right-right">
+
+                <!-------------文件模块------->
+                <mission-folder [setMissionToken]="generalToken" #createFolder></mission-folder>
+                <!---------地图模块------------>
+                <map-presentation [setParams]="'create'" [setMissionToken]="generalToken"
+                                  [class.hide]="missionType == missionConstant.MISSION_TYPE_APPLICATION"
+                                  [class.show]="isHelpPage"
+                                  [setCurrentType]="missionType"></map-presentation>
+
+            </div>
+        </div>
+    </section>
+</div>

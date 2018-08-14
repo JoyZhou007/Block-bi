@@ -1,0 +1,59 @@
+<div class="g-style1 g-padding20 m-p-c-storage" data-step="step_mission_20" id="step_mission_20">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <div class="se-input-select"></div>
+        <input class="g-input-box-shadow" type="text" [(ngModel)]="missionProjectData.description">
+    </div>
+    <div class="g-title relative" *ngIf="childMissionInfo.length > 0">
+        <span class="f9-f">{{'MISSION' | translate}}</span>
+        <!--<a class="bi-icon-open m-create-edit1" href="javascript:;" style="top:0;"></a>-->
+    </div>
+    <ul class="clearfix m-left-storage-list" *ngIf="childMissionInfo.length > 0">
+        <li class="clearfix" *ngFor="let childMission of childMissionInfo">
+            <div class="mission-left-task-list">
+                <h2 class="f21-f" title="{{childMission.mission.name}}">{{childMission.mission.name}}</h2>
+                <p class="clearfix" *ngIf="childMission.mission.type === missionConstant.MISSION_TYPE_TASK">
+                    <span class="icon-board-task"></span>
+                    <span class="f5-f">{{'Task' | translate}} {{childMission.formatDate.hour}}:{{childMission.formatDate.minute}}
+                        {{childMission.formatDate.day}}th {{childMission.formatDate.month}}</span>
+                </p>
+                <p  *ngIf="childMission.mission.type === missionConstant.MISSION_TYPE_MEETING" >
+                    <span class="icon-board-meeting" ></span>
+                    <span class="f5-f">{{'Meeting' | translate}} {{childMission.formatDate.hour}}:{{childMission.formatDate.minute}}
+                        {{childMission.formatDate.day}}th {{childMission.formatDate.month}}</span>
+                </p>
+                <p  *ngIf="childMission.mission.type === missionConstant.MISSION_TYPE_ASSIGNMENT">
+                    <span class="icon-board-assignment" ></span>
+                    <span class="f5-f">{{'Assignment' | translate}} {{childMission.formatDate.hour}}:{{childMission.formatDate.minute}}
+                        {{childMission.formatDate.day}}th {{childMission.formatDate.month}}</span>
+                </p>
+                <p *ngIf="childMission.mission.type === missionConstant.MISSION_TYPE_APPLICATION">
+                    <span class="icon-board-application"></span>
+                    <span class="f5-f">{{'Application' | translate}} {{'PENDING' | translate}}</span>
+                </p>
+                <div class="m-left-storage-people">
+                  <div *ngFor="let member of childMission.allMemberInfo | slice:0:6">
+                    <!--<img class="pull-left" src="{{member.user_profile_path}}">-->
+                      <profile-img [userInfo]="member" [settings]="{show_work_name: false}"></profile-img>
+                  </div>
+                </div>
+            </div>
+            <div class="m-left-storage-pos">
+                <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-trash"
+                     (click)="deleteTheChildMission(childMission)">
+                    <span class="g-transition2 g-icon-center font-trash"></span>
+                </div>
+                <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                     (click)="showChildMissionDetail(childMission)">
+                    <span class="bi-icon-open g-transition2 g-icon-center"></span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <div class="but but-add" (click)="addAMission()">
+        <i class="base">{{'ADD A MISSION' | translate}}</i>
+    </div>
+</div>
+

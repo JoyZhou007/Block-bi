@@ -1,0 +1,86 @@
+<header class="g-header ch-header">
+    <!-- 默认 -->
+    <div class="pull-left ch-default-chat ch-header-l" *ngIf="isDefaultContent">
+        <div class="pull-left">
+            <div class="clearfix ch-header-left">
+                <span class="bi-icon-rectangle pull-left"></span>
+                <em class="f18-f ch-default-tit">{{'CHAT' | translate}}</em>
+            </div>
+
+        </div>
+        <div class="pull-right g-header-icon ch-header-icon hide">
+            <div class="pull-left">
+                <span class="g-header-icon-list font-setting"></span>
+            </div>
+        </div>
+    </div>
+    <!-- 具体聊天组 -->
+    <div class="pull-left ch-header-l" *ngIf="!isDefaultContent">
+        <div class="pull-left">
+            <div class="clearfix ch-header-left">
+                <span class="pull-left c3-f"><em class="base">{{chatTitle}}</em></span>
+                <span *ngIf="currentMenuItem && !currentMenuItem.isFriend" class="pull-left {{chatCls}}"></span>
+                <em *ngIf="currentMenuItem && !hasStared" class="icon1-collection1 add-pointer"
+                    tooltip [tooltip]="{content:'STARRED', position:'bottom'}"
+                    (click)="enshrineGroup()"></em>
+                <em *ngIf="currentMenuItem && hasStared" class="icon1-collection2 add-pointer"
+                    (click)="cancelEnshrineGroup()"></em>
+            </div>
+            <div class="pull-left f13-f ch-edit-type g-title-des" *ngIf="currentMenuItem && !currentMenuItem.isFriend"
+                 (dblclick)="toggleEditTopic($event)">
+                {{chatTopic}}
+                <span class="bi-icon-edit" (click)="toggleEditTopic($event)"></span>
+            </div>
+            <div class="pull-left ch-header-comments g-title-des" *ngIf="currentMenuItem && !currentMenuItem.isFriend">
+                    <span class="font-comments">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                    </span>
+            </div>
+            <div class="edit-type" *ngIf="currentMenuItem && !currentMenuItem.isFriend" [class.hide]="!editMode">
+                <input #nameInput [(ngModel)]="chatTopic" type="text" (keyup)="editTopic($event)">
+                <span class="">{{'Enter to submit, ESC to cancel' | translate}}</span>
+            </div>
+        </div>
+        <div class="pull-right g-header-icon ch-header-icon">
+            <div class="pull-left" *ngIf="allowInvite || isFriend"
+                 tooltip [tooltip]="{content: 'invite new member', position: 'bottom'}"
+                 (click)="addPersonal($event)">
+                <span class="g-header-icon-list bi-icon-addpeople"></span>
+            </div>
+            <div class="pull-left"
+                 tooltip [tooltip]="{content: 'transfer channel host', position: 'bottom'}"
+                 *ngIf="currentMenuItem && !currentMenuItem.isFriend && isGroupHost">
+                <span class="g-header-icon-list font-transfer"
+                      (click)="transferGroup($event)"></span>
+            </div>
+            <!--<div class="pull-left">-->
+            <!--<span class="g-header-icon-list font-chatcondition-half-chat"></span>-->
+            <!--</div>-->
+            <div class="pull-left" *ngIf="currentMenuItem && !currentMenuItem.isFriend"
+                 tooltip [tooltip]="{content: 'setting', position: 'bottom'}"
+            >
+                <span class="g-header-icon-list font-setting" (click)="groupSetting($event)"
+                ></span>
+            </div>
+        </div>
+    </div>
+    <!-- 搜索聊天 -->
+    <div class="pull-right">
+        <div class="pull-left g-search-wrap">
+            <span class="font-search-blue1" (click)="onKey($event,input)"></span>
+            <input class="f26-f g-input-color g-font-normal" type="text" placeholder="{{'Search' | translate}}" #input
+                   (keyup)="onKey($event,input)"
+                   (compositionstart)="inputChineseCodeStart($event)"
+                   (compositionend)="inputChineseCodeEnd($event)"
+            >
+            <span class="font-remove s-clear" (click)="clearInputValue($event,input)" *ngIf="input.value"></span>
+        </div>
+        <div class="pull-left g-header-icon" help (click)="showChatHelp($event)">
+            <div class="pull-left">
+                <span class="g-header-icon-list font-help"></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="closeChat($event)"></a>
+    </div>
+</header>

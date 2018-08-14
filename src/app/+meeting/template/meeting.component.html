@@ -1,0 +1,183 @@
+<div class="meeting-width" (click)="onClickBody($event)">
+    <!--header start-->
+    <header class="g-header">
+        <div class="pull-left m-header-title">
+            <div class="clearfix">
+                <span class="icon1-title-meeting"></span>
+                <span class="pull-left f18-f meeting-header-title">{{'MEETING ROOM'| translate}}</span>
+            </div>
+        </div>
+        <div class="g-search-wrap-width">
+            <div class="pull-left g-search-wrap">
+                <span class="font-search-blue1"></span>
+                <span class="font-remove" (click)="onCloseSearch()" *ngIf="searchText"></span>
+                <input class="f26-f f-color-dark g-font-normal" type="text" placeholder="{{'Search' | translate}}"
+                       (keydown)="onSearchKeyDown($event)"
+                       [(ngModel)]="searchText">
+            </div>
+        </div>
+
+        <div class="pull-right">
+            <div class="pull-left g-header-icon"></div>
+            <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+        </div>
+    </header>
+    <!--header end-->
+    <section class="clearfix">
+        <!--left start-->
+        <div class="meeting-left pull-left">
+            <bi-calendar [setOption]="{}" (info)="singleCalendar($event)" [isBoxShadow]="false"></bi-calendar>
+            <div class="meeting-left-list">
+                <div class="meeting-left-title">
+                    <span class="icon1-hourglass"></span>
+                    <span class="f16-f g-clearStyle">{{'Meeting Room' | translate}}</span>
+                    <span class="font-add pull-right add-pointer" (click)="meetingHandle('add')"
+                          tooltip [tooltip]="{content:'add room', position:'top'}"
+                    ></span>
+                </div>
+                <perfect-scrollbar class="ps-container meeting-left-list-wrap">
+                    <div class="">
+                        <div class="f19-f text-center margin-top20 g-no-data-color"
+                             *ngIf="!roomList || (roomList && roomList.length === 0)">{{noData | translate}}
+                        </div>
+                        <ul>
+                            <li *ngFor="let room of roomList">
+                                <p class="f21-f meet-room-title">{{room.name}}</p>
+                                <p class="meet-room-people">
+                                    <span class="f5-f meet-room-people-num pull-left">{{room.amount}} People</span>
+                                    <span class="icon1-TV" *ngIf="room.video == 1"></span>
+                                    <span class="icon1-project" *ngIf="room.projector == 1"></span>
+                                </p>
+                                <div class="m-left-storage-pos">
+                                    <div class="pull-left g-border4 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-right5"
+                                         tooltip [tooltip]="{content:'edit', position:'top'}"
+                                         (click)="meetingHandle('update',room)">
+                                        <span class="bi-icon-edit g-transition2 g-icon-center"></span>
+                                    </div>
+                                    <div class="pull-left g-border4 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-trash g-margin-right5"
+                                         tooltip [tooltip]="{content:'delete', position:'top'}"
+                                         (click)="deleteRoom($event,room.id)">
+                                        <span class="g-transition2 g-icon-center font-trash"></span>
+                                    </div>
+                                </div>
+
+                            </li>
+                        </ul>
+                    </div>
+                </perfect-scrollbar>
+
+            </div>
+        </div>
+        <!--left end-->
+        <!--right start-->
+        <div class="meeting-right pull-left">
+            <div class="meeting-right-container" #scrollToBottom>
+                <ul class="clearfix f33-f meeting-right-title o-fun-title">
+                    <li class="meeting-staff g-text-left meeting-ellipsis meeting-title-line" title="{{'Staff' | translate}}">{{'Staff' | translate}}</li>
+                    <li class="meeting-name meeting-ellipsis meeting-title-line" title="{{'Meeting topic' | translate}}">{{'Meeting topic' | translate}}</li>
+                    <li class="meeting-amount meeting-ellipsis meeting-title-line" title="{{'Attendee amount' | translate}}">{{'Attendee amount' | translate}}</li>
+                    <li class="meeting-period meeting-ellipsis meeting-title-line" title="{{'Duration' | translate}}">{{'Duration' | translate}}</li>
+                    <li class="meeting-right-title-available meeting-ellipsis meeting-title-line" title="{{'Available room' | translate}}">{{'Available room' | translate}}</li>
+                    <li class="meeting-Status meeting-ellipsis meeting-title-line" title="{{'Status' | translate}}">{{'Status' | translate}}</li>
+                </ul>
+                <div class="f19-f text-center margin-top20 g-no-data-color"
+                         *ngIf="!meetingList || (meetingList && meetingList.length === 0)">{{noData | translate}}
+                    </div>
+                <ul #scrollUl id="dashboard" *ngIf="meetingList && meetingList.length !== 0" class="meeting-right-list">
+                        <li class="clearfix meeting-list-item text-center o-fun-style" *ngFor="let meeting of meetingList,let inx = index">
+                            <div class="f5-f meeting-staff g-text-left">
+                                <div class="m-staff-profile">
+                                    <profile-img [userInfo]="meeting" [settings]="{show_work_name: true}"></profile-img>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-name meeting-content-line" title="{{meeting.title}}">
+                                {{meeting.title}}
+                            </div>
+                            <div class="f5-f meeting-amount meeting-content-line">
+                                {{meeting.attendance}}
+                            </div>
+                            <div class="f5-f meeting-period">
+                                <div class="clearfix">
+                                    <em class="f5-f meeting-content-line" title="{{meeting.startFormat}}">
+                                        {{meeting.startFormat}}
+                                    </em>
+                                    <span class="icon1-Shape-2"></span>
+                                    <em class="f5-f meeting-content-line" title="{{meeting.endFormat}}">
+                                        {{meeting.endFormat}}
+                                    </em>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-available clearfix" (click)="onClickRoomName($event,meeting,inx)">
+                                <span class="font-selectbutton-soildclose pull-right meeting-font-move"
+                                      [class.meeting-font-move]="!meeting.isShowSelect"></span>
+                                <span class="f5-f pull-right meeting-content-line" title="{{meeting.room_name}}" style="width: 54%;">
+                                    {{meeting.room_name}}
+                                </span>
+                                <div class="d-select" [class.hide]="!meeting.isShowSelect" [style.top.px]="selectTop">
+                                    <ul>
+                                        <li *ngFor="let item of roomListClone"
+                                            (click)="onClickRoomList($event,meeting,item)"
+                                            [class.d-opacity]="!item.isNumberOk || !item.isProjectOk || !item.isVideoOk || !item.isTimeOk">
+                                            <i class="g-clearStyle">{{item.name}}</i>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-Status g-transition2 o-fun-style-operation">
+                                <i class="f5-f g-clearStyle" style="position: relative;top: -3px;">{{meeting.statusFormat | translate}}</i>
+                                <span class="bi-icon-edit meeting-edit add-pointer"
+                                      (click)="meetingReserve('update',meeting)"></span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="meeting-loader" *ngIf="isLoading">
+                        <loaders-css [loader]="'ball-scale-ripple-multiple'" [loaderClass]="'my-loader'">
+                            <div class="loader-inner ball-pulse"></div>
+                        </loaders-css>
+                    </div>
+                <ol style="margin-top: 20px;">
+                        <li class="clearfix meeting-right-list-item" *ngFor="let meeting of searchList">
+                            <div class="f5-f meeting-right-title-staff">
+                                <div class="clearfix">
+                                    <img src="{{meeting.picSrc}}" alt="">
+                                    <span class="f19-f meeting-right-span">{{meeting.work_name}}</span>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-right-title-name">
+                                <span class="f5-f meeting-right-span">{{meeting.title}}</span>
+                            </div>
+                            <div class="f5-f meeting-right-title-amount">
+                                <span class="f5-f meeting-right-span">{{meeting.attendance}}</span>
+                            </div>
+                            <div class="f5-f meeting-right-title-period">
+                                <div class="clearfix">
+                                    <em class="f5-f">{{meeting.startFormat}}</em>
+                                    <span class="icon1-Shape-2"></span>
+                                    <em class="f5-f">{{meeting.endFormat}}</em>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-right-title-available clearfix">
+                                <span class="f5-f meeting-right-span" (click)="onClickRoomName($event,meeting)">{{meeting.room_name}}</span>
+                                <span class="font-selectbutton-soildclose"
+                                      (click)="onClickRoomName($event,meeting)"></span>
+                                <div class="d-select" [class.hide]="!meeting.isShowSelect">
+                                    <ul>
+                                        <li *ngFor="let item of roomListClone"
+                                            (click)="onClickRoomList($event,meeting,item)"
+                                            [class.d-opacity]="!item.isNumberOk || !item.isProjectOk || !item.isVideoOk || !item.isTimeOk">
+                                            {{item.name}}
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="f5-f meeting-right-title-Status">
+                                <span class="f5-f meeting-right-span pull-left">{{meeting.statusFormat | translate}}</span>
+                                <span class="bi-icon-edit" (click)="meetingReserve('update',meeting)"></span>
+                            </div>
+                        </li>
+                    </ol>
+            </div>
+        </div>
+        <!--right end-->
+    </section>
+</div>

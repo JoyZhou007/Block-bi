@@ -1,0 +1,78 @@
+<!--setting start-->
+<div class="g-side-eject-width h-setting-fixed" #settingElement [class.h-setting-an]="hSettingAn">
+    <span class="font-page-esc-small h-setting-close" (click)="doSettingBoxHide()"></span>
+    <h3 class="f7-f">{{'SETTING' | translate}}
+        <span *ngIf="hasNoticeMsg" #noticeEle>{{noticeMsg}}</span>
+    </h3>
+    <div class="h-me-noti-height">
+        <ul class="g-d-drag">
+            <li class="clearfix" *ngIf="settingGeneral">
+                <div class="pull-left">
+                    <span class="f9-f">{{'GENERAL PUSHING' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Control all of notification and message to push' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingGeneral"
+                                   (switchButEvent)="updateSettings($event, 'general')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingContact">
+                <div class="pull-left">
+                    <span class="f9-f">{{'CONTACT PUSHING' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Enable or disable recommendation' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingContact"
+                                   (switchButEvent)="updateSettings($event, 'contact')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingChat">
+                <div class="pull-left">
+                    <span class="f9-f">{{'CHAT PUSHING' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Enable or disable new message' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingChat" (switchButEvent)="updateSettings($event, 'chat')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingMission">
+                <div class="pull-left">
+                    <span class="f9-f">{{'MISSION PUSHING' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Enable or disable mission' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingMission"
+                                   (switchButEvent)="updateSettings($event, 'mission')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingFile">
+                <div class="pull-left">
+                    <span class="f9-f">{{'FILES PUSHING' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'Enable or disable file' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingFile" (switchButEvent)="updateSettings($event, 'file')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingSound">
+                <div class="pull-left">
+                    <span class="f9-f">{{'SOUND' | translate}}</span>
+                    <p class="f10-f g-margin-top7">{{'To set sound reminding' | translate}}</p>
+                </div>
+                <div class="g-drag1-width1 g-notification-setting-switch">
+                    <switch-button [initVal]="settingSound"
+                                   (switchButEvent)="updateSettings($event, 'sound')"></switch-button>
+                </div>
+            </li>
+            <li class="clearfix" *ngIf="settingNotifyMaxNum">
+                <div class="f9-f g-margin-bottom10">{{'MAX PUSHING BOARD DISPLAY' | translate}}</div>
+                <permission-setting [setData]="settingNotifyMaxNum"
+                                    (outToggleBtnEvent)="updateSettings($event, 'quantity')"></permission-setting>
+            </li>
+        </ul>
+    </div>
+    <a class="h-clear-notifi f5-f" href="javascript:;" (click)="resetDefaultSettings($event)">
+        <span class="base">{{'DEFAULT SETTINGS' | translate}}</span>
+    </a>
+</div>
+<!--setting end-->

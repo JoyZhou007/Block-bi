@@ -1,0 +1,233 @@
+<!-- Todo: 整理到通用样式 -->
+<style>
+    .my-loader-tips {
+        border: 2px solid rgba(94, 102, 209, .6) !important;
+    }
+
+    .loader-wrap {
+        width: 100%;
+        height: 100px;
+    }
+
+    .loader-wrap .loader {
+        position: relative !important;
+        margin-left: -25px !important;
+        left: 50% !important;
+    }
+</style>
+<section class="g-width" #scrollToBottom>
+    <!--<perfect-scrollbar class="ps-container h-scroll">-->
+        <div class="h-scroll relative" id="dashboard">
+        <ul class="clearfix h-con h-mission" *ngIf="dashboardHasInited">
+            <li *ngFor="let dashboardObj of dashboardLst; let i=index;">
+
+                <!--tips start-->
+                <div class="clearfix {{dashboardObj.hasOwnProperty('form') ? 'm-calendar-loading-show' : ''}} h-mission-item"
+                     *ngIf="dashboardObj.hasOwnProperty('form')">
+                    <div class="g-border4 g-transition2 content-item-wrap isTipsHeight">
+                        <div class="tips-title clearfix">
+                            <profile-img [userInfo]="dashboardObj.ownerInfo" [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                            <div class="pull-left tips-title-pic-name">
+                                <div class="f19-f LatoMedium">{{dashboardObj.ownerInfo?.work_name}}</div>
+                                <div class="f5-f tips-time">
+                                <span class="icon1-tips">
+                                    <em class="path1"></em>
+                                    <em class="path2"></em>
+                                    <em class="path3"></em>
+                                    <em class="path4"></em>
+                                    <em class="path5"></em>
+                                 </span>
+                                    <span>{{'Tips' | translate}}</span>
+                                    <span>{{dashboardObj.createDetailTime}}</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tips-content relative {{dashboardObj.ableEdit ? '' : 'tips-shared-content'}}"
+                             loadMore
+                             [currentClass]="'current'"
+                             [isInit]="isInit"
+                             [html]="dashboardObj.content"
+                             [defaultHeight]="dashboardObj.ableEdit ? 60 : 118">
+                            <div class="h-con-word-break f15-f" #loadMoreHtml></div>
+                            <span class="pull-right g-bg-white hide" #loadMoreBut>
+                                <em class="g-transition2 font-selectbutton-line cursor"></em>
+                            </span>
+                        </div>
+                        <span class=" g-header-icon-list icon1-alarm alarm-clicked tipsAlarm"
+                              *ngIf="dashboardObj.has_alarm"></span>
+                        <div class="h-tips-top-line" *ngIf="dashboardObj.ableEdit"></div>
+                        <div class="clearfix h-mission-share" *ngIf="dashboardObj.ableEdit">
+                            <p class="f9-f">{{'SHARE TO' | translate}}</p>
+                            <a href="javascript:;" *ngFor="let userObj of dashboardObj.sharedToInfoList; let j=index;">
+                                <profile-img [settings]="{show_work_name: false}" [userInfo]="userObj"></profile-img>
+                            </a>
+                            <div class="no-share" *ngIf="!dashboardObj?.sharedToInfoList?.length">
+                                <span class="icon1-no-one"></span>
+                                <span class="f41-f">{{'NO ONE' | translate}}</span>
+                            </div>
+                        </div>
+                        <i class="m-calendar-doing-line m-calendar-doing-line-color2"></i>
+                        <div class="g-transition2 m-left-storage-pos" [class.m-left-storage-pos-right]="dashboardObj.showAlarmIcon">
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-trash"
+                                 tooltip [tooltip]="{content:'delete', position:'top'}">
+                                <span class="g-transition2 g-icon-center font-trash" (click)="clickDeleteTips($event,dashboardObj)"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                                 (click)="onClickAlarm($event, dashboardObj, tipsAlarmElement, i)"
+                                 #tipsAlarmElement
+                                 *ngIf="!dashboardObj.has_alarm"
+                                 tooltip [tooltip]="{content:'alarm', position:'top'}">
+                                <span class="g-transition2 g-icon-center font-alarm"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                                 *ngIf="dashboardObj.has_alarm"
+                                 #tipsAlarmElement
+                                 (click)="onClickedAlarm($event, i, dashboardObj, tipsAlarmElement)"
+                                 tooltip [tooltip]="{content:'alarm', position:'top'}">
+                                <span class="g-transition2 g-icon-center icon1-alarm alarm-clicked" title="{{dashboardObj.effective_time_display}}"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon" *ngIf="dashboardObj.ableEdit"
+                                 tooltip [tooltip]="{content:'edit', position:'top'}">
+                                <span class="g-transition2 g-icon-center bi-icon-edit" (click)="clickOpenUpdateDialog($event,dashboardObj)"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--tips end-->
+                <!--mission start-->
+                <div class="clearfix {{dashboardObj.hasOwnProperty('form') ? 'm-calendar-loading-show' : ''}} h-mission-item"
+                     *ngIf="!dashboardObj.hasOwnProperty('form')">
+                    <div class="g-border4 g-transition2 content-item-wrap isTipsHeight">
+                        <div class="clearfix mission-left-task-list">
+                            <h2 class="f21-f HelveticaNeueMedium" title="{{dashboardObj.name}}">
+                                {{dashboardObj.name}}</h2>
+                            <p class="clearfix"><span
+                                    class="h-mission-margin icon-board-{{dashboardObj.typeClass}} "></span>
+                                <span class="f5-f h-mission-type-vertical">
+                                    <em class="base">{{dashboardObj.typeTitle | translate}} {{dashboardObj.last_update_locale_time}}</em>
+                                </span>
+                            </p>
+                            <div class="m-left-storage-people">
+                                <span class="icon1-Shape-3 h-mission-margin"></span>
+                                <profile-img [userInfo]="dashboardObj.last_update_info.user_info" [settings]="{show_work_name: true}"></profile-img>
+                            </div>
+                        </div>
+                        <!-- 获取详情后加载所有 -->
+                        <div>
+                            <mission-progress [eleData]="dashboardObj" [mode]="mode"></mission-progress>
+                            <div class="h-tips-top-line g-margin-top10"></div>
+                            <div class="clearfix date-time">
+                                <div class="pull-left date-curr-time">
+                                    <span class="f13-f">{{'Start' | translate}}</span>
+                                    <div *ngIf="dashboardObj.startIsLink">
+                                        <span class="v8-f date-curr-conf">{{dashboardObj.startLinkInfo.name}}</span>
+                                    </div>
+                                    <div *ngIf="!dashboardObj.startIsLink">
+                                        <span class="pull-left f49-f">{{dashboardObj.startTimeInfo.day}}</span>
+                                        <div class="date-t">
+                      <span
+                              class="f32-f">{{dashboardObj.startTimeInfo.month}} {{dashboardObj.startTimeInfo.year}}</span>
+                                            <span class="f27-f">{{dashboardObj.startTimeInfo.hour}}:{{dashboardObj.startTimeInfo.minute}} {{dashboardObj.startTimeInfo.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="pull-right date-curr-time">
+                                    <span class="f13-f">{{'End' | translate}}</span>
+                                    <div *ngIf="dashboardObj.endIsPending">
+                                        <span class="pull-left f49-f">{{'PENDING' | translate}}</span>
+                                    </div>
+                                    <div *ngIf="!dashboardObj.endIsPending">
+                                        <span class="pull-left f49-f">{{dashboardObj.endTimeInfo.day}}</span>
+                                        <div class="date-t">
+                                            <span class="f32-f">{{dashboardObj.endTimeInfo.month}} {{dashboardObj.endTimeInfo.year}}</span>
+                                            <span class="f27-f">{{dashboardObj.endTimeInfo.hour}}:{{dashboardObj.endTimeInfo.minute}} {{dashboardObj.endTimeInfo.week}}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <i class="icon1-Shape-2"></i>
+                            </div>
+                        </div>
+                        <div class="g-transition2 m-left-storage-pos">
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-trash"
+                                 tooltip [tooltip]="{content:'delete', position:'top'}">
+                                <span class="g-transition2 g-icon-center font-trash" (click)="deletePromoteMission($event,dashboardObj)"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                                 tooltip [tooltip]="{content:'chat', position:'top'}"
+                                 *ngIf="!dashboardObj.is_observer && dashboardObj.type != missionConstant.MISSION_TYPE_APPLICATION"
+                            >
+                                <span class="g-transition2 g-icon-center bi-icon-rectangle"
+                                      (click)="openMissionChatDialog($event ,dashboardObj)"></span>
+                            </div>
+                            <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                                 tooltip [tooltip]="{content:'redirect', position:'top'}"
+                                 (click)="onClickedAlarm($event,i,dashboardObj)">
+                                <span class="g-transition2 g-icon-center bi-icon-open" (click)="redirectToDetail($event, dashboardObj)"></span>
+                            </div>
+                        </div>
+                        <div [class.hide]="!dashboardObj.isLoadingDetail">
+                            <loaders-css [loader]="'pacman'" [loaderClass]="'my-mission-loader'">
+                                <div class="loader-inner ball-pulse"></div>
+                            </loaders-css>
+                        </div>
+                    </div>
+                </div>
+                <!--mission end-->
+            </li>
+        </ul>
+
+        <!--calendar repeat-->
+        <div class="absolute" #biCalendarFixElement>
+            <bi-calendar-fix
+                    *ngIf="isShowCalendar"
+                    (outFixInfo)="getFix($event)"
+                    (outDeleteInfo)="deleteFix($event)"
+                    (outDefault)="intiDefault()"
+                    [dataOption]="fixData"></bi-calendar-fix>
+        </div>
+        <div class="clearfix g-default-prompt" [class.hide]="dashboardLst?.length">
+            <img src="{{config.staticResourceDomain + 'assets/images/tips-empty.png'}}"/>
+            <div class="g-default-prompt-right h-tips-prompt">
+                <h1 class="LatoRegular" *ngIf="isZhLan" >{{currentUserInfo?.work_name}}，{{'hello how' | translate}}</h1>
+                <h1 class="LatoRegular text-center" *ngIf="!isZhLan" >Hi {{currentUserInfo?.work_name}}! {{'hello how' | translate}}</h1>
+                <p class="LatoLight text-center g-margin-left20 g-margin-right20 h-prompt-color2">{{'Here is your main desktop' | translate}}
+                    <span>{{'Make a tip' | translate}}</span>
+                </p>
+            </div>
+        </div>
+        <div class="loader-wrap">
+            <div class="loader" *ngIf="isLoading">
+                <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader-tips'">
+                    <div class="loader-inner ball-pulse"></div>
+                </loaders-css>
+            </div>
+        </div>
+        <div class="h-video-list" style="margin-top: 0">
+            <ul>
+                <li class="g-border4">
+                    <div class="h-video-warp">
+                        <div class="h-video-img-scale"><img src="{{config.staticResourceDomain + 'assets/images/home-img1.jpg'}}"/></div>
+                        <div class="g-border4 h-video-content"></div>
+                    </div>
+                    <p class="f15-f">{{'Default Chat' | translate}}</p>
+                </li>
+                <li class="g-border4">
+                    <div class="h-video-warp">
+                        <div class="h-video-img-scale"><img src="{{config.staticResourceDomain + 'assets/images/home-img2.jpg'}}"/></div>
+                        <div class="g-border4 h-video-content"></div>
+                    </div>
+                    <p class="f15-f">{{'Efficient Mission' | translate}}</p>
+                </li>
+                <li class="g-border4">
+                    <div class="h-video-warp">
+                        <div class="h-video-img-scale"><img src="{{config.staticResourceDomain + 'assets/images/home-img3.jpg'}}"/></div>
+                        <div class="g-border4 h-video-content"></div>
+                    </div>
+                    <p class="f15-f">{{'Easy to create a business' | translate}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!--</perfect-scrollbar>-->
+
+</section>

@@ -1,0 +1,267 @@
+[
+  {
+    "id": "1",
+    "name": "Computers,Software",
+    "name_zh":"计算机、软件"
+  },
+  {
+    "id": "2",
+    "name": "Computers,Hardware",
+    "name_zh":"计算机硬件"
+  },
+  {
+    "id": "3",
+    "name": "Computer Services",
+    "name_zh":"计算机服务"
+  },
+  {
+    "id": "4",
+    "name": "Telecom & Network Equipment",
+    "name_zh":"电信及网络设备"
+  },
+  {
+    "id": "5",
+    "name": "Telecom Operators/Service Providers",
+    "name_zh":"电信运营商/服务提供商"
+  },
+  {
+    "id": "6",
+    "name": "Internet/E-commerce",
+    "name_zh":"互联网/电子商务"
+  },
+  {
+    "id": "7",
+    "name": "Online Game",
+    "name_zh":"在线游戏"
+  },
+  {
+    "id": "8",
+    "name": "Finance/Investments/Securities",
+    "name_zh":"金融/投资/证券"
+  },
+  {
+    "id": "9",
+    "name": "Banking",
+    "name_zh":"银行"
+  },
+  {
+    "id": "10",
+    "name": "Insurance",
+    "name_zh":"保险"
+  },
+  {
+    "id": "11",
+    "name": "Trading/Import & Export",
+    "name_zh":"贸易/进出口"
+  },
+  {
+    "id": "12",
+    "name": "Wholesale/Retail ",
+    "name_zh":"批发/零售"
+  },
+  {
+    "id": "13",
+    "name": "FMCG( Food,Beverage,Cosmetics)",
+    "name_zh":"快速消费品（食品、饮料、化妆品）"
+  },
+  {
+    "id": "14",
+    "name": "Apparel/Textiles/Leather Goods",
+    "name_zh":"服装/纺织品/皮革制品"
+  },
+  {
+    "id": "15",
+    "name": "Furniture/Home Appliances/Arts & Craft/Toys",
+    "name_zh":"家具/家用电器/工艺美术/玩具"
+  },
+  {
+    "id": "16",
+    "name": "Office Supplies & Equipment",
+    "name_zh":"办公用品及设备"
+  },
+  {
+    "id": "17",
+    "name": "Machinery, Equipment, Heavy Industries",
+    "name_zh":"机械，设备，重工业"
+  },
+  {
+    "id": "18",
+    "name": "Automobile & Components",
+    "name_zh":"汽车及零部件"
+  },
+  {
+    "id": "19",
+    "name": "Pharmaceuticals/Biotechnology ",
+    "name_zh":"医药/生物技术"
+  },
+  {
+    "id": "20",
+    "name": "Healthcare/Medicine/Public Health",
+    "name_zh":"医疗/医学/公共卫生"
+  },
+  {
+    "id": "21",
+    "name": "Medical Facilities/Equipment",
+    "name_zh":"医疗设施/设备"
+  },
+  {
+    "id": "22",
+    "name": "Advertising ",
+    "name_zh":"广告"
+  },
+  {
+    "id": "23",
+    "name": "Public Relations/Marketing/Exhibitions",
+    "name_zh":"公关/市场/展览"
+  },
+  {
+    "id": "25",
+    "name": "Films/Media/Arts",
+    "name_zh":"电影/媒体/艺术"
+  },
+  {
+    "id": "24",
+    "name": "Print Media/Publishing",
+    "name_zh":"印刷媒体/出版"
+  },
+  {
+    "id": "26",
+    "name": "Printing/Packaging/Paper",
+    "name_zh":"印刷/包装/纸张"
+  },
+  {
+    "id": "27",
+    "name": "Real Estate Development",
+    "name_zh":"房地产开发"
+  },
+  {
+    "id": "28",
+    "name": "Architectural Services/Construction",
+    "name_zh":"建筑服务/建筑"
+  },
+  {
+    "id": "29",
+    "name": "Interior Design/Decoration",
+    "name_zh":"室内设计/装修"
+  },
+  {
+    "id": "30",
+    "name": "Property Management",
+    "name_zh":"物业管理"
+  },
+  {
+    "id": "31",
+    "name": "Agency",
+    "name_zh":"代理"
+  },
+  {
+    "id": "32",
+    "name": "Consulting, Human Resources, etc.",
+    "name_zh":"咨询、人力资源等。"
+  },
+  {
+    "id": "33",
+    "name": "Testing, Certification",
+    "name_zh":"测试、认证"
+  },
+  {
+    "id": "34",
+    "name": "Legal",
+    "name_zh":"法律"
+  },
+  {
+    "id": "35",
+    "name": "Education/Training",
+    "name_zh":"教育/培训"
+  },
+  {
+    "id": "36",
+    "name": "Science/Research",
+    "name_zh":"科学研究"
+  },
+  {
+    "id": "37",
+    "name": "Restaurant & Food Services",
+    "name_zh":"餐饮服务"
+  },
+  {
+    "id": "38",
+    "name": "Hospitality/Tourism",
+    "name_zh":"酒店/旅游"
+  },
+  {
+    "id": "39",
+    "name": "Entertainment/Leisure/Sports & Fitness",
+    "name_zh":"娱乐/休闲/运动与健身"
+  },
+  {
+    "id": "40",
+    "name": "Beauty/Health",
+    "name_zh":"美容/保健"
+  },
+  {
+    "id": "41",
+    "name": "Personal Care & Services",
+    "name_zh":"个人护理及服务"
+  },
+  {
+    "id": "42",
+    "name": "Transportation/Logistic/Distribution",
+    "name_zh":"航空航天/航空/航空公司"
+  },
+  {
+    "id": "43",
+    "name": "Aerospace/Aviation/Airlines",
+    "name_zh":"石油/化学品/矿山/地质"
+  },
+  {
+    "id": "44",
+    "name": "Oils/Chemicals/Mines/Geology",
+    "name_zh":"采矿冶金"
+  },
+  {
+    "id": "45",
+    "name": "Mining/Metallurgy",
+    "name_zh":"运输/物流/配送"
+  },
+  {
+    "id": "46",
+    "name": "Utilities/Energy",
+    "name_zh":"原材料及加工"
+  },
+  {
+    "id": "47",
+    "name": "Raw Materials & Processing",
+    "name_zh":"原材料及加工"
+  },
+  {
+    "id": "48",
+    "name": "Government",
+    "name_zh":"政府"
+  },
+  {
+    "id": "49",
+    "name": "Non-Profit organizations",
+    "name_zh":"非营利组织"
+  },
+  {
+    "id": "50",
+    "name": "Environmental Protection",
+    "name_zh":"环境保护"
+  },
+  {
+    "id": "51",
+    "name": "Agriculture/Fishing/Forestry",
+    "name_zh":"农业/渔业/林业"
+  },
+  {
+    "id": "52",
+    "name": "Conglomerates",
+    "name_zh":"集团企业"
+  },
+  {
+    "id": "53",
+    "name": "Others",
+    "name_zh":"其他"
+  }
+]

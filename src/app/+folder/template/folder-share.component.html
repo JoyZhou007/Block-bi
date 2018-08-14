@@ -1,0 +1,90 @@
+<div class="di-con" style="line-height: inherit;">
+    <div class="di-people-height">
+        <div *ngFor="let shareFile of shareFileList;let i=index" class="clearfix di-people {{(i !== 0) ? 'di-margin10' : ''}}">
+            <div class="clearfix">
+                <span class="icon-file-folder di-fo-file-icon"
+                      *ngIf="shareFile.chn === 0 && shareFile.is_dir===1">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                        </span>
+                <span class="icon-file-excel di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='excel'">
+                            <em class="path1"></em>
+                        </span>
+                <span class="icon-file-word di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='word'">
+                            <em class="path1"></em>
+                         </span>
+                <span class="icon-file-information di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='information'">
+                           <em class="path1"></em>
+                         </span>
+                <span class="icon-file-other di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='other'">
+                            <em class="path1"></em>
+                            <em class="path2"></em>
+                    </span>
+                <span class="icon-file-analysis di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='analysis'">
+                        <em class="path1"></em>
+                         <em class="path2"></em>
+                    </span>
+                <span class="icon-file-acrobat di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='pdf'">
+                         <em class="path1"></em>
+                    </span>
+                <span class="icon-file-post di-fo-file-icon"
+                      *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='email'">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                        <em class="path3"></em>
+                    </span>
+                <span class="icon1-excel di-fo-file-icon" *ngIf="shareFile.is_dir === 0 && shareFile.ext_type==='ppt'">
+                        <em class="path1"></em>
+                        <em class="path2"></em>
+                    </span>
+                <div class="pull-left" *ngIf="shareFile.is_dir === 0 && shareFile.ext_type === 'image'">
+                    <img class="g-img34" src="{{ shareFile.thumb_s ? config.resourceFolderDomain + shareFile.thumb_s:''}}">
+                </div>
+
+                <span class="f19-f">{{shareFile.name}}</span>
+                <span class="f5-f">{{'Last edit' | translate}}{{shareFile.lastUpdateTemplate}}</span>
+            </div>
+            <span class="font-delete" *ngIf="shareFileList.length > 1" (click)="deleteTemporaryFile($event,shareFile,i)"></span>
+        </div>
+    </div>
+    <div class="clearfix di-new-contact di-float-but" [class.hide]="!isShowSelectBox">
+        <div class="pull-left di-new-contact-left" style="width: 100%">
+            <div class="g-title">
+                <span class="f9-f">{{'AUTHORIZED PERSON' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input">
+                <dropdown-search (optionModelArrChange)="modelChange($event)"
+                                 (doCloseDropDown)="closeDropDown($event)"
+                                 [dropdownSettings]="dropdownSettings"
+                                 [dropdownOptions]="dropdownOptions[currentPermission]"
+                                 [selectedOptions]="shareArr"
+                ></dropdown-search>
+            </div>
+        </div>
+    </div>
+    <div class="but but-add id-but-h30 di-float-but g-line-height38"
+         [class.hide]="isShowSelectBox"
+         (click)="addPermission($event)">
+        {{'ADD OTHER PERMISSION USERS' | translate}}
+    </div>
+    <div class="g-title" style="padding-top: 10px;">
+        <span class="f9-f">{{'COMMENTS' | translate}}</span>
+    </div>
+    <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea" data-maxLength="200" [(ngModel)]="comments"></textarea>
+    </div>
+    <p class="f33-f">{{'Maximum 200' | translate}}</p>
+    <drag [selectOption]="inputSelectMember"
+          [setPermission]="inputPermission"
+          (doSelectPermission)="selectCurrentPermission($event)"
+          (doDragOption)="dragTheOption($event)"
+          (doDeleteOption)="deleteOption($event)"
+    ></drag>
+</div>

@@ -1,0 +1,13 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'TRANSFER TO WHO' | translate}}</span>
+        <em class="f14-f">{{"required" | translate}}</em>
+    </div>
+    <div class="se-input">
+        <dropdown-search
+                (optionModelArrChange)="modelChange($event)"
+                [dropdownSettings]="dropdownSettings"
+                [dropdownOptions]="dropdownOptions"
+        ></dropdown-search>
+    </div>
+</div>

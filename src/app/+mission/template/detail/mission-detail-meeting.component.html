@@ -1,0 +1,108 @@
+<div *ngIf="!isEditModel">
+    <div class="m-right-part g-style1" *ngIf="meetingDetailInfo">
+        <span class="pull-right f13-f g-margin-right10 margin-top20">{{userRoleIntro}}</span>
+        <div class="m-right-part-desc">
+            <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+            <div class="clearfix m-right-part-desc-people g-margin-top10">
+                <div class="pull-left g-margin-right10">
+                    <profile-img [userInfo]="meetingDetailInfo.creator_info.user_info" [settings]="{show_work_name: true, img_size: 34}"></profile-img>
+                </div>
+                <span class="f5-f">{{createFormatDate.hour}}:{{createFormatDate.minute}} {{createFormatDate.days}}
+                        {{createFormatDate.month}} {{createFormatDate.year}}</span>
+            </div>
+            <p class="v7-f m-right-part-con">
+                {{meetingDetailInfo.description}}
+            </p>
+        </div>
+        <div class="clearfix date-time g-border-bottom-none g-padding20">
+            <div class="clearfix">
+                <div class="pull-left date-curr-time" *ngIf="isShowStartTime">
+                    <span class="f13-f">{{'Start' | translate}}</span>
+                    <span class="pull-left f49-f">{{showStartTime.day}}</span>
+                    <div class="date-t">
+                        <span class="f32-f">{{showStartTime.month}} {{showStartTime.year}}</span>
+                        <span class="f27-f">{{showStartTime.hour}}:{{showStartTime.minute}} {{showStartTime.week}}</span>
+                    </div>
+                </div>
+                <div class="pull-left date-curr-time" *ngIf="!isShowStartTime">
+                    <span class="f13-f">{{'Start' | translate}}</span>
+                    <span class="pull-left f49-f">{{'PENDING' | translate}}</span>
+                </div>
+                <div class="pull-right date-curr-time" *ngIf="isShowEndTime">
+                    <span class="f13-f">{{'End' | translate}}</span>
+                    <span class="pull-left f49-f">{{showEndTime.day}}</span>
+                    <div class="date-t">
+                        <span class="f32-f">{{showEndTime.month}} {{showEndTime.year}}</span>
+                        <span class="f27-f">{{showEndTime.hour}}:{{showEndTime.minute}} {{showEndTime.week}}</span>
+                    </div>
+                </div>
+                <div class="pull-right date-curr-time" *ngIf="!isShowEndTime">
+                    <span class="f13-f">{{'End' | translate}}</span>
+                    <span class="v8-f">+{{datePeriod}}</span>
+                </div>
+            </div>
+            <i class="icon1-Shape-2"></i>
+            <div class="date-curr-time-est v9-f clearfix g-margin-top10">
+                <span class="pull-left" *ngIf="isShowStartEst && startDiffer"><span class="f13-f">Act</span> <em>{{startDiffer.differTmplate}}</em></span>
+                <span class="pull-right" *ngIf="isShowEndEst && endDiffer"><span class="f13-f">Act</span> <em>{{endDiffer.differTmplate}}</em></span>
+            </div>
+        </div>
+        <mission-detail-person [missionObj]="meetingDetailInfo"></mission-detail-person>
+    </div>
+    <div *ngIf="isHasRecorder">
+        <!--------与会其他人看到的------------------->
+        <div class="g-padding20 g-style1"
+             *ngIf="!isRecorder
+             && (meetingDetailInfo.mission_status === missionConstant.MISSION_STATUS_DOING)">
+            <span class="f9-f">{{'MEMO' | translate}}</span>
+            <p class="v7-f">{{memoContent}}</p>
+        </div>
+        <div class="g-padding20 g-style1"
+             *ngIf="(meetingDetailInfo.mission_status === missionConstant.MISSION_STATUS_DONE)">
+            <span class="f9-f">{{'MEMO' | translate}}</span>
+            <p class="v7-f">{{memoContent}}</p>
+        </div>
+        <!--------会议记录着的记录框------------------->
+        <div class="g-padding20-1 g-style1"
+             *ngIf="isRecorder && (meetingDetailInfo.mission_status === missionConstant.MISSION_STATUS_DOING)">
+            <div class="m-right-part-desc">
+                <div class="g-title">
+                    <span class="f9-f">{{'MEMO' | translate}}</span>
+                </div>
+                <div class="g-textArea-set">
+                    <textarea textareaHeight class="g-textArea m-meeting-memo" data-maxLength="250"
+                              [(ngModel)]="meetingContent"></textarea>
+                </div>
+                <p class="f33-f">{{'Maximum 250' | translate}}</p>
+                <div class="clearfix m-r-c-but m-meeting-memo-but">
+                    <div class="but but-refuse" (click)="cancelMeetingContent()">{{'CANCEL' | translate}}</div>
+                    <div class="but but-approve" (click)="uploadMeetingContent()">{{'UPLOAD' | translate}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="isEditModel">
+    <div class="g-style1 g-padding20 m-a-type">
+        <div class="g-title" [class.g-padding-top0]="isEditModel">
+            <span class="f9-f">{{'ATTENDEE' | translate}}</span>
+        </div>
+        <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                         [selectedOptions]="confereeArr"
+        ></dropdown-search>
+        <p class="f33-f">{{'Choose people to attend this meeting' | translate}}</p>
+        <div class="g-title">
+            <span class="f9-f">{{'DESCRIPTION' | translate}}</span>
+        </div>
+        <div class="g-textArea-set">
+            <textarea textareaHeight class="g-textArea" data-maxLength="100"
+                      [(ngModel)]="meetingDetailInfo.description"></textarea>
+        </div>
+        <p class="f33-f">{{'Maximum 100' | translate}}</p>
+    </div>
+</div>
+
+
+

@@ -1,0 +1,129 @@
+<!--me notification start-->
+<div class="g-side-eject-width h-me-noti" #notificationMessage [class.h-me-noti-an]="isNotificationMessage">
+  <h2 class="clearfix">
+    <span class="pull-left f7-f">{{'NOTIFICATION TO YOU'  | translate}}</span>
+  </h2>
+  <div class="wo-center-tab" *ngIf="currentMsgType === 2 || currentMsgType === 1">
+    <ul class="f46-f g-tab-radio LatoLight" [class.g-tab-radio-an]="isCurrent">
+      <li [class.current]="!isCurrent" (click)="setStoreNotification(1, currentMsgType)">
+        <span class="base">Personal</span><span></span>
+      </li>
+      <li [class.current]="isCurrent" (click)="setStoreNotification(2, currentMsgType)">
+        <span class="base">Company<span></span></span>
+      </li>
+    </ul>
+  </div>
+  <div class="h-me-noti-height h-me-noti-height-scroll" [ngStyle]="{height: (currentMsgType === 2) ? 'calc(100% - 191px)' : ''}" #notificationContent>
+    <div *ngIf="myNotificationList.length > 0" >
+      <dl *ngFor="let list of myNotificationList" #notificationWarp>
+      <dt class="clearfix">
+        <span class="f24-f">{{((list.key === currentDate) ? 'Today' : (list.key === prevDate) ? 'Yesterday' : list.key) | translate}}</span>
+        <span class="h-me-noti-but">
+            <span class="pull-left">
+              <em class="font-selectbutton-line" (click)="notificationToggleBut(notificationWarp)"></em>
+            </span>
+            <span class="pull-left" (click)="clearNotificationByDay($event,list.key,myNotificationList)">
+              <em class="font-page-esc-small"></em>
+            </span>
+        </span>
+      </dt>
+      <template ngFor let-notification let-i="index" [ngForOf]="list[list.key]">
+        <dd class="clearfix" [ngSwitch]="notification.act">
+          <div *ngIf="isShowMailMessage">
+              <div class="clearfix n-warp">
+                  <template [ngSwitchCase]="notificationService.config.ACT_IN_MAIL">
+                      <new-notice [setNotification]="notification" #messageContent></new-notice>
+                  </template>
+              </div>
+          </div>
+          <div *ngIf="!isShowMailMessage">
+            <div class="clearfix n-warp" [class.n-bg1]="notification.data.handled === 1" *ngIf="!notification.isMission && !notification.isInMail">
+              <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_ADD_FRIEND">
+                <new-contact-message [setNotification]="notification" ></new-contact-message>
+              </template>
+              <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_RECOMMEND_USER">
+                <new-recommendation-request [setNotification]="notification" #messageContent></new-recommendation-request>
+              </template>
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_MEMBER_GROUP_INVITE">
+                <chat-member-group-invite [setNotification]="notification" #messageContent></chat-member-group-invite>
+              </template>
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_HIRE">
+                <new-hire [setNotification]="notification" #messageContent></new-hire>
+              </template>
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_COMPANY_RELATIONSHIP">
+                <join-company [setNotification]="notification" #messageContent></join-company>
+              </template>
+              <!--chat invite group message start-->
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_MEMBER_GROUP_INVITE_RECEIVER">
+                <chat-invite-group-message [setNotification]="notification" #messageContent></chat-invite-group-message>
+              </template>
+              <template ngSwitchDefault>
+                <new-notice [setNotification]="notification" #messageContent></new-notice>
+              </template>
+              <template [ngSwitchCase]="notificationService.config.ACT_CHAT_NOTICE_GROUP_CREATE">
+                <chat-create-group-message [setNotification]="notification"
+                                           #messageContent></chat-create-group-message>
+              </template>
+              <!--set company owner start-->
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_SET_COMPANY_ADMIN">
+                <set-company-admin [setNotification]="notification" #messageContent></set-company-admin>
+              </template>
+
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_OUT_OFFICE_APPLY">
+                <out-office-application-message [setNotification]="notification"  #messageContent></out-office-application-message>
+              </template>
+
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_SHAREHOLDER_APPROVE_STRUCTURE_ADMIN">
+                <set-company-ceo [setNotification]="notification"  #messageContent></set-company-ceo>
+              </template>
+
+              <template [ngSwitchCase] = "notificationService.config.ACT_REQUEST_SHAREHOLDER_APPROVE">
+                <company-admin-change [setNotification]="notification"  #messageContent></company-admin-change>
+              </template>
+              <!--set company owner end-->
+
+              <!--add recommend start-->
+              <template [ngSwitchCase]="notificationService.config.ACT_USER_REQUEST_RECOMMEND_ADD_FRIEND">
+                <add-recomm-contact [setNotification]="notification" #messageContent></add-recomm-contact>
+              </template>
+              <!--add recommend end-->
+
+              <!--update company ceo start-->
+              <template [ngSwitchCase]="notificationService.config.ACT_REQUEST_SET_COMPANY_STRUCTURE_ADMIN">
+                <update-company-ceo [setNotification]="notification" #messageContent></update-company-ceo>
+              </template>
+              <!--update company ceo end-->
+
+              <!--S vacation-apply-->
+              <template [ngSwitchCase]="notificationService.config.ACT_USER_VACATION_APPLY">
+                <vacation-apply [setNotification]="notification"  #messageContent></vacation-apply>
+              </template>
+              <!--E vacation-apply-->
+
+              <!--S resignation-apply-->
+              <template [ngSwitchCase]="notificationService.config.ACT_APPLICATION_REQUEST_APPLY_DISMISSION">
+                <resignation-apply [setNotification]="notification"  #messageContent></resignation-apply>
+              </template>
+
+              <template [ngSwitchCase]="notificationService.config.ACT_APPLICATION_NOTICE_DISMISSION_ACCEPT">
+                <resignation-apply [setNotification]="notification"  #messageContent></resignation-apply>
+              </template>
+              <!--E resignation-apply-->
+            </div>
+            <div class="clearfix n-warp" [class.n-bg1]="notification.data.handled === 1"  *ngIf="notification.isMission && !notification.isInMail">
+              <mission-request-message [setNotification]="notification" #messageContent></mission-request-message>
+            </div>
+          </div>
+        </dd>
+      </template>
+    </dl>
+    </div>
+    <div style="text-align: center;line-height: 5em;" *ngIf="myNotificationList.length === 0">{{'No Data1' | translate}}</div>
+  </div>
+  <a class="h-clear-notifi f5-f" href="javascript:;" (click) = "clearNotification()">{{'CLEAR ALL NOTIFICATION' | translate}}</a>
+</div>
+<!--me notification end-->
+
+
+
+

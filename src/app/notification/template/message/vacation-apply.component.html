@@ -1,0 +1,15 @@
+<div (click)="clickOpenDialog($event)">
+    <img src="{{groupCreatorProfile}}" alt="{{groupCreator}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{'LEAVE APPLICATION' | translate}}</h3>
+        <div class="n-con">
+            <p class="f20-f">{{vacationType | translate}}</p>
+            <div class="n-time f20-f">
+                <span class="pull-left">{{startTime}}</span>
+                <span class="icon1-Shape-2"></span>
+                <span class="pull-left">{{endTime}}</span>
+            </div>
+        </div>
+        <span class="f32-f pull-left">{{groupCreator}}</span>
+    </div>
+</div>

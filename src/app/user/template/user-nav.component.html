@@ -1,0 +1,408 @@
+<style>
+    :host /deep/ .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit !important;
+    }
+
+    :host /deep/ .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<section class="g-width h-module-menu">
+    <ul class="pull-left h-module-menu-ul">
+        <li><em class="font-homepage-contact"
+                data-step="5"  id="step_5"
+                tooltip [tooltip]="{content: 'contact list', position:'top'}"
+                (click)="showContactList($event)"></em></li>
+        <li><em class="font-homepage-folder"
+                data-step="6"  id="step_6"
+                tooltip [tooltip]="{content: 'folder', position:'top'}"
+                (click)="enterInFolder($event)"></em></li>
+        <li [class.current]="isAttention" [class.module-no-access]="companyLength == 0">
+            <em class="font-homepage-attention"  data-step="7"  id="step_7"
+               tooltip [tooltip]="{content: 'attention', position:'top'}"
+                (click)="onClickAttention($event)"></em></li>
+    </ul>
+    <div class="pull-left h-module-menu-se"
+         [class.h-module-menu-se-bg]='navSearMouseClick'
+         [class.h-module-menu-se-active]='navSearMouseClick'
+         [class.h-module-menu-se-visible]='!navSearFormVisible'>
+        <span class="font-search-blue1" tooltip [tooltip]="{content: 'overall search', position:'top'}"
+              data-step="8"  id="step_8"
+              (click)="navSearchClick($event)"></span>
+        <input class="pull-left f20-f" type="text" #searchInput
+               (keyup)="onKey($event,searchInput)"
+               (click)="navSearchClick($event)"
+               [class.hide]="!navSearMouseClick"
+               (compositionstart)="inputChineseCodeStart($event)"
+               (compositionend)="inputChineseCodeEnd($event)"
+        >
+        <div class="h-module-menu-select" toggleSelectGroup (callBackData)="getData($event)">
+            <span #toggleSelectBut [class.hide]="!navSearMouseClick">
+                <span class="pull-left f29-f">{{navSearSelect | translate}}</span>
+                <span class="font-selectbutton-soildclose"></span>
+            </span>
+            <div class="d-select" #toggleSelect style="margin-top:30px;z-index: 52">
+                <ul #toggleSelectContent>
+                    <li (click)="navSearListClick('all types',0);"><i class="base">{{'all types' | translate}}</i></li>
+                    <li (click)="navSearListClick('contacts',1);"><i class="base">{{'contacts' | translate}}</i></li>
+                    <li (click)="navSearListClick('Mission',2);"><i class="base">{{'Mission' | translate}}</i></li>
+                    <li (click)="navSearListClick('folder or files',3);"><i class="base">{{'folder or files' | translate}}</i></li>
+                    <li class="hide" (click)="navSearListClick('information');"><i class="base">{{'information' | translate}}</i></li>
+                    <li class="hide" (click)="navSearListClick('analysis');"><i class="base">{{'analysis' | translate}}</i></li>
+                    <li class="hide" (click)="navSearListClick('images');"><i class="base">{{'images' | translate}}</i></li>
+                    <li class="hide" (click)="navSearListClick('attachment');"><i class="base">{{'attachment' | translate}}</i></li>
+                    <li class="hide" (click)="navSearListClick('news');"><i class="base">{{'news' | translate}}</i></li>
+                </ul>
+            </div>
+        </div>
+        <a class="pull-right" href="javascript:;" (click)="navSearchClose();" [class.hide]="!navSearMouseClick">
+            <span class="font-page-esc-small"></span>
+        </a>
+    </div>
+    <div class="pull-left h-module-invite">
+        <a class="pull-left" href="javascript:;" (mouseenter)="navPrompt()"
+            (click)="clickShowInviteDialog($event)"
+        ><span class="font-chatinput"></span></a>
+        <div class="h-module-invite-border h-module-invite-border-width" [class.hide]="navPromptToggle">
+            <span class="f2-f base">{{"Invite people" | translate}}</span>
+            <span class="font-page-esc-small" (click)="closeNavPrompt()"></span>
+        </div>
+    </div>
+    <div class="pull-right h-module-menu-right">
+        <!--<div class="pull-left clearfix h-module-weather" toggleSelectGroup>-->
+      <!--<span class="pull-left h-module-curr-tem" #toggleSelectBut>-->
+          <!--20-->
+          <!--<sup>o</sup>-->
+          <!--<sub>C</sub>-->
+      <!--</span>-->
+            <!--<em class="h-module-curr-weather w-Shape"></em>-->
+            <!--<div class="h-module-w-box" #toggleSelect>-->
+                <!--<div class="h-module-w-top">-->
+                    <!--<span class="pull-left f22-f">2nd November</span>-->
+                    <!--<span class="font-add"></span>-->
+                <!--</div>-->
+                <!--<div class="pull-left h-module-weather-left">-->
+                    <!--<div class="h-module-w-curr">-->
+                        <!--<span class="w-Shape"></span>-->
+                        <!--<em class="h-module-w-curr-line"></em>-->
+                    <!--</div>-->
+                    <!--<ul>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="f24-f pull-left h-module-w-time">2nd Nov</span>-->
+                            <!--<div class="pull-left h-module-w-icon">-->
+                                <!--<span class="w-Shape1"></span>-->
+                                <!--<em class="h-module-w-curr-line"></em>-->
+                            <!--</div>-->
+                            <!--<div class="pull-left h-module-w-tem">-->
+                                <!--<div class="f23-f">SUN</div>-->
+                                <!--<div class="clearfix h-module-tem">-->
+                  <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                    <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                <!--</div>-->
+                                <!--<div class="f50-f">Day</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="f24-f pull-left h-module-w-time">2nd Nov</span>-->
+                            <!--<div class="pull-left h-module-w-icon">-->
+                                <!--<span class="w-Shape4"></span>-->
+                                <!--<em class="h-module-w-curr-line"></em>-->
+                            <!--</div>-->
+                            <!--<div class="pull-left h-module-w-tem">-->
+                                <!--<div class="f23-f">SUN</div>-->
+                                <!--<div class="clearfix h-module-tem">-->
+                  <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                    <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                <!--</div>-->
+                                <!--<div class="f50-f">Day</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="f24-f pull-left h-module-w-time">2nd Nov</span>-->
+                            <!--<div class="pull-left h-module-w-icon">-->
+                                <!--<span class="w-Shape4"></span>-->
+                                <!--<em class="h-module-w-curr-line"></em>-->
+                            <!--</div>-->
+                            <!--<div class="pull-left h-module-w-tem">-->
+                                <!--<div class="f23-f">SUN</div>-->
+                                <!--<div class="clearfix h-module-tem">-->
+                  <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                    <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                <!--</div>-->
+                                <!--<div class="f50-f">Day</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="f24-f pull-left h-module-w-time">2nd Nov</span>-->
+                            <!--<div class="pull-left h-module-w-icon">-->
+                                <!--<span class="w-Shape4"></span>-->
+                                <!--<em class="h-module-w-curr-line"></em>-->
+                            <!--</div>-->
+                            <!--<div class="pull-left h-module-w-tem">-->
+                                <!--<div class="f23-f">SUN</div>-->
+                                <!--<div class="clearfix h-module-tem">-->
+                  <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                    <!--<span class="v5-f pull-left">-->
+                      <!--18-->
+                      <!--<sup>o</sup>-->
+                      <!--<sub>C</sub>-->
+                  <!--</span>-->
+                                    <!--<em class="font-remove1"></em>-->
+                                <!--</div>-->
+                                <!--<div class="f50-f">Day</div>-->
+                            <!--</div>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+                <!--<div class="pull-right h-module-weather-right">-->
+                    <!--<div class="text-right f55-f">SUN</div>-->
+                    <!--<div class="clearfix h-module-tem">-->
+            <!--<span class="v1-f pull-left">-->
+                <!--18-->
+                <!--<sup>o</sup>-->
+                <!--<sub>C</sub>-->
+            <!--</span>-->
+                        <!--<em class="font-remove1"></em>-->
+                        <!--<span class="v1-f pull-left">-->
+                <!--18-->
+                <!--<sup>o</sup>-->
+                <!--<sub>C</sub>-->
+            <!--</span>-->
+                        <!--<em class="font-remove1"></em>-->
+                    <!--</div>-->
+                    <!--<div class="text-right f26-f">Day</div>-->
+                <!--</div>-->
+                <!--<div class="h-module-w-bot">-->
+                    <!--<a class="font-page-next-small" href="javascript:;"></a>-->
+                    <!--<span class="f22-f">SHANGHAI</span>-->
+                    <!--<a class="font-page-next-small" href="javascript:;"></a>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;search city start&ndash;&gt;-->
+                <!--<div class="h-module-se-w">-->
+                    <!--<div class="s-style3 h-module-se-w-se h-module-se-w-se-width">-->
+                        <!--<span class="font-search-blue"></span>-->
+                        <!--<span class="font-search-blue1"></span>-->
+                        <!--<ul class="pull-left s-style3-warp">-->
+                            <!--<li class="s-style3-list-bg1">-->
+                                <!--<span class="pull-left f4-f">Kenneth</span>-->
+                                <!--<span class="pull-left"><em class="font-page-esc-small"></em></span>-->
+                            <!--</li>-->
+                        <!--</ul>-->
+                        <!--<input class="pull-left f25-f" type="text"/>-->
+                        <!--<span class="pull-right font-page-esc-small"></span>-->
+                    <!--</div>-->
+                    <!--<ul class="h-module-city-list">-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="pull-left f25-f">SHANGHAI</span>-->
+                            <!--<span class="pull-right font-delete"></span>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="pull-left f25-f">BEIJING</span>-->
+                            <!--<span class="pull-right font-delete"></span>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="pull-left f25-f">BEIJING</span>-->
+                            <!--<em class="pull-right"></em>-->
+                        <!--</li>-->
+                        <!--<li class="clearfix">-->
+                            <!--<span class="pull-left f25-f">BEIJING</span>-->
+                            <!--<em class="pull-right current"></em>-->
+                        <!--</li>-->
+                    <!--</ul>-->
+                    <!--<ul class="f23-f h-module-se-w-but">-->
+                        <!--<li>CANCEL</li>-->
+                        <!--<li>SAVE</li>-->
+                    <!--</ul>-->
+                <!--</div>-->
+                <!--&lt;!&ndash;search city end&ndash;&gt;-->
+            <!--</div>-->
+        <!--</div>-->
+        <ul class="pull-left h-module-menu-ul">
+            <li toggleSelectGroup [currClass]="'current'">
+                <em tooltip [tooltip]="{content: 'time line', position: 'top'}"
+                    class="font-homepage-active"
+                    data-step="9" id="step_9"
+                    (click)="clickShowTimeLine(scrollToBottom)" #toggleSelectBut></em>
+                <div class="clearfix d-select h-module-menu-active" #scrollToBottom #toggleSelect>
+                    <div class="h-module-menu-active-icon"></div>
+                    <div class="h-module-no-active " *ngIf="!timeLineList.length && hasInitTimeLine">
+                        <img src="{{config.staticResourceDomain + 'assets/images/man6.png'}}"/>
+                        <p class="f41-f">{{'NO ACTIVE' | translate}}</p>
+                    </div>
+                    <em class="h-module-active-line" *ngIf="timeLineList.length"></em>
+                    <!--<perfect-scrollbar class="ps-container ">-->
+                    <div class="h-module-active" *ngIf="timeLineList.length" id="timeLine">
+                        <div class="time-line-height">
+                            <dl *ngFor="let timeLineObj of timeLineList | slice : 0 : timeLineSliceEndIndex">
+                                <dt *ngIf="!timeLineObj.isMerge" class="h-module-active-bg1"
+                                    [ngStyle]="{'background-color': timeLineObj.timeColor}">
+                                    <i class="base">{{timeLineObj.day | translate}}</i>
+                                </dt>
+                                <dd>
+                                    <div class="h-module-active-time">
+                                        <span class="f5-f">{{timeLineObj.detailTime}}</span>
+                                        <em></em>
+                                        <span class="f27-f">{{timeLineObj.title | translate}}</span>
+                                    </div>
+                                    <div class="clearfix h-module-active-mission">
+                                        <div [ngSwitch]="timeLineObj.target">
+                                            <template [ngSwitchCase]="'Task'">
+                                                <span class="icon-board-task"></span>
+                                                <!--<span class="f5-f">Task</span>-->
+                                            </template>
+                                            <template [ngSwitchCase]="'Application'">
+                                                <span class="icon-board-application"></span>
+                                                <!--<span class="f5-f">Application</span>-->
+                                            </template>
+                                            <template [ngSwitchCase]="'Meeting'">
+                                                <span class="icon-board-meeting"></span>
+                                                <!--<span class="f5-f">Meeting</span>-->
+                                            </template>
+                                            <template [ngSwitchCase]="'Assignment'">
+                                                <span class="icon-board-assignment"></span>
+                                                <!--<span class="f5-f">Assignment</span>-->
+                                            </template>
+                                            <template [ngSwitchCase]="'Project'">
+                                                <span class="icon-board-project"></span>
+                                                <!--<span class="f5-f">Project</span>-->
+                                            </template>
+                                        </div>
+                                        <span class="f21-f h-module-active-width">
+                                        <i class="base" title="{{timeLineObj.content}}">{{timeLineObj.content}}</i>
+                                    </span>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                        <div class="loader" style="position: absolute; left:0;bottom:80px;z-index:5;" *ngIf="isLoading">
+                            <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                                <div class="loader-inner ball-pulse"></div>
+                            </loaders-css>
+                        </div>
+                    </div>
+                    <!--</perfect-scrollbar>-->
+                </div>
+            </li>
+            <li [class.module-no-access]="companyLength == 0">
+                <em tooltip [tooltip]="{content: 'mission', position:'top'}" class="font-homepage-calendar"
+                    data-step="10" id="step_10"
+                    (click)="jumpToMission()"></em>
+            </li>
+            <li><em tooltip [tooltip]="{content: 'chat', position:'top'}" class="font-homepage-chat"
+                    data-step="11" id="step_11"
+                    (click)="loadChat()"></em>
+                <div class="have-message" *ngIf="hasUnReadChatMessage"></div>
+            </li>
+            <li>
+                <em tooltip [tooltip]="{content: 'notification'}" class="font-homepage-notification"
+                    data-step="12" id="step_12"
+                    (click)="showUserNotification()"></em>
+                <div class="have-message" *ngIf="hasUnReadNotificationMessage"></div>
+            </li>
+            <li toggleSelectGroup [currClass]="'current'">
+                <em tooltip [tooltip]="{content: 'company function'}"
+                    class="font-homepage-more" #toggleSelectBut
+                ></em>
+                <div class="clearfix d-select h-module-menu-more" #toggleSelect #companyFunction>
+                    <h3 class="f2-f">{{'BUSINESS FUNCTION' | translate}}</h3>
+                    <div class="clearfix">
+                        <div class="h-module-menu-more-list h-meeting" (click)="jumpToMeeting()"
+                             [class.module-no-access]="!isSuperAdmin && !accessArr.meeting_room && !isHelpModule"
+
+                             data-step="13" id="step_13">
+                            <span class="icon1-homepage-meeting" >
+                                <em class="path1"></em>
+                                <em class="path2"></em>
+                                <em class="path3"></em>
+                            </span>
+                            <p class="f5-f">{{'MEETING1' | translate}}</p>
+                        </div>
+                        <div class="h-module-menu-more-list h-vacation" (click)="jumpToVocation()"
+                             [class.module-no-access]="!isSuperAdmin && !accessArr.vacation && !isHelpModule"
+                             data-step="14" id="step_14">
+                            <span class="icon1-homepage-vacation" >
+                                <em class="path1"></em>
+                            </span>
+                            <p class="f5-f">{{'VACATION' | translate}}</p>
+                        </div>
+                        <div class="h-module-menu-more-list h-attendance" (click)="jumpToAttendance()"
+                             [class.module-no-access]="!isSuperAdmin && !accessArr.attendance && !isHelpModule"
+                             data-step="15" id="step_15">
+                            <span class="icon1-homepage-attendance" >
+                                <em class="path1"></em>
+                                <em class="path2"></em>
+                                <em class="path3"></em>
+                                <em class="path4"></em>
+                            </span>
+                            <p class="f5-f">{{'ATTENDANCE' | translate}}</p>
+                        </div>
+                    </div>
+                    <div class="h-module-menu-more-warp">
+                        <div class="h-module-menu-more-list h-control" (click)="jumpToSpace()"
+                             [class.module-no-access]="!isSuperAdmin && !accessArr.space && !isHelpModule"
+                             data-step="16" id="step_16">
+                              <span class="icon1-space-control" >
+                                  <em class="path1"></em>
+                                  <em class="path2"></em>
+                                  <em class="path3"></em>
+                                  <em class="path4"></em>
+                                  <em class="path5"></em>
+                              </span>
+                            <p class="f5-f">{{'SPACE CONTROL' | translate}}</p>
+                        </div>
+                        <div class="h-module-menu-more-list h-staff" (click)="jumpToStaffManagement()"
+                             [class.module-no-access]="!isSuperAdmin && !accessArr.staff_manager && !isHelpModule"
+                             data-step="17" id="step_17">
+                              <span class="icon1-staff-manager" >
+                                <em class="path1"></em>
+                                <em class="path2"></em>
+                                <em class="path3"></em>
+                              </span>
+                            <p class="f5-f">{{'STAFF MANAGER' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+</section>

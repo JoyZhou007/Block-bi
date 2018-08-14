@@ -1,0 +1,14 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'SHARE TO' | translate}}</span>
+        <em class="f14-f">{{'require' | translate}}</em>
+    </div>
+    <dropdown-search
+            [dropdownOptions]="shareList"
+            [dropdownSettings]="shareSettings"
+            [selectedOptions]="selectedOptions"
+            (optionModelArrChange)="setSelectedOption($event)"
+    ></dropdown-search>
+    <p class="g-show-error-color" *ngIf="showError.isShow">{{showError.text}}</p>
+</div>
+

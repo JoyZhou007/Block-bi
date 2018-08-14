@@ -1,0 +1,50 @@
+<div class="product price">
+    <div class="login">
+        <div class="login-filter"></div>
+        <div class="login-wrap">
+            <home-header></home-header>
+            <!--main start-->
+            <div class="price-nav g-transition2 clearfix" [class.login-filter]="!isShowContactUs">
+                <div class="price-nav-item" (click)="onSelect(1,$event)" [class.current]="!isBusiness">
+                    <span class="base">{{'PRIVATE ACCOUNT' | translate}}</span>
+                </div>
+                <div class="price-nav-item" (click)="onSelect(0,$event)" [class.current]="isBusiness">
+                    <span class="base">{{'BUSINESS ACCOUNT' | translate}}</span>
+                </div>
+            </div>
+            <perfect-scrollbar class="ps-container g-transition2 price-main" [class.login-filter]="!isShowContactUs">
+                    <div class="">
+                        <div class="price-main-des">
+                            <div [class.hide]="!isBusiness">
+                                <div class="price-main-title g-margin-bottom10">{{'USED/REST FREE BUSINESS ACCOUNT' | translate}}</div>
+                                <div class="price-main-b g-margin-bottom10">1505</div>
+                                <div class="price-main-m g-margin-bottom10">{{'First 2000 free business account' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'2 GB free web space' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'More than 50 workflow' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'The maximum number of' | translate}}</div>
+                                <!--<div class="price-main-s g-margin-bottom10">{{'Free trial administrative function for one year' | translate}}</div>-->
+                            </div>
+                            <div [class.hide]="isBusiness">
+                                <div class="price-main-title g-margin-bottom10">{{'FREE ACCOUNT' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'500MB free private web space' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'Private chat' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'Share folder or files to your friends' | translate}}</div>
+                                <div class="price-main-s g-margin-bottom10">{{'Save and record your work experience and improving' | translate}}</div>
+                            </div>
+                        </div>
+                        <div class="price-pic">
+                            <!-- <img src="/assets/images/price1.png" alt="">
+                             <img src="/assets/images/price2.png" alt="">-->
+                            <img src="{{config.staticResourceDomain + 'assets/images/price.jpg'}}" alt="">
+                        </div>
+                    </div>
+                </perfect-scrollbar>
+            <user-footer [isShowContactUs]="isShowContactUs" (OutShowContact)="clickShowContactUs($event)"
+                         [joinUs]="true" [isProduct]="true"></user-footer>
+            <!--S contact-us-->
+            <user-contact #contactUs (OutCloseContact)="clickShowContactUs()" [isProduct]="true"></user-contact>
+            <!--E contact-us-->
+            <h1 class="login-logo" (click)="onClickLogo($event)"><span class="icon-logo"></span></h1>
+        </div>
+    </div>
+</div>

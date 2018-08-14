@@ -1,0 +1,164 @@
+<div class="wa-middle margin-top20 margin-bottom20" *ngIf="recommendContacts">
+  <div class="contacts-rec">
+    <div class="clearfix">
+      <span class="pull-left">{{'RECOMMEND TO' | translate}}</span>
+      <span class="pull-right">{{'multiple' | translate}}</span>
+    </div>
+    <div class="contacts-rec-wrap">
+      <div class="contacts-rec-scroll clearfix" (click)="showContacts()" [class.contacts-border] = "contactsBorder">
+        <p *ngFor="let member of selectMembers">
+          <img src="{{config.resourceDomain + member.user_profile_path}}"/>
+          <span>{{member.work_name}}<em (click)="deleteTheMember($event, member)"></em></span>
+        </p>
+        <i></i>
+      </div>
+      <div class="public-select-style1 contacts-rec-box" [class.hide]="!isShowContacts">
+            <div class="z-chat-list-scroll">
+                <div toggle-group >
+                    <div class="contacts-rec-title clearfix" >
+                        <span>INTERNAL</span>
+                        <div class="clearfix contacts-rec-title-right">
+                            <i class="public-icon" #toggleBtn ></i>
+                            <span class="clearfix" #selectAllInternal>
+                                <em>All</em>
+                                <i (click)="selectAllMembers(contactList?.internal, selectAllInternal)"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <ul #toggleList>
+                        <li class="clearfix"
+                            *ngFor="let internal of contactList?.internal"
+                            (click) = "selectCurrent($event, internal, selectAllInternal, contactList?.internal)"
+                            [class.current] = "internal.currentClass"
+                            [class.default-style] = "internal.defaultStyle">
+                            <img class="pull-left" src="{{config.resourceDomain + internal.user_profile_path}}" />
+                            <span class="pull-left" >
+                                <b>{{internal.work_name}}</b>
+                                <i>{{internal.p_name}}</i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div toggle-group >
+                    <div class="contacts-rec-title clearfix">
+                        <span>PARTNER</span>
+                        <div class="clearfix contacts-rec-title-right">
+                            <i class="public-icon"  #toggleBtn ></i>
+                            <span class="clearfix" #selectAllPartner>
+                                <em>All</em>
+                                <i (click)="selectAllMembers(contactList?.partner, selectAllPartner)"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <ul  #toggleList>
+                        <li class="clearfix"
+                            *ngFor="let partner of contactList?.partner"
+                            (click) = "selectCurrent($event, partner, selectAllPartner, contactList?.partner)"
+                            [class.current] = "partner.currentClass"
+                            [class.default-style] = "partner.defaultStyle">
+                            <img class="pull-left" src="{{config.resourceDomain + partner.user_profile_path}}" />
+                            <span class="pull-left">
+                                <b>{{partner.work_name}}</b>
+                                <i>{{partner.p_name}}</i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div toggle-group >
+                    <div class="contacts-rec-title clearfix">
+                        <span>CLIENT</span>
+                        <div class="clearfix contacts-rec-title-right">
+                            <i class="public-icon"  #toggleBtn></i>
+                            <span class="clearfix" #selectAllClient>
+                                <em>All</em>
+                                <i (click)="selectAllMembers(contactList?.client, selectAllClient)"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <ul  #toggleList>
+                        <li class="clearfix"
+                            *ngFor="let client of contactList?.client"
+                            (click) = "selectCurrent($event, client, selectAllClient, contactList?.client)"
+                            [class.current] = "client.currentClass"
+                            [class.default-style] = "client.defaultStyle">
+                            <img class="pull-left" src="{{config.resourceDomain + client.user_profile_path}}" />
+                            <span class="pull-left">
+                                <b>{{client.work_name}}</b>
+                                <i>{{client.p_name}}</i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div toggle-group >
+                    <div class="contacts-rec-title clearfix">
+                        <span>SUPPLIER</span>
+                        <div class="clearfix contacts-rec-title-right">
+                            <i class="public-icon"  #toggleBtn></i>
+                            <span class="clearfix" #selectAllSupplier>
+                                <em>All</em>
+                                <i (click)="selectAllMembers(contactList?.supplier, selectAllSupplier)"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <ul  #toggleList>
+                        <li class="clearfix"
+                            *ngFor="let supplier of contactList?.supplier"
+                            (click) = "selectCurrent($event, supplier, selectAllSupplier, contactList?.supplier)"
+                            [class.current] = "supplier.currentClass"
+                            [class.default-style] = "supplier.defaultStyle">
+                            <img class="pull-left" src="{{config.resourceDomain + supplier.user_profile_path}}" />
+                            <span class="pull-left">
+                                <b>{{supplier.work_name}}</b>
+                                <i>{{supplier.p_name}}</i>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+                <div toggle-group >
+                    <div class="contacts-rec-title clearfix">
+                        <span>FRIEND</span>
+                        <div class="clearfix contacts-rec-title-right">
+                            <i class="public-icon" #toggleBtn ></i>
+                            <span class="clearfix" #selectAllFriend>
+                                <em >All</em>
+                                <i (click)="selectAllMembers(contactList?.friend, selectAllFriend)"></i>
+                            </span>
+                        </div>
+                    </div>
+                    <ul #toggleList>
+                        <li class="clearfix"
+                            *ngFor="let friend of contactList?.friend"
+                            (click) = "selectCurrent($event, friend, selectAllFriend, contactList?.friend)"
+                            [class.current] = "friend.currentClass"
+                            [class.default-style] = "friend.defaultStyle">
+                            <img class="pull-left" src="{{config.resourceDomain + friend.user_profile_path}}" />
+                            <span class="pull-left">
+                              <b>{{friend.work_name}}</b>
+                            </span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <a class="margin-top20" href="javascript:" (click)="done()">Done</a>
+        </div>
+    </div>
+  </div>
+  <div class="person-new-contact public-relative clearfix margin-top20">
+    <div class="pull-left personal-head">
+      <img class="pull-left" src="{{config.resourceDomain + recommendContacts.user_profile_path}}">
+      <div class="pull-left">
+        <p class="public-font-weight">{{recommendContacts?.work_name}}</p>
+        <p >{{recommendContacts?.p_name}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="chat-work-new">
+    <div class="work-top">
+      <h6>{{'DIALOG MESSAGE' | translate}}</h6>
+      <div class="g-textArea-set">
+        <textarea textareaHeight class="g-textArea" data-maxLength="300" [(ngModel)]="recommendRemark"></textarea>
+      </div>
+      <p>Please use max maximum of 300 characters </p>
+    </div>
+  </div>
+</div>

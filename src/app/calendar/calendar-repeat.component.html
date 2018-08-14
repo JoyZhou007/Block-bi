@@ -1,0 +1,91 @@
+<div class="d-select d-select-people" style="width: 410px;" (click)="onClickRepeatEmpty($event)" *ngIf="isShow">
+    <!--tab 切换-->
+    <ol>
+        <li (click)="onClickDay($event)" [class.current]="isShowDay"><span>DAY</span></li>
+        <li (click)="onClickWeek($event)" [class.current]="isShowWeek"><span>WEEK</span></li>
+        <li (click)="onClickMonth($event)" [class.current]="isShowMonth"><span>MONTH</span></li>
+    </ol>
+    <div class="d-select-item d-select-day ">
+        <div class="d-select-item-title f13-f">{{isShowMonth?'Day':'Every'}}</div>
+        <div class="d-select-item-content">
+            <!--day-->
+            <div class=" d-select-day" [class.hide]="!isShowDay">
+                <div class="day-wrap">
+                    <span class="f27-f d-select-item-con" *ngFor="let day of daysArr,let i = index"
+                          [class.currentDate]="day.selected" (click)="onClickDays($event,i,day.text)">{{day.text}}</span>
+                </div>
+            </div>
+            <!--week-->
+            <div class="d-select-week clearfix" [class.hide]="!isShowWeek" elementRolling>
+                <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut></a>
+                <div class="d-select-week-num pull-left">
+                    <div class="d-select-week-num-wrap clearfix" #rollContent>
+                        <span class="f27-f add-pointer" style="display:block;float:left;" *ngFor="let week of weekObjArr,let j = index"
+                              [class.currentDate] = "week.selected" (click)="onClickWeeks($event,j,week.text)">{{week.text}}</span>
+                        <em></em>
+                    </div>
+                </div>
+                <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut></a>
+            </div>
+            <!--month-->
+            <div class="d-select-month" [class.hide]="!isShowMonth">
+                <div class="date-h-m">
+                    <div class="date-hour clearfix">
+                        <div class="date-h-m-content clearfix" elementRolling>
+                            <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut></a>
+                            <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour" style="width:351px;">
+                                <ul class="date-list clearfix date-list-new  date-list-day" #rollContent>
+                                    <li *ngFor="let month of monthArr,let k = index" [class.selected]="month.selected" (click)="onClickMonths($event,k,month.month)">
+                                        <span><em>{{month.month}}</em><i>{{month.suffix}}</i></span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="d-select-item-line"></div>
+    </div>
+    <!--hour-->
+    <div class="date-h-m">
+        <div class="date-hour clearfix repeat-hour">
+            <div class="date-h-m-title f13-f">Hour</div>
+            <div class="date-h-m-content clearfix" elementRolling>
+                <a class="date-top-but date-top-prev font-page-next-small add-pointer" #rollLeftBut></a>
+                <div class="date-h-m-content-nums pull-left date-h-m-content-nums-hour" style="width:351px;">
+                    <ul class="date-list clearfix date-list-new" #rollContent>
+                        <li *ngFor="let hour of hourList,let i = index" (click)="onClickHour($event,i)"
+                            [class.selected]="hour.selected">
+                            <span>{{hour.hour}}</span>
+                        </li>
+                    </ul>
+                </div>
+                <a class="date-top-but date-top-next font-page-next-small add-pointer" #rollRightBut></a>
+            </div>
+        </div>
+        <!--minute-->
+        <div class="date-minute date-hour clearfix">
+            <div class="date-minute-line"></div>
+            <div class="date-h-m-title f13-f">Minute</div>
+            <div class="date-h-m-content clearfix">
+                <div class="date-h-m-content-nums pull-left">
+                    <ul class="date-list clearfix date-list-new">
+                        <li *ngFor=" let minute of minuteList,let i=index"
+                            [class.selected]="minute.selected"
+                            (click)="onClickMinute($event,i)">
+                            <span>{{minute.minute}}</span>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="but but-select-done" (click)="onClickDone($event)" style="line-height: 3px">
+        <span class="base g-clearStyle">{{'DONE' | translate}}</span>
+    </div>
+    <div class="but but-select-done" (click)="cancelAlarm($event)" [class.g-no-access]="!hasAlarm">
+        <span class="base g-clearStyle">{{'REMOVE' | translate}}</span>
+    </div>
+</div>

@@ -1,0 +1,4 @@
+/.idea
+/app/test/*
+/app/user/components/ydxtest-bank-list.component.ts
+/app/user/template/ydxtest-bank-list.component.html

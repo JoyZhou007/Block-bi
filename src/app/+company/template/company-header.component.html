@@ -1,0 +1,25 @@
+<!--header start-->
+<header class="g-width g-header a-header">
+    <div class="pull-left">
+        <div class="clearfix">
+            <span class="icon-title-company g-header-margin"></span>
+            <span class="pull-left f18-f">{{'BUSINESS PROFILE' | translate}}</span>
+        </div>
+        <ul class="clearfix f17-f g-header-column LatoRegular g-title-des">
+            <li routerLinkActive="current" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/company/introduction']">{{'business introduction' | translate}}</li>
+            <li routerLinkActive="current" [routerLinkActiveOptions]="{exact: true}" [routerLink]="['/company/analysis']">{{'business analysis' | translate}}</li>
+        </ul>
+    </div>
+    <div class="pull-right">
+        <div class="pull-left g-header-but g-header-but-reset" *ngIf="couldEdit">
+            <i class="g-btn-error" title="{{btnFail | translate}}">{{btnFail | translate}}</i>
+            <span class="pull-left but but-approve" saveDataGroup #saveDataElement (outSaveData)="saveData(saveDataElement)">
+                <i class="base">{{'UPLOAD' | translate}}</i>
+                  <i class="font-selectbutton-select but-status"></i>
+                 <i class="font-remove but-status"></i>
+            </span>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" [routerLink]="['/user/index']"></a>
+    </div>
+</header>
+<!--header end-->

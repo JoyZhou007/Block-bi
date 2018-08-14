@@ -1,0 +1,365 @@
+@charset "UTF-8";
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 自定义路径
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 字体大小
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 网络字体
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 公共颜色
+
+  注：L => link
+      H => hover
+      D => default
+      P => public
+      W => window
+      U => upload
+      C => contact
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 角度旋转
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 缩放
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 圆角
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 动画
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 背景渐变
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: position定位
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: padding
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: margin
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.24
+
+  Explain: 宽高
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.03.25
+
+  Explain: Public Shadow type 1
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.04.6
+
+  Explain: Public Tree
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.04.21
+
+  Explain: 滚动条样式,color1滚动条颜色，color2滚动条背景色
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.14
+
+  Explain: 行间距 仅限 5 的倍数
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.16
+
+  Explain: 背景图片调用
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.21
+
+  Explain: 谷歌文字小于 12号 字体
+
+==============================================*/
+/*===============================================
+
+  Time: 2016.06.21
+
+  Explain: 谷歌文字小于 12号 字体
+
+==============================================*/
+/*=======================================
+
+  Time: 2016.07.08
+
+  Explain：进度条
+
+ ======================================*/
+.public-progress-bar {
+  flex: 1;
+  padding: 0 10px; }
+.public-progress-bar .progress-wrap {
+  height: 14px;
+  border-radius: 10px;
+  line-height: 14px;
+  z-index: 15;
+  position: relative;
+  background-color: #b8e5e9; }
+.public-progress-bar .progress-wrap .progress-bg {
+  height: 14px;
+  left: 0;
+  top: 0;
+  position: absolute;
+  z-index: 1;
+  -moz-border-radius: 7px;
+  -webkit-border-radius: 7px;
+  -ms-border-radius: 7px;
+  -o-border-radius: 7px;
+  border-radius: 7px; }
+.public-progress-bar .progress-wrap .icon-plane {
+  width: 20px;
+  height: 24px;
+  position: absolute;
+  top: -4px;
+  left: 20%;
+  z-index: 5;
+  background: url("/assets/images/icon.png") no-repeat -731px -137px; }
+.public-progress-bar .progress-wrap .icon-del {
+  width: 19px;
+  height: 14px;
+  position: absolute;
+  right: 3px;
+  top: 0;
+  cursor: pointer;
+  background: url("/assets/images/icon.png") no-repeat -597px -421px;
+  background-color: #b8e5e9;
+  -moz-border-radius: 100%;
+  -webkit-border-radius: 100%;
+  -ms-border-radius: 100%;
+  -o-border-radius: 100%;
+  border-radius: 100%; }
+.public-progress-bar .progress-wrap .icon-del:hover {
+  background: url("/assets/images/icon.png") no-repeat -102px 3px;
+  background-color: #b8e5e9; }
+.public-progress-bar .progress-wrap .progress-bar {
+  text-align: right;
+  display: inline-block;
+  height: 14px;
+  line-height: 14px;
+  font-size: 12px;
+  color: #fff;
+  border-radius: 10px;
+  position: relative;
+  z-index: 2;
+  background-color: #13a8b7;
+  overflow: visible; }
+.public-progress-bar .progress-wrap .progress-bar em {
+  display: inline-block;
+  padding: 0 5px;
+  font-style: italic;
+  position: absolute;
+  right: 0;
+  left: 0;
+  top: 0; }
+.public-progress-bar .progress-wrap .progress-font {
+  color: #13a8b7; }
+.public-progress-bar .progress-wrap.progress-remind {
+  color: #fff; }
+.public-progress-bar .progress-wrap.progress-remind .progress-bar {
+  font-size: 12px;
+  font-weight: bold;
+  width: 100%;
+  height: 22px;
+  line-height: 22px;
+  text-align: center;
+  font-style: italic;
+  background-color: #a280b3;
+  border-radius: 4px; }
+.public-progress-bar .progress-wrap.progress-remind .icon-jump {
+  position: absolute;
+  height: 22px;
+  line-height: 22px;
+  left: 10px;
+  top: 0;
+  cursor: pointer;
+  display: inline-block; }
+.public-progress-bar .progress-wrap.progress-remind .icon-jump:before {
+  content: " ";
+  width: 15px;
+  padding-left: 15px;
+  background: url("/assets/images/icon.png") no-repeat -562px -417px; }
+.public-progress-bar .progress-wrap.progress-remind .icon-del {
+  top: 2px;
+  background: url("/assets/images/icon.png") no-repeat -580px -419px; }
+.public-progress-bar .progress-wrap.progress-remind .icon-del:hover {
+  background: url("/assets/images/icon.png") no-repeat -102px 5px; }
+.public-progress-bar .file-name {
+  font-size: 10px;
+  color: #13a8b7;
+  margin-left: 10px;
+  line-height: 20px; }
+
+.loading-aircraft .progress-wrap {
+  background: url("/assets/images/loading-icon.png") repeat-x left 1px;
+  background-color: #b8e5e9; }
+
+.loading-aircraft .loading-aircraft-icon {
+  display: block !important;
+  width: 18px;
+  height: 22px;
+  position: absolute;
+  right: -18px;
+  top: -4px;
+  background: url("/assets/images/icon.png") no-repeat -299px -399px; }
+
+.loading-complete .progress-wrap .icon-del {
+  display: none !important; }
+
+.loading-complete .progress-bar {
+  width: 100% !important; }
+.loading-complete .progress-bar em {
+  display: none !important; }
+.loading-complete .progress-bar span {
+  display: block !important;
+  font-weight: bold;
+  font-size: 12px;
+  margin-right: 5px; }
+
+.loading-msg {
+  height: 22px;
+  background: #a280b3;
+  margin-left: 10px;
+  margin-right: 10px;
+  position: relative;
+  color: #fff;
+  line-height: 22px; }
+.loading-msg i, .loading-msg span, .loading-msg::before {
+  display: block;
+  position: absolute;
+  top: 0; }
+.loading-msg i {
+  right: 10px;
+  display: block;
+  width: 6px;
+  height: 6px;
+  background: url("/assets/images/icon.png") no-repeat -344px -399px;
+  top: 8px;
+  cursor: pointer; }
+.loading-msg p {
+  text-align: center;
+  font-size: 12px; }
+.loading-msg::before {
+  content: '';
+  width: 8px;
+  height: 8px;
+  background: url("/assets/images/icon.png") no-repeat -326px -399px;
+  top: 8px;
+  margin-left: 10px; }
+.loading-msg span {
+  left: 22px;
+  font-size: 10px;
+  -webkit-transform: scale(0.9);
+  -webkit-transform-origin: left center; }
+
+.loading-strip {
+  width: 124px;
+  height: 17px;
+  position: relative; }
+.loading-strip i {
+  display: block;
+  height: 17px;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  border-left: 4px solid #f3b06f;
+  border-right: 4px solid #f3b06f;
+  transform: translateX(-50%);
+  opacity: 0; }
+.loading-strip i:nth-child(1) {
+  width: 94px;
+  opacity: 1;
+  transition: opacity .2s linear 5s; }
+.loading-strip i:nth-child(2) {
+  width: 106px;
+  border-left-width: 3px;
+  border-right-width: 3px;
+  animation: loadingStripTwo 3s linear infinite; }
+.loading-strip i:nth-child(3) {
+  width: 116px;
+  border-left-width: 2px;
+  border-right-width: 2px;
+  animation: loadingStripThree 2s linear infinite; }
+.loading-strip i:nth-child(4) {
+  width: 122px;
+  border-left-width: 1px;
+  border-right-width: 1px;
+  animation: loadingStripFour 1s linear infinite; }
+.loading-strip span {
+  display: block;
+  width: 90px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 17px;
+  color: #fff;
+  font-size: 12px;
+  background: #f3b06f;
+  text-align: center; }

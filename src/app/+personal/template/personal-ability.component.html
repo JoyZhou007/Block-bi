@@ -1,0 +1,144 @@
+
+<!--personal header-->
+<personal-header [btnFailData]="btnFail" (uploadInfo)="doUploadInfo($event)"></personal-header>
+<!--personal end-->
+
+<!--section start-->
+<section class="clearfix g-width a-section">
+    <div class="pull-left a-left a-analysis-media">
+        <div class="pull-left a-list">
+            <div class="a-list-top">
+                <h3 class="f7-f">{{'SKILL' | translate}}</h3>
+                <p class="f14-f">{{'Featured Skills & Endorsements' | translate}}</p>
+            </div>
+            <ul class="a-p-skill">
+                <li class="clearfix g-transition2" *ngFor="let list of getSkillList;let i = index;" [class.hide]="list.operation === -1">
+                    <div class="clearfix" *ngIf="list.isShow && list.operation !== -1">
+                        <div class="pull-left">
+                            <div class="g-title">
+                                <span class="f9-f">{{isZhLan? skillList[list.skill_name - 1].name : skillList[list.skill_name - 1].name_en}}</span>
+                                <span class="bi-icon-edit" (click)="doSkillEdit(list)"></span>
+                                <span class="font-delete" (click)="doSkillDelete(list, i)"></span>
+                            </div>
+                            <span class="pull-left f19-f">{{skillLevel[list.level - 1]}}</span>
+                        </div>
+                        <div class="pull-right">
+                            <div class="pull-left skill-people-list">
+                                <a class="pull-left font-page-next-small g-transition2" href="javascript:;"></a>
+                                <div class="pull-left skill-people-list-img">
+                                    <div class="skill-people-list-warp">
+                                        <div *ngFor="let likeUser of list.likeUsers">
+                                            <profile-img [userInfo]="likeUser" [settings]="{show_work_name: false}">
+                                            </profile-img>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <a class="pull-right font-page-next-small g-transition2" href="javascript:;"></a>
+                            </div>
+                            <span class="pull-right f27-f skill-people-num">{{list.likeUsers | dataLength}}</span>
+                        </div>
+                    </div>
+                    <div class="clearfix a-add-skill" *ngIf="!list.isShow">
+                        <div class="clearfix">
+                            <select-filter class="pull-left a-add-skill-left"
+                                           [selectOption]="{data: newArr, type: 'update', defaultValue: isZhLan? skillList[list.skill_name - 1].name :  skillList[list.skill_name - 1].name_en,id:i}" (outPutCurrentValue)="getCurrentValue($event)"></select-filter>
+                            <div class="pull-right a-add-skill-right" toggleSelectGroup [currClass]="'se-input-selected'">
+                                <div class="se-input">
+                                    <div class="se-input-select">
+                                        <span class="font-selectbutton-soildclose"></span>
+                                    </div>
+                                    <input class="g-input-box-shadow" type="text" [(ngModel)]="skillLevel[list.level - 1]" #toggleSelectBut readonly>
+                                    <div class="d-select" #toggleSelect>
+                                        <perfect-scrollbar class="ps-container g-height140">
+                                            <ul class="g-max-height-inherit">
+                                                <li *ngFor="let level of skillLevel;let i = index" (click)="updateLevel(list, i, toggleSelect)"><i class="base">{{level}}</i></li>
+                                            </ul>
+                                        </perfect-scrollbar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="clearfix g-right-but">
+                            <div class="but but-refuse" (click)="cancelUpdateSkill(list)"><span class="base">CANCEL</span></div>
+                            <div class="but but-approve" (click)="acceptUpdateSkill(list)"><span class="base">UPDATE</span></div>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+            <div class="but but-add a-resume-but g-margin-bottom20" (click)="doAddSkill($event)">
+                <em class="base">{{'ADD A SKILL' | translate}}</em>
+            </div>
+            <div class="clearfix a-add-skill" [class.hide]="showAddSkill">
+                <div class="clearfix">
+                    <div class="pull-left a-add-skill-left">
+                        <div class="g-title g-padding-top0">
+                            <span class="f9-f">{{'SKILL NAME' | translate}}</span>
+                        </div>
+                        <select-filter [selectOption]="abilityData" (outPutCurrentValue)="getCurrentValue($event)"></select-filter>
+                    </div>
+                    <div class="pull-right a-add-skill-right">
+                        <div class="g-title g-padding-top0">
+                            <span class="f9-f">{{'LEVEL' | translate}}</span>
+                        </div>
+                        <div class="se-input" toggleSelectGroup [currClass]="'se-input-selected'">
+                            <div class="se-input-select">
+                                <span class="font-selectbutton-soildclose"></span>
+                            </div>
+                            <input class="g-input-box-shadow" type="text" [(ngModel)]="defaultSkillLevel" #toggleSelectBut readonly>
+                            <div class="d-select" #toggleSelect>
+                                <perfect-scrollbar class="ps-container g-height140">
+                                    <ul class="g-max-height-inherit">
+                                        <li *ngFor="let level of skillLevel;let i = index" (click)="selectSkillLevelName(level, i, toggleSelect)"><i class="base">{{level}}</i></li>
+                                    </ul>
+                                </perfect-scrollbar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="clearfix g-right-but g-margin-bottom20">
+                    <div class="but but-refuse" (click)="cancelSkill()"><span class="base">{{'CANCEL' | translate}}</span></div>
+                    <div class="but but-approve" (click)="acceptSkill()"><span class="base">{{'ADD' | translate}}</span></div>
+                </div>
+            </div>
+        </div>
+        <perfect-scrollbar class="ps-container pull-right a-list">
+            <div class="a-list-top g-margin-left20">
+                <h3 class="f7-f">{{'COMPREHENSIVE CAPACITY' | translate}}</h3>
+                <p class="f14-f">{{'COMPREHENSIVE CAPACITY DESC' | translate}}</p>
+            </div>
+            <div class="text-left g-margin-left20"><img src="{{config.staticResourceDomain + 'assets/images/personal-analysis-img.jpg'}}" /></div>
+            <div class="a-analysis-agree g-margin-left20">
+                <span class="font-color-good"></span>
+                <em></em>
+                <span class="font-color-good"></span>
+            </div>
+            <ul class="a-analysis-list">
+                <li class="clearfix g-margin-left20">
+                    <span class="f9-f"><em class="base">{{'Work experience' | translate}}</em></span>
+                    <span class="f19-f"><em class="base">4</em></span>
+                    <span class="v7-f"><em class="base">{{'Below' | translate}}</em></span>
+                    <span class="f12-f"><em class="base">23.9%</em></span>
+                </li>
+                <li class="clearfix g-margin-left20">
+                    <span class="f9-f"><em class="base">{{'Total completed tasks' | translate}}</em></span>
+                    <span class="f19-f"><em class="base">222</em></span>
+                    <span class="v7-f"><em class="base">{{'More than' | translate}}</em></span>
+                    <span class="f12-f"><em class="base">99.9%</em></span>
+                </li>
+                <li class="clearfix g-margin-left20">
+                    <span class="f9-f"><em class="base">{{'BI average' | translate}}</em></span>
+                    <span class="f19-f"><em class="base">3.4</em></span>
+                    <span class="v7-f"><em class="base">{{'More than' | translate}}</em></span>
+                    <span class="f12-f"><em class="base">99.9%</em></span>
+                </li>
+            </ul>
+        </perfect-scrollbar>
+    </div>
+
+    <!--photo start-->
+    <personal-photo></personal-photo>
+    <!--photo end-->
+
+</section>
+<!--section end-->

@@ -1,0 +1,79 @@
+<div class="g-style1" data-step="step_mission_13" id="step_mission_13">
+    <div class="m-r-c-tab m-t-c-tab" style="position: static;">
+        <ul class="clearfix m-r-c-tab-list">
+            <li (click)="switchBiddingType('UNANIMOUS')" [class.current]="isUnanimous"><span>{{'UNANIMOUS' | translate}}</span></li>
+            <li (click)="switchBiddingType('%')" [class.current]="isPercent"><span>{{'%DECISION' | translate}}</span></li>
+            <li (click)="switchBiddingType('VOTE')" [class.current]="isVote"><span>{{'VOTE' | translate}}</span></li>
+        </ul>
+        <div>
+            <div class="g-title">
+                <span class="f9-f">{{'BID TIME' | translate}}</span>
+            </div>
+            <div class="clearfix g-time" style="position: relative">
+                <input class="pull-left " readonly="" type="text"
+                       style="width: 180px"
+                       [class.g-color-not-select]='!hasTime'
+                       (click)="showCalendar($event,'start')"
+                       [(ngModel)]="startTemplate">
+                <span class="pull-left icon1-Shape-2"></span>
+                <input class="pull-left " readonly="" type="text"
+                       style="width: 200px"
+                       [class.g-color-not-select]='!hasTime'
+                       (click)="showCalendar($event,'end')"
+                       [(ngModel)]="endTemplate">
+            </div>
+            <div>
+                <div class="absolute" #calendarProfile>
+                    <bi-calendar-multiselect
+                            *ngIf="isShowCalendar"
+                            [multiselectOption]="multiCalendar"
+                            (outSelectData)="getSelectData($event)"
+                            (outDefault)="getOutDefault()">
+                    </bi-calendar-multiselect>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isPercent">
+            <div class="g-title" *ngIf="approveList.length !== 0 ">
+                <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input m-r-c-tab-common se-input-hover g-transition2 g-input-box-shadow m-r-c-self-goal" *ngFor="let voter of approveList">
+                <div class="se-input-select">
+                    <span class="f14-f">%</span>
+                </div>
+                <div class="m-r-c-tab-common-people pull-left">
+                    <profile-img [userInfo]="voter" [settings]="{show_work_name: true}"></profile-img>
+                </div>
+                <input class="current-color" type="text"
+                       placeholder="0"
+                       (keydown)="onKeyDown($event)"
+                       [(ngModel)]="voter.data"
+                       *ngIf="voter.isEdit"
+                       (blur)="calculateBidding(voter.data)"
+                >
+                <input class="current-color" type="text"
+                       placeholder="0"
+                       (keydown)="onKeyDown($event)"
+                       [(ngModel)]="voter.data"
+                       disabled
+                       *ngIf="!voter.isEdit"
+                >
+            </div>
+            <div class="g-title">
+                <span class="f9-f">{{'WEIGHT' | translate}}</span>
+            </div>
+            <div class="m-r-c-select-percent g-transition2 se-input-hover g-input-box-shadow">
+                <span class="font-min" (click)="changeAcceptLine('min')"></span>
+                <span class="font-add" (click)="changeAcceptLine('add')"></span>
+                <div class="m-r-c-select-percent-pos">
+                    <input class="f20-f" type="text" placeholder="0"
+                           (keydown)="onKeyDown($event)"
+                           (blur)="calculateAcceptLine(biddingCreateData.accept_line)"
+                           [(ngModel)]="biddingCreateData.accept_line">
+                    <span class="f14-f">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

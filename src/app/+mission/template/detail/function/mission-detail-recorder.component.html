@@ -1,0 +1,11 @@
+<div class="g-style1 g-padding20 m-a-type">
+    <div class="g-title">
+        <span class="f9-f">{{'RECORDER' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="dropdownOptions"
+                         [selectedOptions]="recorderArr"
+        ></dropdown-search>
+    </div>
+</div>

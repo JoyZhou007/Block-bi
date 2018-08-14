@@ -1,0 +1,25 @@
+<!--loading start-->
+<!--
+    loading-aircraft 小飞机
+    loading-complete 上传成功
+-->
+<div class="public-progress-bar" [class.hide]="!showLoadingBar">
+    <div class="progress-wrap">
+        <div class="progress-bar" #progressBar>
+            <em [class.hide]="processPercent === 100">{{processPercent}}%</em>
+            <span [class.hide]="processPercent < 100">{{'COMPLETE' | translate}}</span>
+        </div>
+        <div class="icon-del" (click)="hideProcessBar()"></div>
+        <i class="hide"></i>
+    </div>
+    <span class="file-name">({{fileCount}}) {{'file' | translate}} </span>
+</div>
+<!--loading end-->
+
+<!--loading start-->
+<div class="loading-msg border-radius4" class="hide">
+    <span>{{'jump to message' | translate}}</span>
+    <p>{{'MESSAGE REMINDING' | translate}}</p>
+    <i></i>
+</div>
+<!--loading end-->

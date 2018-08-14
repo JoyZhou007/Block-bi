@@ -1,0 +1,69 @@
+<div class="di-con" *ngIf="hasInit">
+
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'LEAVE TYPE' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <!--<input class="current-color" type="text" placeholder="">-->
+        <div class="search-style1-warp" (click)="clickShowTypeList($event)">
+            <input class="pull-left  s-last-input" type="text" value="{{currentType.label | translate}}" readonly disabled>
+        </div>
+        <div class="se-input-select" (click)="clickShowTypeList($event)">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <div class="d-select" [hidden]="!showTypeSelect">
+            <ul>
+                <li *ngFor="let item of typeList" (click)="clickChooseType($event,item)"><em
+                    class="base">{{item.label | translate}}</em></li>
+            </ul>
+        </div>
+    </div>
+    <div class="g-title">
+        <span class="f9-f">{{'PERIOD' | translate}}</span>
+    </div>
+    <div class="clearfix g-time" style="position: relative" [class.g-bgf4]="!checkRestDay()">
+        <input class="pull-left g-width180"
+               [class.g-color-not-select]="!hasTime"
+               [class.g-readonly-input]="!checkRestDay()"
+               readonly="" type="text" [(ngModel)]="startTemplate"
+               (click)="showCalendar($event,'start')">
+        <span class="pull-left icon1-Shape-2"></span>
+        <input class="pull-left g-width180"
+               [class.g-color-not-select]="!hasTime"
+               [class.g-readonly-input]="!checkRestDay()"
+               readonly="" type="text" [(ngModel)]="endTemplate"
+               (click)="showCalendar($event,'end')">
+    </div>
+    <div class="absolute z-index-num4 calendar-move" #calendarProfile>
+        <bi-calendar-multiselect
+                *ngIf="isShowCalendar"
+                 [multiselectOption]="multiCalendar"
+                 (outSelectData)="getSelectData($event)"
+                 (outDefault)="getOutDefault()">
+        </bi-calendar-multiselect>
+    </div>
+    <p class="g-show-error-color absolute" *ngIf="date_error.isShow">{{date_error.text | translate}}</p>
+    <div class="g-title">
+        <span class="f9-f">{{'REST OF VACATION' | translate}}</span>
+    </div>
+    <p class="f10-f"> {{'total' | translate}}  {{currentType.rest===-1? '∞': currentType.rest}} {{'days' | translate}} <span>{{'you chosen' | translate}} {{realHoliday}} {{'days' | translate}}</span></p>
+    <div class="g-title">
+        <span class="f9-f">{{'DIALOG MESSAGE' | translate}}</span>
+    </div>
+    <div class="clearfix se-input">
+        <!--<input class="current-color" type="text" value="5.1">-->
+        <textarea textareaHeight data-maxlength="100" class="g-textArea" name="" id="" cols="30" rows="10" [(ngModel)]="message"></textarea>
+    </div>
+    <p class="f33-f">{{'Maximum 100' | translate}}</p>
+</div>
+
+<div class="loader-wrap" *ngIf="!hasInit">
+    <div class="loader" style="position: absolute !important;">
+        <loaders-css [loader]="'ball-scale-ripple-multiple'" [loaderClass]="'my-loader-tips'">
+            <div class="loader-inner ball-pulse"></div>
+        </loaders-css>
+    </div>
+    <div *ngIf="dataError.show">
+        <p class="text-center">{{dataError.text}}</p>
+    </div>
+</div>

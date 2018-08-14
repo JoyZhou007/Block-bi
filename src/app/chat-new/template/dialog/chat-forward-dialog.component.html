@@ -1,0 +1,13 @@
+<div class="di-con">
+    <div class="g-title g-padding-top0">
+        <span class="f9-f">{{'FORWARD TO' | translate}}</span>
+        <em class="f14-f">{{'required' | translate}}</em>
+    </div>
+    <dropdown-search
+            [dropdownOptions]="forwardList"
+            [dropdownSettings]="forwardSettings"
+            [selectedOptions]="selectedOptions"
+            (optionModelArrChange)="setSelectedOption($event)"
+    ></dropdown-search>
+    <p class="g-show-error-color" *ngIf="showError.isShow">{{showError.text}}</p>
+</div>

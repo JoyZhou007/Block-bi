@@ -1,0 +1,233 @@
+<!--头部-->
+
+<style>
+    .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: absolute;
+    }
+
+    .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<header class="g-header mission-header">
+    <div class="pull-left m-header-title"
+         data-step="step_mission_list_1" id="step_mission_list_1"
+         *ngIf="!isOpenProjectHeader">
+        <div class="clearfix">
+            <span class="icon-title-calendar"></span>
+            <span class="pull-left f18-f">{{'MISSION' | translate}}</span>
+        </div>
+        <div class="pull-left m-header-select" toggleSelectGroup  #toggleSelectBut>
+            <span class="f5-f">{{filterIsSelfTitle | translate}}</span>
+            <div class="d-select f27-f" #toggleSelect>
+                <ul class="g-text-left" #toggleSelectContent>
+                    <li *ngFor="let filterSelfObj of tplFilterSelfList; let i=index;"
+                        [class.current]="tplFilterData.is_self === filterSelfObj.key"
+                        (click)="setFilterIsSelf($event, filterSelfObj.key)">
+                        <i class="base">{{filterSelfObj.title | translate}}</i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pull-left m-header-select" toggleSelectGroup  #toggleSelectBut>
+            <span class="f5-f">{{filterTypeTitle | translate}}</span>
+            <div class="d-select f27-f" #toggleSelect>
+                <ul class="g-text-left" #toggleSelectContent>
+                    <li *ngFor="let typeObj of tplTypeList; let i=index;"
+                        [class.current]="tplFilterData.type.indexOf(typeObj.key) !== -1"
+                        (click)="setFilterMissionType($event, typeObj.key)">
+                        <i class="base">{{typeObj.title | translate}}</i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="pull-left m-header-title" *ngIf="isOpenProjectHeader">
+        <div class="pull-left m-header-title m-create-header-title">
+            <div class="clearfix m-create-title">
+                <span class="icon-title-project"></span>
+                <span class="pull-left f18-f">{{'PROJECT' | translate}}</span>
+                <span class="pull-left m-create-line"></span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_DOING">{{'doing' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_TODO">{{'to do' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_PENDING">{{'pending' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_RESET">{{'reset' | translate}}</span>
+                <span class="m-create-header-doing f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_PAUSE">{{'pause' | translate}}</span>
+                <span class="m-create-header-done f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_DONE">{{'done' | translate}}</span>
+                <span class="m-create-header-done f42-f"
+                      *ngIf="currentProjectMission.mission_status === missionConstant.MISSION_STATUS_STORAGE">{{'storage' | translate}}</span>
+            </div>
+            <div class="clearfix m-create-planning">
+                <span class="font-prior"></span>
+                <span class="pull-left f15-f">{{currentProjectMission.name}}</span>
+
+            </div>
+        </div>
+    </div>
+    <div class="g-search-wrap-width">
+        <div class="pull-left g-search-wrap mission-header-search g-input-box-shadow" (click)="stopPro($event)">
+        <span class="font-search-blue1 zIndex"
+              (click)="searchMission($event)"></span>
+            <span class="font-remove" (click)="onCloseSearch()" *ngIf="missionKeywords"></span>
+            <input class="f26-f f-color-dark g-font-normal" type="text" placeholder="{{'Search' | translate}}"
+                   [class.current]="missionKeywords.length > 0"
+                   [(ngModel)]="missionKeywords"
+                   (keydown)="searchMission($event)">
+            <div class="mission-calendar-search-select"  #scrollToBottom
+                 [class.hide]="!missionKeywords || !searchHasResult">
+                <div class="calendar-search-select-title">
+                    <div class="pull-left calendar-search-select-left calendar-search-select-active cursor" (click)="sortSearch($event)">
+                        PUBLISH TIME
+                        <!--去掉.icon1-Shape-2-top，箭头向下-->
+                        <span class="icon1-arrow icon1-Shape-2-bottom add-pointer"
+                              [class.icon1-Shape-2-top]="searchSort"
+                        ></span>
+                    </div>
+                    <!-- <div class="pull-left calendar-search-select-right">
+                         COMPLETION TIME
+                         <span class="icon1-arrow icon1-Shape-2-bottom add-pointer"></span>
+                     </div>-->
+                </div>
+                <perfect-scrollbar class="ps-container calendar-search-select-content">
+                    <div class="calendar-search-select-content" id="search">
+                    <div class="g-no-data-monkey" *ngIf="!searchResultArr.length">
+                        <span class="icon1-no-data-monkey"></span>
+                        <p class="f41-f">{{'NO RESULT' | translate}}</p>
+                    </div>
+                    <ul *ngIf="searchResultArr.length" class="clearfix m-left-storage-list" >
+                        <li class="clearfix" *ngFor="let sr of searchResultArr;">
+                            <div class="mission-left-task-list">
+                                <h3 class="f21-f" title="{{sr.name}}">{{sr.name}}</h3>
+                                <p class="clearfix"><span class="icon-board-{{sr.typeClass}}"></span><span class="f5-f">{{sr.typeTitle}} {{sr.last_update_locale_time}}</span>
+                                </p>
+                                <div class="m-left-storage-people" *ngIf="sr.last_update_info.hasOwnProperty('user_info')">
+                                    <span class="icon1-Shape-3"></span>
+                                    <profile-img class="pull-left" [userInfo]="sr.last_update_info.user_info" [settings]="{show_work_name: true}"></profile-img>
+                                </div>
+                            </div>
+                            <div class="m-left-storage-pos">
+                                <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon"
+                                     *ngIf="sr.type != missionConstant.MISSION_TYPE_APPLICATION && !sr.is_observer"
+                                     (click)="openMissionChatDialog($event,sr)"
+                                >
+                                    <span class="bi-icon-rectangle g-transition2 g-icon-center"></span>
+                                </div>
+                                <div class="pull-left g-border2 g-icon-width24 g-icon-position cursor g-border-ab g-bg-white g-new-icon g-margin-left5"
+                                     (click)="redirectToDetail($event, sr)">
+                                    <span class="bi-icon-open g-transition2 g-icon-center" ></span>
+                                </div>
+
+                            </div>
+                        </li>
+
+                    </ul>
+                    <div class="loader" *ngIf="isLoading">
+                        <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                            <div class="loader-inner ball-pulse"></div>
+                        </loaders-css>
+                    </div>
+                </div>
+                </perfect-scrollbar>
+            </div>
+        </div>
+    </div>
+
+    <div class="pull-right">
+        <div class="pull-left g-header-icon">
+            <div class="pull-left" *ngIf="isShowScheduleBtn">
+                <span class="g-header-icon-list font-calendarcondition-schedule g-border2" mission-list-schedule
+                      [schedule]="{content: chooseList, viewContainer: viewBox}"
+                      (click)="clickShowChosenMission($event)">
+                </span>
+            </div>
+            <div class="pull-left header-alarm" [class.hide]="showMissionListTable">
+                <span class="g-header-icon-list font-calendarcondition-status g-border2"
+                      data-step="step_mission_list_3" id="step_mission_list_3"
+                      tooltip [tooltip]="{content: 'list model', position:'bottom'}"
+                      [class.current]="!showMissionListTable"
+                      (click)="clickShowMissionListTable($event)">
+                </span>
+            </div>
+            <div class="pull-left header-alarm" [class.hide]="!showMissionListTable">
+                <span class="m-c-list-default m-c-list-current g-border2"
+                      data-step="step_mission_list_3_1" id="step_mission_list_3_1"
+                      [class.current]="showMissionListTable"
+                      tooltip [tooltip]="{content: 'status model', position:'bottom'}"
+                      (click)="clickShowMissionListTable($event)">
+                    <em class="g-header-icon-list font-calendarcondition-status"></em>
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list bi-icon-rectangle g-border2"
+                      data-step="step_mission_list_4" id="step_mission_list_4"
+                      tooltip [tooltip]="{content: 'chat', position:'bottom'}"
+                      (click)="openChat($event)">
+                </span>
+            </div>
+          <!--  <div class="pull-left">
+                <span class="g-header-icon-list font-transferall g-border2"
+                      data-step="step_mission_list_5" id="step_mission_list_5"
+                      tooltip [tooltip]="{content: 'transfer all', position:'bottom'}"
+                ></span>
+            </div>-->
+            <div class="pull-left" toggleSelectGroup [currClass]="'header-alarm'">
+                <span class="g-header-icon-list bi-icon-newmission g-border2"
+                      tooltip [tooltip]="{content: 'new mission', position:'bottom'}" #toggleSelectBut></span>
+                <div class="d-select f27-f" #toggleSelect #missionTypeList
+                     data-step="step_mission_list_6" id="step_mission_list_6">
+                    <ul #toggleSelectContent>
+                        <li *ngFor="let missionTypeObj of tplTypeList | slice:1"
+                            (click)="createMission(missionTypeObj.title)">
+                            <em class="base">{{missionTypeObj.title | translate}}</em>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="pull-left" >
+                <span class="g-header-icon-list font-help" (click)="showMissionListHelp($event)"></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="closeMission()"></a>
+    </div>
+</header>
+
+<!--
+<mission-list-schedule #missionListSchedule
+                       [hidden]="!isShowSchedule"
+                       (OutputOpenProject)="showProjectHeader($event)"
+></mission-list-schedule>
+-->
+<template #myTargetDiv></template>
+
+
+<div [hidden]="isShowSchedule">
+    <!--------第一种视图-------->
+
+    <mission-list-calendar #missionListCalendar
+                           [calendarFilter]="tplFilterData"
+                           [hidden]="showMissionListTable"
+                           (outLoadingNextPage)="loadingNextPageMission($event)"
+                           (OutputIsDraw)="showScheduleBtn($event)"
+                           (reloadMissionList)="reloadMission($event)"></mission-list-calendar>
+    <!--------第二种视图-------->
+
+
+    <!-- mission-list-table -->
+    <mission-list-table #missionListTable
+                        [hidden]="!showMissionListTable"
+                        [calendarFilter]="tplFilterData"
+                        (outLoadingNextPage)="loadingNextPageMission($event)"
+                        (OutputIsDraw)="showScheduleBtn($event)"
+    ></mission-list-table>
+</div>

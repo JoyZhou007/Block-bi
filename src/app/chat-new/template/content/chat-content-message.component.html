@@ -1,0 +1,293 @@
+<!-- 顶部置顶消息提醒 -->
+<style>
+    :host /deep/ .loader {
+        width: 100px;
+        height: 80px;
+        margin-left: calc(50% - 50px);
+        position: inherit;
+        z-index: 10;
+    }
+
+    :host /deep/ .loader .my-loader {
+        top: 42px;
+        left: 20px;
+        border: 2px solid rgba(94, 102, 209, .6);
+    }
+</style>
+<div style="height:415px;" *ngIf="loadCorrect" DragDropDirective (outDrop)="setChatFileUpload($event)">
+    <div [class.hide]="isFirstLoading">
+        <div class="add-pointer">
+            <div class="f4-f ch-prompt-msg" *ngIf="isNetWorkConnectError">Network failure</div>
+            <div class="f4-f ch-msg-reminding" *ngIf="isShowNewMsgNotice && !isNetWorkConnectError">
+                <span class="f50-f" (click)="jumpToNewMessage($event)">
+                    {{(!isLoadingByPIN?'jump to new message':'jump to last message') | translate}}
+                </span>
+                <span class="f4-f" *ngIf="!isMiniDialog">
+                    {{(!isLoadingByPIN?'Message reminding':'You are reading history message') | translate}}
+                </span>
+                <span class="f4-f" *ngIf="isMiniDialog"></span>
+                <span class=" font-page-esc-small" (click)="closeNewMsgNotice($event,'new')"></span>
+            </div>
+        </div>
+        <!--<perfect-scrollbar class="ps-container ">-->
+        <div class="ch-msg-scroll-wrap">
+            <div class="ch-msg-scroll" *ngIf="currentDisplayMessageList" #scrollMe
+                 [style.height]="'calc(100vh - 70px - 6px - ' + checkHeight + 'px - 28px)'">
+                <div class="ch-msg-beginning ch-msg-time"
+                     *ngIf="!hasMoreHistoryMessage && loadCorrect && !isLoadingHistory">
+                    <div class="ch-msg-time">
+                        <div class="ch-msg-time-event">
+                            <span class="c1-f">{{'No More Message' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader" *ngIf="hasMoreHistoryMessage && loadCorrect && isLoadingHistory">
+                    <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                        <div class="loader-inner ball-pulse"></div>
+                    </loaders-css>
+                </div>
+                <div *ngFor="let message of currentMessageList" class="msgObj" #msgObj [attr.msg_id]="message.msg_id">
+                    <div class="ch-msg-time" #title *ngIf="message.isFirstMessageByDay">
+                        <div class="ch-msg-time-event"
+                             [class.ch-msg-time-select]="message.isToggleShow"
+                             (click)="toggleMessageByDay($event,message.date)">
+                            <span class="c1-f">{{message.date}}</span>
+                            <i class="font-selectbutton-line"></i>
+                        </div>
+                    </div>
+                    <div [class.hide]="message.isToggleShow">
+                        <div [ngSwitch]="message.type" *ngIf="message.status === 1">
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_SHARE">
+                                <chat-content-message-img
+                                    *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_IMG"
+                                    [setIsMiniDialog]="isMiniDialog"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    [setCurrentItem]="currentMenuItem"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-message-img>
+                                <chat-content-message-file
+                                    *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_FILE"
+                                    [setIsShare]="true"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    [setCurrentItem]="currentMenuItem"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-message-file>
+                                <chat-content-message-post
+                                    *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_POST"
+                                    [setIsShare]="true"
+                                    [setCurrentItem]="currentMenuItem"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-message-post>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_TEXT">
+                                <chat-content-message-text #messageText
+                                                           [setIsMiniDialog]="isMiniDialog"
+                                                           [setCurrentItem]="currentMenuItem"
+                                                           [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                           (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                           (outForwardMsg)="setMessageForward($event)"
+                                                           (outAtUser)="setAtUser($event)"
+                                                           (outSetMessagePin)="setMessagePin($event)"
+                                                           (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                           (outOpenMiniDialog)="openMiniDialog($event)"
+                                                           (outMessageRevoke)="setMessageRevoke($event)"
+                                                           (outDeleteChatAlarm) ="deleteAlarm($event)"
+                                >
+                                </chat-content-message-text>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_IMG">
+                                <chat-content-message-img
+                                    [setIsMiniDialog]="isMiniDialog"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    [setCurrentItem]="currentMenuItem"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)"
+                                >
+                                </chat-content-message-img>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_FILE">
+                                <chat-content-message-file
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    [setCurrentItem]="currentMenuItem"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-message-file>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_POST">
+                                <chat-content-message-post
+                                    [setCurrentItem]="currentMenuItem"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-message-post>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_FORWARD">
+                                <chat-content-forward
+                                    [setIsMiniDialog]="isMiniDialog"
+                                    [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                    [setCurrentItem]="currentMenuItem"
+                                    (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                    (outForwardMsg)="setMessageForward($event)"
+                                    (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                    (outShareFile)="setShareFile($event)"
+                                    (outAtUser)="setAtUser($event)"
+                                    (outSetMessagePin)="setMessagePin($event)"
+                                    (outSetMessageAlarm)="setMessageAlarm($event)"
+                                    (outOpenMiniDialog)="openMiniDialog($event)"
+                                    (outMessageRevoke)="setMessageRevoke($event)"
+                                    (outDeleteChatAlarm) ="deleteAlarm($event)">
+                                </chat-content-forward>
+                            </template>
+                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_SYSTEM">
+                                <div *ngIf="message.detail.act_type === 5" class="ch-new-message">
+                                    <span class="v7-f ch-message-bg">{{message.msg}}</span>
+                                </div>
+                                <div *ngIf="message.detail.act_type === 2" class="ch-update-topic">
+                                    <div class="ch-message-bg clearfix">
+                                        <span class="v7-f">{{message.msg}}</span>
+                                        <span class="f4-f"><i class="base">{{message.detail.topic}}</i></span>
+                                        <span class="f13-f">Edit by</span>
+                                        <span class="f19-f">{{message.userInfo?.work_name}}</span>
+                                    </div>
+                                </div>
+                                <div class="ch-msg-list" *ngIf="message.detail.act_type === 7">
+                                    <profile-img class="ch-msg-logo" [userInfo]="message.userInfo"
+                                                 [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                                    <div class="clearfix ch-msg-header">
+                                        <span class="f19-f g-margin-right10">{{message.userInfo?.work_name}}</span>
+                                      
+                                        <div>
+                                            <profile-state  [states]="message.userInfo?.state" [uid]="message.userInfo?.uid" [isChatContent]="true"></profile-state>
+                                        </div>
+
+                                        <span class="f5-f ch-msg-merge-time  {{typeService.isNumber(message.userInfo?.uid) ? 'g-margin-left10' : ''}}">
+                                            {{dateService.formatLocal(message.time, 'HH:MMtt')}}</span>
+                                        <span class="icon1-chat-pin ch-msg-icon hide"></span>
+                                        <span class="icon1-at ch-msg-icon hide"></span>
+                                        <span class="font-alarm ch-msg-icon hide"></span>
+                                    </div>
+                                    <div class="f20-f ch-msg-text">
+                                        <div class="clearfix">
+                                            <span>{{ 'comments on' | translate}}</span>
+                                            <span class="v8-f"
+                                                  (click)="downLoadTheFile($event,message.detail?.file_info)">{{message.detail?.file_info?.file_name}}
+                                            </span>
+                                            <span class="bi-icon-open hide"
+                                                  (click)="clickOpenDetailSystemMessage($event,message)"></span>
+                                        </div>
+                                        <div class="clearfix ch-msg-comments">
+                                        <span class="font-comments">
+                                            <em class="path1"></em>
+                                            <em class="path2"></em>
+                                        </span>
+                                            {{message.detail?.commentTxt}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                        <div *ngIf="message.status === 0">
+                            <div class="ch-msg-beginning ch-msg-time"
+                                 *ngIf="!hasMoreMessage && loadCorrect && !isLoading">
+                                <div class="ch-msg-time">
+                                    <div class="ch-msg-time-event">
+                                        <span class="c1-f" *ngIf="!isZhLan">This message has been revoked by {{message.revoke_by}}</span>
+                                        <span class="c1-f" *ngIf="isZhLan">{{message.revoke_by}} 撤回了这条消息</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="loader" style="margin-bottom: 30px"
+                     *ngIf="hasMoreNewMessage && loadCorrect && isLoadingNew">
+                    <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                        <div class="loader-inner ball-pulse"></div>
+                    </loaders-css>
+                </div>
+            </div>
+        </div>
+        <!--</perfect-scrollbar>-->
+    </div>
+    <div class="add-pointer" *ngIf="isShowAtMsg" [class.hide]="isFirstLoading">
+        <div class="f4-f ch-msg-reminding" style="margin-top:-24px;background-color:#78C0E0">
+            <span class="f50-f" (click)="jumpToAtMessage($event,atMsgData)">jump to the message</span>
+            <span class="f4-f">{{atMsgData?.userInfo?.work_name}} @ you</span>
+            <span class=" font-page-esc-small" (click)="closeNewMsgNotice($event,'at')"></span>
+        </div>
+    </div>
+    <div class="absolute mission-loading"  [class.hide]="!isFirstLoading">
+        <img src="{{appConfig.staticResourceDomain + 'assets/images/loading.gif'}}" alt="">
+    </div>
+    <!--<div class="absolute mission-loading" [class.hide]="!isFirstLoading" >-->
+        <!--<img src="{{appConfig.staticResourceDomain + 'assets/images/loading.gif'}}" alt="">-->
+    <!--</div>-->
+    <chat-content-message-input *ngIf="currentMenuItem"
+                                [class.hide]="isFirstLoading"
+                                [setCurrentItem]="currentMenuItem"
+                                [setIsMissionDialog]="isMiniDialog"
+                                [setForbiddenAT]="currentMenuItem.isFriend"
+                                [setIsNotInMail]="true"
+                                [setAtUserList]="currentGroupMember"
+                                #messageInputComponent
+                                (outChangeHeight)="detectInputHeight($event)"
+                                (outFileUpLoad)="setChatFileUpload($event)"
+                                (outAtUser)="setAtUser($event)"
+                                (outSendMessage)="sendMessage($event)">
+    </chat-content-message-input>
+
+
+</div>
+

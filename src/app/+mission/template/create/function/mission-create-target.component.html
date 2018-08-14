@@ -1,0 +1,69 @@
+<div class="g-style1" data-step="step_mission_15" id="step_mission_15">
+    <div class="m-r-c-tab">
+        <ul class="clearfix m-r-c-tab-list">
+            <li class="pull-left f46-f " (click)="switchGoalType('common')" [class.current]="isShowCommonGoal">{{'COMMON GOAL' | translate}}</li>
+            <li class="pull-right f46-f" (click)="switchGoalType('self')" [class.current]="isShowSelfGoal">{{'SELF GOAL' | translate}}</li>
+        </ul>
+        <div *ngIf="operatorMemberList?.length > 0 && isShowSelfGoal">
+            <div class="g-title">
+                <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div  *ngFor="let operator of operatorMemberList; let i = index;">
+                <div class="se-input m-r-c-tab-common se-input-hover g-transition2 g-input-box-shadow m-r-c-self-goal" toggleSelectGroup [currClass]="'se-el-selected'">
+                    <div class="se-input-select" #toggleSelectBut>
+                        <span class="f14-f" >{{unit}}</span>
+                        <span class="font-selectbutton-soildclose"></span>
+                    </div>
+                    <div class="m-r-c-tab-common-people pull-left">
+                        <div class="m-r-c-tab-common-bg g-border4 g-transition2">
+                            <profile-img class="g-line-height26" [userInfo]="operator" [settings]="{show_work_name: true}"></profile-img>
+                        </div>
+                    </div>
+                    <input class="current-color" type="text"
+                           [(ngModel)]="operator.data"
+                           (blur)="validateFormData(operator)"
+                           [class.g-show-input-error]="operator.isShowError">
+                    <div class="d-select d-select-min-width" #div1 #toggleSelect>
+                        <perfect-scrollbar class="ps-container g-height140">
+                            <ul class="g-max-height-inherit" #toggleSelectContent>
+                                <li  *ngFor="let unit of unitList" (click)="selectUnit(operator,unit.key)">
+                                    <span class="base">{{unit.key}}</span>
+                                </li>
+                            </ul>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+                <span class="g-show-error g-text-right" [ngStyle]="{'marginTop': '-10px', 'marginBottom': (i === (operatorMemberList.length - 1)) ? '' : '10px'}" *ngIf="operator.isShowError">
+                    {{'target value is required' | translate}}
+                </span>
+            </div>
+        </div>
+        <div *ngIf="isShowCommonGoal">
+            <div class="g-title">
+                <span class="f9-f">{{'TARGET AMOUNT' | translate}}</span>
+                <em class="f14-f">{{'required' | translate}}</em>
+            </div>
+            <div class="se-input m-r-c-tab-common" toggleSelectGroup [currClass]="'se-input-current'">
+                <div class="se-input-select" #toggleSelectBut>
+                    <span class="f14-f">{{unit}}</span>
+                    <span class="font-selectbutton-soildclose"></span>
+                </div>
+                <input class="current-color g-input-box-shadow" type="text"
+                       [(ngModel)]="commonGoalData.data"
+                       [class.g-show-input-error]="commonGoalData.isShowError"
+                       (blur)="validateFormData(commonGoalData)"
+                       placeholder="50,000.00">
+                <div class="d-select d-select-min-width" #toggleSelect #div1>
+                    <perfect-scrollbar class="ps-container g-height140">
+                        <ul class="g-max-height-inherit" #toggleSelectContent>
+                            <li  *ngFor="let unit of unitList" (click)="selectUnit(operator,unit.key)">
+                                <span class="base">{{unit.key}}</span></li>
+                        </ul>
+                    </perfect-scrollbar>
+                </div>
+                <span class="g-show-error pull-right " *ngIf="commonGoalData.isShowError">{{'total target value is require' | translate}}</span>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,25 @@
+<div class="clearfix se-input g-input-box-shadow"
+     toggleSelectGroup
+     #toggleInput
+     [currClass]="currClass"
+     [calcHeight]="true"
+     [minusHeight]="getCalcHeight"
+     [class.g-readonly-input]="_currentDropdownSettings.readonly"
+     (callBackData)="doCallBackData($event)">
+    <div class="clearfix" #toggleSelectBut>
+        <div class="se-input-select"> <!--(click)="toggleDropdownEvent($event)" *ngIf="!dropdownSettings.readonly"-->
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <dropdown-input #dropdownInput
+        [settings]="dropdownSettings"
+        (outSearchEvent)="triggerSearchAction($event)"
+        (outRemoveElementEvent)="removeSelectedOptionsEvent($event)"></dropdown-input><!--(click)="toggleDropdownEvent($event)"-->
+    </div>
+    <div #toggleSelect>
+        <dropdown-select #dropdownSelect
+         [settings]="dropdownSettings"
+         [dropdownOptions]="dropdownOptions"
+         (outDropdownElementClickEvent)="toggleSelectedOptionsEvent($event)"
+         (confirmOptions)="closeOptionDropdown($event)"></dropdown-select>
+    </div>
+</div>

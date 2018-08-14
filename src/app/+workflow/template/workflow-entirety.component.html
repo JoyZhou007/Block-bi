@@ -1,0 +1,67 @@
+<div class="wo-right" moveGroup [dataDiff]="300" [dataSteps]="5" style="position: relative">
+    <header class="g-header">
+        <div style="display: inline-block"  data-step="step_wk_1" id="step_wk_1">
+            <div>
+                <span class="icon-title-workflow"></span>
+                <span class="f18-f">{{'WORKFLOW' | translate}}</span>
+            </div>
+            <div class="wo-head-bottom g-title-des" *ngIf="workflowTitles">
+                <span *ngFor="let wk of workflowTitles; let i = index; let l = last;">
+                    <span class="add-pointer {{'i-'+i}} {{'l-' + l}}" (click)="changeWorkflow(wk, i)"
+                          [class.f17-f]="!l"
+                          [class.f15-f]="l">{{wk.title}}</span>
+                    <span *ngIf="!l" class="wo-head-line" style="padding-left:3px;">|</span>
+                </span>
+
+            </div>
+        </div>
+    </header>
+    <div id="the-image-box" class="the-image-box">
+        <div id="top-painter" class="the-image-painter all-scroll-y" #moveElement style="width: 100%;">
+        </div>
+    </div>
+    <div class="di-warp m-map-dialog m-map-pro-list ct-common-di"
+         [class.hide]='!isShowMoreDialog'
+         style="position: absolute;z-index: 20;left: 0;top:0"
+         #morePeopleDialog>
+        <div class="di-vertical-align">
+            <div class="di-warp-style">
+                <h2>
+                    <span class="f11-f">{{'USER LIST' | translate}}</span>
+                    <em class="font-page-esc-small" (click)="closeMorePeopleDialog($event)"></em>
+                </h2>
+                <p class="f19-f g-noData-style"></p>
+                <ul class="m-map-pro-ul">
+                    <li *ngFor="let user of allUser">
+                        <div class="g-vertical-img34 clearfix">
+                            <profile-img [userInfo]="user"
+                                         [settings]="{show_work_name: true, img_size: 24}"></profile-img>
+                        </div>
+                        <i class="font-chat" (click)="friendShowChat($event, user)"
+                           *ngIf="user.user_profile_path != '' && !user.isSelf"></i>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!--左右按钮-->
+    <div class="wo-btn-group pull-left">
+        <div class="but-page pull-left" #moveRightBut>
+            <span class="but-page-prev icon1-Shape-3"></span>
+        </div>
+    </div>
+    <div class="wo-btn-group pull-right">
+        <div class="but-page pull-right" #moveLeftBut>
+            <span class="but-page-next icon1-Shape-3"></span>
+        </div>
+    </div>
+    <div class="wo-right-fix" *ngIf="concurrencyUserArr.length > 0">
+        <div class="wo-right-fix-top" tooltip [tooltip]="{content: 'user editing', position:'left'}">
+            <span class="icon1-synchronization"></span>
+            <div class="wo-right-fix-list">
+                <profile-img *ngFor="let user of concurrencyUserArr"
+                             [settings]="{show_work_name:false, img_size: 30, img_radius: 4}" [userInfo]="user"></profile-img>
+            </div>
+        </div>
+    </div>
+</div>

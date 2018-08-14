@@ -1,0 +1,30 @@
+<div class="clearfix  g-width ch-warp" [class.hide]="!hasInit || (hasInit && !chatFullOpen)">
+    <chat-menu-new #chatMenuComponent (isShowChatPost)="showChatPost($event)"
+                   [setChatIsOpen]="chatFullOpen"></chat-menu-new>
+    <div class="ch-right">
+        <!-- 聊天框主体内容 -->
+        <chat-content-new #chatContentComponent
+                          (OutputChatSearchMessage)="sendSearchChatMessage($event)"></chat-content-new>
+    </div>
+    <!-- 默认隐藏的侧边栏，搜索结果，用户详情，评论列表 -->
+    <!--chat search-->
+    <chat-search-new *ngIf="hasInit && chatFullOpen"
+                     [searchInfo]="searchChatInfo"
+                     [specificData]="specificData"
+                     [hidden]="!chatFullOpen"
+                     (outClearSearch)="clearSearchContent()"
+                     #chatSearchComponent></chat-search-new>
+    <chat-member-detail #chatMemberDetailComponent></chat-member-detail>
+    <chat-comments-new #chatCommentsComponent></chat-comments-new>
+</div>
+
+
+<!--新建post-->
+<new-chat-post #newChatPostComponent [hidden]="!showPostChat"></new-chat-post>
+
+<!--read post-->
+<read-chat-post #readChatPostComponent  [class.hide]="!showReadPostChat"></read-chat-post>
+
+
+<chat-new-image-dialog [class.hide]="!isShowImgDialog"></chat-new-image-dialog>
+

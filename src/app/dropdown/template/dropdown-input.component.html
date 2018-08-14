@@ -1,0 +1,32 @@
+
+    <div class="pull-left s-style1 g-scroll-warp" style="z-index: 1;">
+        <perfect-scrollbar class="ps-container g-select-scroll">
+    <div class="clearfix search-style1-warp g-margin-left10" #searchWarp>
+        <div #selectedElementDiv *ngFor="let item of selectedOptions"
+             title="{{item.desc? item.desc :'' }}"
+             class="search-style1-list g-border4 g-transition2"
+             (click)="removeSelectedItem($event, item)">
+
+            <span *ngIf="(item.desc || item.label) && !item.imageLabel || (item.imageLabel === 'NaN')" style="margin-left:-5px;" class="pull-left d-letter d-letter-color d-letter-new">
+                <i class="base">{{item.desc? item.desc.charAt(0) : (item.label ? item.label.charAt(0) : '')}}</i>
+            </span>
+            <profile-img [userInfo]="item" [settings]="{show_work_name: true}" *ngIf="item.imageLabel !== 'NaN' && item.imageLabel !== ''"></profile-img>
+            <span *ngIf="(item.desc || item.label) && !item.imageLabel || (item.imageLabel === 'NaN')"
+                  class="search-key f4-f search-key-padding"
+                  [class.readonly]="settings.readonly"><i class="base">{{item.desc ? item.desc : (item.label ? item.label: '')}}</i></span>
+            <span *ngIf="item.label && !settings.readonly" class="remove-but"><i class="font-remove"></i></span>
+        </div>
+        <div class="absolute f26-f" style="visibility: hidden;white-space: nowrap;" #textWidth>{{searchValue}}</div>
+        <input #searchInput [ngStyle]="{'width': searchInputWidth}"
+               [class.has-margin]="selectedOptions?.length"
+               (click)="searchInput.select()"
+               *ngIf="settings.enableSearch && !settings.readonly" class="pull-left f26-f s-last-input dropdown-input g-font-normal g-transitionDuration"
+               type="text" value="" title=""
+               (keyup)="searchAction($event, searchInput.value)"
+               (keydown)="searchAction($event, searchInput.value)"
+               [(ngModel)]="searchValue"
+               placeholder="{{(selectedOptions?.length === 0 && settings.searchPH ) ? (settings.searchPH | translate)  + '...' : ''}}">
+    </div>
+</perfect-scrollbar>
+</div>
+

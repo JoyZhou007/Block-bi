@@ -1,0 +1,94 @@
+<perfect-scrollbar class="ps-container pull-left ct-right-left">
+    <div *ngIf="init">
+        <div class="a-list-top">
+            <h3 class="f7-f">{{'EDUCATION' | translate}}</h3>
+        </div>
+        <div class="ct-resume-list">
+            <p class="f19-f g-no-data-color g-margin-bottom40" *ngIf="getEducations && getEducations.length == 0 || !getEducations">{{noData}}</p>
+            <ul class="ct-right-general" *ngFor = "let educations of getEducations; let i=index">
+                <li class="clearfix">
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'PERIOD' | translate}}</span>
+                        </div>
+                        <div class="clearfix f19-f ct-resume-time">
+                            <span class="pull-left">{{educations.start_date?educations.start_date:noData}}</span>
+                            <span class="icon1-Shape-2"></span>
+                            <span class="pull-left">{{educations.end_date?educations.end_date:noData}}</span>
+                        </div>
+                    </div>
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'SCHOOL' | translate}}</span>
+                        </div>
+                        <p class="f19-f">{{educations.school?educations.school:noData}}</p>
+                    </div>
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'MAJOR' | translate}}</span>
+                        </div>
+                        <p class="f19-f">{{educations.major?educations.major:noData}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+                    </div>
+                    <p class="v7-f">{{educations.description?educations.description:noData}}</p>
+                </li>
+            </ul>
+        </div>
+        <div class="a-list-top">
+            <h3 class="f7-f">{{'WORK EXPERIENCE' | translate}}</h3>
+        </div>
+        <div class="ct-resume-list">
+            <p class="f19-f g-no-data-color" *ngIf="getExperiences && getExperiences.length == 0 || !getExperiences">{{noData}}</p>
+            <ul class="ct-right-general" *ngFor = "let experience of getExperiences; let i=index">
+                <li class="clearfix">
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'PERIOD' | translate}}</span>
+                        </div>
+                        <div class="clearfix f19-f ct-resume-time">
+                            <span class="pull-left">{{experience.start_date?experience.start_date:noData}}</span>
+                            <span class="icon1-Shape-2"></span>
+                            <span class="pull-left">{{experience.end_date?experience.end_date:noData}}</span>
+                        </div>
+                    </div>
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'COMPANY' | translate}}</span>
+                        </div>
+                        <p class="f19-f">{{experience.company?experience.company:noData}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'INITIAL POSITION' | translate}}</span>
+                        </div>
+                        <p class="f19-f">{{experience.initial_position?experience.initial_position:noData}}</p>
+                    </div>
+                    <div class="ct-right-width3">
+                        <div class="g-title">
+                            <span class="f9-f">{{'LAST POSITION' | translate}}</span>
+                        </div>
+                        <p class="f19-f">{{experience.finial_position?experience.finial_position:noData}}</p>
+                    </div>
+                </li>
+                <li class="clearfix">
+                    <div class="g-title">
+                        <span class="f9-f">{{'SPECIFICATION' | translate}}</span>
+                    </div>
+                    <p class="v7-f">{{experience.description?experience.description:noData}}</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="profile-loadding" *ngIf="!init">
+        <loaders-css [loader]="'ball-scale-ripple-multiple'">
+            <div class="loader-inner ball-pulse"></div>
+        </loaders-css>
+    </div>
+</perfect-scrollbar>

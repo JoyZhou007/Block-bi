@@ -1,0 +1,155 @@
+<header class="g-width g-header fo-header">
+    <div class="pull-left fo-header-left">
+        <div class="clearfix">
+            <span class="icon-title-folder g-header-margin"></span>
+            <span class="pull-left f18-f">{{'FOLDER' | translate}}</span>
+        </div>
+        <div *ngIf="!isInSearchPartByExt && !isInSearchPartByKeyword && !isDefaultPage"
+             data-step="step_folder_2" id="step_folder_2">
+            <ul class="clearfix f17-f g-header-column LatoRegular g-title-des" #previousFolderUl
+                *ngIf="!isTopFolder">
+                <li style="overflow: hidden;
+                   text-overflow: ellipsis;
+                    white-space: nowrap;
+                    max-width: 100px;"
+                    title="{{previousFolderInfo.name}}"
+                    #previousFolderLi
+                    (click)="backPreviousFolder($event,previousFolderInfo)">
+                    {{previousFolderInfo.name}}
+                </li>
+                <li class="current" style="overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;"
+                    [ngStyle]="{'max-width': maxFolderTitleWidth+'px'}"
+                    title="{{folderInfo.name}}">
+                    {{folderInfo.name}}
+                </li>
+            </ul>
+            <ul class="clearfix f17-f g-header-column LatoRegular g-title-des" *ngIf="isTopFolder">
+                <li class="current">{{folderInfo.name}}</li>
+            </ul>
+        </div>
+    </div>
+    <div class="g-search-wrap-width">
+        <div class="pull-left g-search-wrap g-input-box-shadow">
+            <span class="font-search-blue1"></span>
+            <input class="f26-f f-color-dark normalRegular" type="text"
+                   [(ngModel)]="searchKeyWords"
+                   #input
+                   (keyup)="keyPressEvent($event)"
+                   placeholder="{{'Search' | translate}}">
+            <span class="font-remove s-clear" (click)="clearInputValue($event)"
+                  *ngIf="searchKeyWords"></span>
+        </div>
+    </div>
+
+    <div class="pull-right" >
+        <div class="pull-left g-header-icon fo-header-icon"
+             [class.hide]="!isMultipleSelect || isHasPasteFile">
+            <div class="pull-left">
+                <span class="g-header-icon-list font-permission hide"></span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list bi-icon-download"
+                      data-step="step_folder_8" id="step_folder_8"
+                      tooltip [tooltip]="{content: 'download', position:'bottom'}"
+                      (click)="downloadTheFile($event)">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-transfer"
+                      data-step="step_folder_9" id="step_folder_9"
+                      tooltip [tooltip]="{content: 'transfer', position:'bottom'}"
+                      (click)="transferTheFile($event)">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-copy"
+                      data-step="step_folder_10" id="step_folder_10"
+                      tooltip [tooltip]="{content: 'copy', position:'bottom'}"
+                      (click)="copyTheFile($event)">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list bi-icon-move"
+                      data-step="step_folder_11" id="step_folder_11"
+                      tooltip [tooltip]="{content: 'move', position:'bottom'}"
+                      (click)="moveTheFile($event)">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-pin1"
+                      data-step="step_folder_12" id="step_folder_12"
+                      tooltip [tooltip]="{content: 'pin', position:'bottom'}"
+                      (click)="pinTheFile($event)">
+                </span>
+            </div>
+            <div class="pull-left">
+                <span class="g-header-icon-list font-trash"
+                      data-step="step_folder_13" id="step_folder_13"
+                      tooltip [tooltip]="{content: 'delete', position:'bottom'}"
+                      (click)="deleteTheFile($event)">
+                </span>
+            </div>
+        </div>
+        <div class="pull-left g-header-icon fo-header-icon" [class.hide]="!isHasPasteFile" *ngIf="isAbleShowPasteBtn">
+            <div class="pull-left" (click)="pasteTheFile($event)">
+                <span class=" g-header-icon-list font-paste"
+                      tooltip [tooltip]="{content: 'paste', position:'bottom'}"
+                ></span>
+            </div>
+        </div>
+        <div class="pull-left g-header-icon">
+            <span *ngIf="!isDefaultPage">
+                <div class="pull-left header-alarm">
+                <span class="g-header-icon-list "
+                      data-step="step_folder_3" id="step_folder_3"
+                      tooltip [tooltip]="{content:isShowSmallView?'list model':'icon model', position:'bottom'}"
+                      [class.font-fillcondition-big]="!isShowSmallView"
+                      [class.font-fillcondition-small]="isShowSmallView"
+                      (click)="switchFolderView()">
+                </span>
+                </div>
+                <div class="pull-left">
+                    <span class="g-header-icon-list bi-icon-rectangle"
+                          tooltip [tooltip]="{content:'chat', position:'bottom'}"
+                          data-step="step_folder_4" id="step_folder_4"
+                          (click)="openChat($event)"></span>
+                </div>
+            <!--    <div class="pull-left">
+                    <span class="g-header-icon-list font-transferall"
+                          tooltip [tooltip]="{content:'transfer all', position:'bottom'}"
+                          data-step="step_folder_5" id="step_folder_5"
+                    ></span>
+                </div>-->
+                <div class="pull-left" [class.header-alarm]="isUploadFile" [class.hide]="!isCanOperate">
+                <span class="g-header-icon-list bi-icon-upload"
+                      data-step="step_folder_6" id="step_folder_6"
+                      tooltip [tooltip]="{content: 'upload', position:'bottom'}"
+                      (click)="uploadFile($event,fileInput)">
+                </span>
+                    <input type="file" multiple (change)="inputChangeEvent(fileInput, $event)" #fileInput
+                           style="display: none">
+                </div>
+                <div class="pull-left relative" toggleSelectGroup [currClass]="'header-alarm'" [class.hide]="!isCanOperate">
+                <span class="g-header-icon-list bi-icon-newfile"
+                      data-step="step_folder_7" id="step_folder_7"
+                      tooltip [tooltip]="{content: 'new folder', position:'bottom'}"
+                      #toggleSelectBut></span>
+                    <div class="d-select" #toggleSelect>
+                        <ul #toggleSelectContent>
+                            <li (click)="createNewFolder($event,newFold)"><i class="base">{{'New Folder h' |
+                                translate}}</i></li>
+                            <li class="hide"><i class="base">{{'New Information' | translate}}</i></li>
+                            <li class="hide"><i class="base">{{'New Analysis' | translate}}</i></li>
+                        </ul>
+                    </div>
+                </div>
+            </span>
+            <div class="pull-left" (click)="showFolderHelp($event)">
+                <span class="g-header-icon-list font-help"  tooltip [tooltip]="{content:'help', position:'bottom'}"></span>
+            </div>
+        </div>
+        <a href="javascript:;" class="pull-left font-page-esc" (click)="closeTheFolder($event)"></a>
+    </div>
+</header>

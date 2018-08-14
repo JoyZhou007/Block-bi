@@ -1,0 +1,73 @@
+<div class="g-title">
+    <span class="f9-f">{{'FOLDER NAME' | translate}}</span>
+    <em class="f14-f">{{'required' | translate}}</em>
+</div>
+<div class="se-input">
+    <input class="g-input-box-shadow" type="text" [(ngModel)]="newFoldIn.name"
+           (blur)="validateFolderName($event)"
+           (keyup)="validateFolderName($event)">
+</div>
+<span class="g-show-error" *ngIf="!regResult">{{errorMsg | translate}}</span>
+
+
+<div class="relative" *ngIf="!newFoldIn.isMission">
+    <div class="clearfix di-float-but" [class.hide]="!isShowSelectBox" style="left:20px;right:20px;bottom:128px">
+        <div class="g-title">
+            <span class="f9-f">{{'AUTHORIZED PERSON' | translate}}</span>
+            <em class="f14-f">{{'required' | translate}}</em>
+        </div>
+        <div class="pull-left di-new-contact-left" style="width: 100%">
+            <div class="se-input">
+                <dropdown-search (optionModelArrChange)="modelChange($event)"
+                                 (doCloseDropDown)="closeDropDown($event)"
+                                 [dropdownSettings]="dropdownSettings"
+                                 [dropdownOptions]="dropdownOptions[currentPermission]"
+                                 [selectedOptions]="shareArr"
+                ></dropdown-search>
+            </div>
+        </div>
+    </div>
+    <!------------------选择新建文件夹的路径------------------------>
+    <div class="but but-add id-but-h30 di-float-but g-line-height38" [class.hide]="isShowSelectBox" (click)="addPermission($event)" style="left:20px;right:20px;width:auto;bottom:129px">
+       {{'ADD OTHER PERMISSION USERS' | translate}}
+    </div>
+    <!----------------------------------->
+    <drag [selectOption]="inputSelectMember"
+          (doDeleteOption)="deleteOption($event)"
+          (doSelectPermission)="selectCurrentPermission($event)"
+          (doDragOption)="dragTheOption($event)">
+    </drag>
+    <div class="g-title"></div>
+    <div class="se-input g-input-box-shadow" toggleSelectGroup #toggleInput (callBackData)="getData($event)" [currClass]="'se-input-current'">
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <input class="hide" type="text">
+        <div class="clearfix s-style1" style="overflow: initial" #toggleSelectBut>
+            <div class="di-folder-path">
+                <span class="icon-folder-small icon-folder-small-icon folder-new-folder-icon"></span>
+                <div class="clearfix di-folder-path-warp" style="height:100%;overflow: initial;line-height:34px;">
+                    <div>
+                        <a style="color:#9193AB;">{{selectPath}}</a>
+                    </div>
+                    <div class="d-select" #toggleSelect>
+                        <perfect-scrollbar class="ps-container g-max-height150">
+                        <ul *ngIf="isFolderShow">
+                            <tree-root [nodes]="nodes" (toggleExpanded)="onEvent($event)">
+                                <template #treeNodeTemplate let-node let-index="index">
+                                    <div (click)="selectThePath($event,node.data)" class="folder-tree-root">
+                                        <span class="icon-folder-small" style="margin-top: 7px"></span>
+                                        <span class="folder-tree-root-name">{{node.data.name}}</span>
+                                    </div>
+                                </template>
+                            </tree-root>
+                        </ul>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p class="g-show-error-color g-margin-top5">{{btnError}}</p>
+

@@ -1,0 +1,25 @@
+<div *ngIf="obj.msgType === 'notice'">
+    <img src="{{senderInfo?.user_profile_path ? appConfig.resourceDomain + senderInfo?.user_profile_path : ''}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{obj.title}}</h3>
+        <div class="n-con n-company">
+            <p class="f20-f" [innerHtml]="obj.simpleMsg"></p>
+            <p class="f20-f">{{getNotification?.data.comments}}</p>
+            <span class="f4-f n-con-company-name">{{getNotification?.data.company_name}}</span>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>
+<div class="n-cursor" (click)="doCompanyAdmin()" *ngIf="obj.msgType === 'request'">
+    <img src="{{senderInfo?.user_profile_path ? appConfig.resourceDomain + senderInfo?.user_profile_path : ''}}">
+    <div class="n-right">
+        <h3 class="f27-f">{{obj.title}}</h3>
+        <div class="n-con n-company">
+            <p class="f20-f" [innerHtml]="obj.simpleMsg"></p>
+            <span class="f4-f n-con-company-name">{{getNotification?.data.company_name}}</span>
+        </div>
+        <span class="f32-f pull-left">{{senderInfo?.work_name}}</span>
+        <span class="f5-f pull-right">{{notificationTime}}</span>
+    </div>
+</div>

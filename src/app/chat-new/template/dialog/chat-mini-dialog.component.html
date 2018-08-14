@@ -1,0 +1,312 @@
+<div style="overflow: hidden;">
+    <div class="di-chat-mini-dialog" style="position: absolute"
+         #minDialog
+         [class.di-chat-mini-dialog-an]="isShowChatContent" [class.hide]="!isShowMiniDialog">
+        <div class="m-wrap pull-left">
+            <div class="g-chat">
+                <div *ngIf="!isFriendRelation">
+                    <div class="but-connect" [class.hide]="isShowConnectBtn" (click)="connectGroupMember($event)">
+                        <span class="font-chatinput"></span>
+                    </div>
+                    <div class="but-conn-hire" [class.show]="isShowConnectBtn" *ngIf="isShowHireBtn">
+                        <span class="animated fadeInUp"
+                              (click)="addFriend(memberInfo,$event)">{{'CONNECT' | translate}}</span>
+                        <span class="animated fadeInDown" (click)="hirePerson(memberInfo, $event)">{{'HIRE' | translate}}</span>
+                    </div>
+                    <div class="but-conn-hire but-conn-connect" [class.show]="isShowConnectBtn" *ngIf="!isShowHireBtn">
+                        <i class="base" (click)="addFriend(memberInfo,$event)">{{'CONNECT' | translate}}</i>
+                    </div>
+                </div>
+                <div class="chat-header"
+                     #chatHeaderImage
+                     (mousedown)="mouseDownEvent($event)">
+                    <!-- <div class="chat-user">
+                         <h3 class="f4-f">
+                             <a href="javascript:;"><i class="icon-circle {{statusClass}}"></i>{{memberInfo?.work_name}}</a>
+                         </h3>
+                     </div>-->
+                    <span class="close-mini-dialog font-page-esc-small" (click)="closeMiniDialog($event)"></span>
+                </div>
+                <div class="chat-bar">
+                    <div class="chat-bar-name">
+                        <i class="icon-circle {{statusClass}}"></i>
+                        <span class="f19-f">{{memberInfo?.work_name}}</span>
+                        <div style="display: inline-block; position: relative; top: 4px; left: 3px">
+                            <profile-state [states]="memberInfo?.state" [uid]="memberInfo?.uid"
+                            ></profile-state>
+                        </div>
+
+                    </div>
+                    <div class="clearfix chat-personal-info">
+                        <i class="pull-left font-calendar-location"></i>
+                        <span class="f5-f">{{chatUserInfo.location}} +2:00</span>
+                        <div class="pull-right">
+                        <span class="but but-pro-small" style="float: left"
+                              (click)="redirectToProfile($event, memberInfo)">
+                            <span class="base g-clearStyle">{{'DETAIL PROFILE' | translate}}</span>
+                        </span>
+                            <div class="pull-right chat-bar-icon"
+                                 *ngIf="isFriendRelation"
+                                 (click)="chatWithThePerson($event)">
+                                <span class="bi-icon-rectangle"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <ul>
+                        <li class="clearfix" *ngIf="optionData.form===2">
+                            <span class="pull-left f9-f">{{'COMPANY NAME' | translate}}</span>
+                            <span class="pull-right f19-f">{{chatUserInfo.company_name}}</span>
+                        </li>
+                        <li class="clearfix" *ngIf="optionData.form===2">
+                            <span class="pull-left f9-f">{{'POSITION' | translate}}</span>
+                            <span class="pull-right f19-f">{{chatUserInfo.position}}</span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pull-left f9-f">{{'WORK NAME' | translate}}</span>
+                            <span class="pull-right f19-f">{{chatUserInfo.work_name}}</span>
+                        </li>
+                        <li class="clearfix">
+                            <span class="pull-left f9-f">{{(optionData.form===2 && !optionData.isInMail ? "PHONE": "WORK PHONE") | translate}}</span>
+                            <span class="pull-right f19-f">{{optionData.form===2 && !optionData.isInMail? chatUserInfo.work_phone : chatUserInfo.phone}}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="di-chat-mini-msg-warp" [class.di-chat-mini-msg-height]="isChatMiniHeight">
+            <div class="di-chat-mini-msg">
+                <div class="di-chat-mini-msg-title add-pointer" (mousedown)="mouseDownEvent($event)">
+                    <img class="pull-left"
+                         src="{{memberInfo && memberInfo.hasOwnProperty('user_profile_path') && memberInfo.user_profile_path !== '' ? config.resourceFolderDomain + memberInfo.user_profile_path : ''}}"/>
+                    <span class="helveticaNeuelight di-chat-mini-msg-name">{{memberInfo?.work_name}}</span>
+                    <span class="v2-f">{{memberInfo?.p_name ? memberInfo?.p_name : ' '}}</span>
+                    <em class="but but-pro-small" (click)="tabUserInfo($event)">
+                        <i class="base g-clearStyle">{{'PERSONAL PROFILE' | translate}}</i>
+                    </em>
+                    <span class="close-mini-dialog font-page-esc-small" (click)="closeMiniDialog($event)"></span>
+                </div>
+                <div class="chat-body chat-body-lst"
+                     *ngIf="optionData.isInMail || (isFriendRelation && isShowChatContent) ">
+                    <div style="height:410px;overflow: hidden">
+                        <div class="mini-dialog-loading" [class.hide]="!isLoading">
+                            <div class="loader">
+                                <loaders-css [loader]="tplLoadingPagerClass" [loaderClass]="'my-loader'">
+                                    <div class="loader-inner ball-pulse"></div>
+                                </loaders-css>
+                            </div>
+                        </div>
+
+                        <div class="ch-message" #messageScroll DragDropDirective (outDrop)="setChatFileUpload($event)" >
+                            <div class="ch-msg-beginning ch-msg-time" *ngIf="loadEnd || currentPage === -1">
+                                <div class="ch-msg-time">
+                                    <div class="ch-msg-time-event">
+                                        <span class="c1-f">{{'No More Message' | translate}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <chat-content-mail-message
+                                    [setMemberInfo]="memberInfo"
+                                    [setInMailData]="currentMessageList"
+                                    *ngIf="optionData.isInMail">
+                            </chat-content-mail-message>
+                            <div *ngIf="!optionData.isInMail">
+                                <div *ngFor="let message of currentMessageList">
+                                    <div class="ch-msg-time" #title (click)="(title.isClose = !title.isClose);"
+                                         *ngIf="message.isFirstMessageByDay">
+                                        <div class="ch-msg-time-event"
+                                             [class.ch-msg-time-select]="message.isToggleShow"
+                                             (click)="toggleMessageByDay($event,message.date)">
+                                            <span class="c1-f">{{message.date}}</span>
+                                            <i class="font-selectbutton-line"></i>
+                                        </div>
+                                    </div>
+                                    <div [class.hide]="message.isToggleShow">
+                                        <div [ngSwitch]="message.type" *ngIf="message.status === 1">
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_SHARE">
+                                                <chat-content-message-img
+                                                        *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_IMG"
+                                                        [setIsShare]="{isShare:true}"
+                                                        [setIsMiniDialog]="true"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-img>
+                                                <chat-content-message-file
+                                                        *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_FILE"
+                                                        [setIsShare]="true"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-file>
+                                                <chat-content-message-post
+                                                        *ngIf="message.detail.share_file_type === chatConfig.CHAT_MESSAGE_TYPE_POST"
+                                                        [setIsShare]="true"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-post>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_TEXT">
+                                                <chat-content-message-text
+                                                        [setIsMiniDialog]="true"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-text>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_IMG">
+                                                <chat-content-message-img
+                                                        [setIsMiniDialog]="true"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)"
+                                                >
+                                                </chat-content-message-img>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_FILE">
+                                                <chat-content-message-file
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-file>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_POST">
+                                                <chat-content-message-post
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)">
+                                                </chat-content-message-post>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_FORWARD">
+                                                <chat-content-forward
+                                                        [setIsMiniDialog]="true"
+                                                        [setMessage]="{message: message, userInfoArr: currentChatUserInfo}"
+                                                        [setCurrentItem]="currentMenuItem"
+                                                        (outSetAlarmDisplay)="setAlarmDisplay($event, i)"
+                                                        (outForwardMsg)="setMessageForward($event)"
+                                                        (outSetFileMenuDisplay)="setFileMenuDisplay($event)"
+                                                        (outShareFile)="setShareFile($event)"
+                                                        (outSetMessagePin)="setMessagePin($event)"
+                                                        (outSetMessageAlarm)="setMessageAlarm($event)"
+                                                        (outMessageRevoke)="setMessageRevoke($event)"
+                                                        (outDeleteChatAlarm)="deleteAlarm($event)"
+                                                >
+                                                </chat-content-forward>
+                                            </template>
+                                            <template [ngSwitchCase]="chatConfig.CHAT_MESSAGE_TYPE_SYSTEM">
+                                                <div *ngIf="message.detail.act_type === 5" class="ch-new-message">
+                                                    <span class="v7-f ch-message-bg">{{message.msg}}</span>
+                                                </div>
+                                                <div *ngIf="message.detail.act_type === 2" class="ch-update-topic">
+                                                    <div class="ch-message-bg clearfix">
+                                                        <span class="v7-f">{{message.msg}}</span>
+                                                        <span class="f4-f">{{message.detail.topic}}</span>
+                                                        <span class="f13-f">Edit by</span>
+                                                        <span class="f19-f">{{message.userInfo?.work_name}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="ch-msg-list" *ngIf="message.detail.act_type === 7">
+                                                    <profile-img class="ch-msg-logo" [userInfo]="message.userInfo"
+                                                                 [settings]="{show_work_name: false, img_size: 34}"></profile-img>
+                                                    <div class="clearfix ch-msg-header">
+                                                        <span class="f19-f">{{message.userInfo?.work_name}}</span>
+                                                        <span class="f5-f ch-msg-merge-time">
+                                            {{dateService.formatLocal(message.time, 'HH:MMtt')}}</span>
+                                                        <span class="icon1-chat-pin ch-msg-icon hide"></span>
+                                                        <span class="icon1-at ch-msg-icon hide"></span>
+                                                        <span class="font-alarm ch-msg-icon hide"></span>
+                                                    </div>
+                                                    <div class="f20-f ch-msg-text">
+                                                        <div class="clearfix">
+                                                            <span>comments on</span>
+                                                            <span class="v8-f"
+                                                                  (click)="downLoadTheFile($event,message.detail?.file_info)">{{message.detail?.file_info?.file_name}}
+                                            </span>
+                                                            <span class="bi-icon-open hide"
+                                                                  (click)="clickOpenDetailSystemMessage($event,message)"></span>
+                                                        </div>
+                                                        <div class="clearfix ch-msg-comments">
+                                        <span class="font-comments">
+                                            <em class="path1"></em>
+                                            <em class="path2"></em>
+                                        </span>
+                                                            {{message.detail?.commentTxt}}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </template>
+                                        </div>
+                                        <div *ngIf="message.status === 0">
+                                            <div class="ch-msg-beginning ch-msg-time">
+                                                <div class="ch-msg-time">
+                                                    <div class="ch-msg-time-event">
+                                                        <span class="c1-f">This message has been revoked by {{message.revoke_by}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ch-msg-send-wrap ch-message">
+                        <chat-content-message-input
+                                [setIsMiniDialog]="true"
+                                [setCurrentItem]="currentMenuItem"
+                                (outFileUpLoad)="setChatFileUpload($event)"
+                                (outSendMessage)="sendMessage($event)"
+                        ></chat-content-message-input>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

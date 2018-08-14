@@ -1,0 +1,11 @@
+<div class="g-style1 g-padding20 m-a-type" data-step="step_mission_7" id="step_mission_7">
+    <div class="g-title">
+        <span class="f9-f">{{'RECORDER' | translate}}</span>
+    </div>
+    <div class="se-input">
+        <dropdown-search *ngIf="dropdownOptions" (optionModelArrChange)="modelChange($event)"
+                         [dropdownSettings]="dropdownSettings" [dropdownOptions]="inputDropdownOptions"
+                         [selectedOptions]="recorderArr"
+        ></dropdown-search>
+    </div>
+</div>

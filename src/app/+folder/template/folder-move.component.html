@@ -1,0 +1,33 @@
+<div class="di2-con move-folder">
+    <div class="se-input" toggleSelectGroup #toggleInput [currClass]="'se-input-current'" (callBackData)="getData($event)">
+        <div class="se-input-select">
+            <span class="font-selectbutton-soildclose"></span>
+        </div>
+        <div class="clearfix s-style1 se-input-path" style="overflow: initial" #toggleSelectBut>
+            <div class="di-folder-path">
+                    <span class="icon-folder-small icon-folder-small-icon"></span>
+                <div class="di-folder-path-warp folder-move" style="overflow: initial">
+                    <div>
+                        <a style="color:#9193AB;position: relative;top: 2px;">{{selectPath}}</a>
+                    </div>
+
+                        <div class="d-select g-max-height-inherit" #toggleSelect>
+                            <perfect-scrollbar class="ps-container g-max-height150">
+                            <ul *ngIf="isFolderShow">
+                                <tree-root [nodes]="nodes" (toggleExpanded)="toggleExpanded($event)">
+                                    <template #treeNodeTemplate let-node let-index="index">
+                                        <div (click)="selectThePath($event,node.data)" style="height: 25px;">
+                                        <span class="icon-folder-small">
+                                        </span>
+                                            <span style="color:#9193AB;">{{node.data.name}}</span>
+                                        </div>
+                                    </template>
+                                </tree-root>
+                            </ul>
+                            </perfect-scrollbar>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
